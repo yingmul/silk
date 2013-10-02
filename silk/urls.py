@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
-from silk.views import hello
+from silkers.views import RegistrationWizard
+from silkers.forms import RegistrationBasicForm, RegistrationExtraForm
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -15,6 +16,6 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
-    url(r'^hello/$', hello),
+    (r'^register/$', RegistrationWizard.as_view([RegistrationBasicForm, RegistrationExtraForm])),
 
 )

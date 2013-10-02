@@ -1,0 +1,27 @@
+{% load url from future %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>{% block head_title %}{% trans 'SILK' %}{% endblock head_title %}</title>
+    <meta name="title" content="SILK"/>
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="en"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+</head>
+
+<body>
+    <div class="content">
+        {% block header_block %}
+        {% endblock header_block %}
+
+        {% block content_block %}
+            You screwed up! Fill in content_block in your template!
+        {% endblock content_block %}
+
+        {% block footer_block %}
+        {% endblock footer_block %}
+    </div>
+</body>
+</html>
