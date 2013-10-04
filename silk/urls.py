@@ -8,7 +8,6 @@ from silkers.forms import RegistrationBasicForm, RegistrationExtraForm
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'silk.views.home', name='home'),
     # url(r'^silk/', include('silk.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -16,6 +15,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
-    (r'^register/$', RegistrationWizard.as_view([RegistrationBasicForm, RegistrationExtraForm])),
+    url(r'^$', 'silk.views.home', name='home'),
+    url(r'^register/$', RegistrationWizard.as_view([RegistrationBasicForm, RegistrationExtraForm])),
 
 )
