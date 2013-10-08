@@ -3,18 +3,16 @@
 
 {% block content_block %}
     <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
-    <form action="" method="post">{% csrf_token %}
-    {{ wizard.management_form }}
-    {{ wizard.form.non_field_errors }}
-    <div class="fieldWrapper">
-        {{ wizard.form.user_name.errors }}
-        {{ wizard.form.user_name }}
-    </div>
-    {{ wizard.form.as_p }}
-    {% if wizard.steps.prev %}
-    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% trans "first step" %}</button>
-    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
-    {% endif %}
-    <input type="submit" value="{% trans "submit" %}"/>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ wizard.management_form }}
+        {{ wizard.form.non_field_errors }}
+        <div class="fieldWrapper">
+            {{ wizard.form.user_name.errors }}
+            {{ wizard.form.user_name }}
+        </div>
+        {{ wizard.form.as_p }}
+        <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
+        <input type="submit" value="{% trans "submit" %}"/>
     </form>
 {% endblock content_block %}
