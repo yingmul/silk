@@ -1,3 +1,6 @@
+import os
+import uuid
+
 from django.contrib.formtools.wizard.views import SessionWizardView
 from django.conf import settings
 from django.views.generic.edit import FormMixin
@@ -6,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.contrib.auth.models import User
 from django.contrib.auth import login
+from django.core.files.storage import FileSystemStorage
 
 from silkers.forms import RegistrationBasicForm, RegistrationExtraForm, LoginForm
 from models import UserProfile
@@ -19,6 +23,9 @@ TEMPLATES = {"0": "silkers/registration_basic_form.html",
 
 
 class RegistrationWizard(SessionWizardView):
+    file_storage = FileSystemStorage(
+        location=os.path.join(settings.MEDIA_ROOT, 'profile', str(uuid.uuid4())[:8]))
+
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
 

@@ -3,7 +3,7 @@
 
 {% block content_block %}
     <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ wizard.management_form }}
         {{ wizard.form.non_field_errors }}

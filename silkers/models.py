@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.localflavor.us.models import USStateField
@@ -19,5 +21,9 @@ class UserProfile(models.Model):
     dress_size = models.IntegerField(choices=US_DRESS_SIZE, blank=True, null=True)
     city = models.CharField(max_length=30, blank=True)
     state = USStateField(blank=True, null=True)
+    # upload_to is not really used, it's file_storage from RegistrationWizard that's used.
+    picture = models.ImageField(upload_to="profile/%s" % (uuid.uuid4()),
+                                blank=True,
+                                null=True)
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])

@@ -53,7 +53,7 @@ class RegistrationExtraForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         #TODO: add measurement, picture, and maybe pants size?
-        fields = ['shoe_size', 'dress_size', 'city', 'state']
+        fields = ['shoe_size', 'dress_size', 'city', 'state', 'picture']
 
 
 class LoginForm(forms.Form):
