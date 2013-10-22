@@ -8,33 +8,21 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'ImageAttachment'
-        db.create_table(u'sell_imageattachment', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('file', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
-            ('thumbnail', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(related_name='image_clothes', to=orm['auth.User'])),
-            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
-            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
-        ))
-        db.send_create_signal(u'sell', ['ImageAttachment'])
-
-        # Adding model 'Picture'
-        db.create_table(u'sell_picture', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('file', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50, blank=True)),
-            ('seller', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
-        ))
-        db.send_create_signal(u'sell', ['Picture'])
-
-
-    def backwards(self, orm):
         # Deleting model 'ImageAttachment'
         db.delete_table(u'sell_imageattachment')
 
-        # Deleting model 'Picture'
-        db.delete_table(u'sell_picture')
+
+    def backwards(self, orm):
+        # Adding model 'ImageAttachment'
+        db.create_table(u'sell_imageattachment', (
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
+            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(related_name='image_clothes', to=orm['auth.User'])),
+            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('thumbnail', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
+            ('file', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+        ))
+        db.send_create_signal(u'sell', ['ImageAttachment'])
 
 
     models = {
@@ -73,15 +61,6 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'sell.imageattachment': {
-            'Meta': {'object_name': 'ImageAttachment'},
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'image_clothes'", 'to': u"orm['auth.User']"}),
-            'file': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'thumbnail': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'})
         },
         u'sell.picture': {
             'Meta': {'object_name': 'Picture'},
