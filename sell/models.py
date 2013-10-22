@@ -25,6 +25,8 @@ class ImageAttachment(models.Model):
 class Picture(models.Model):
     file = models.ImageField(upload_to="pictures")
     slug = models.SlugField(max_length=50, blank=True)
+    #NOTE: this foreign key really shouldn't be null
+    #  but this is to get around using PictureCreateView
     creator = models.ForeignKey(User, blank=True, null=True)
 
     def __unicode__(self):

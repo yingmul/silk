@@ -1,10 +1,11 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views.generic.base import TemplateView
 
 
-def home(request):
-    return HttpResponse("Welcome to SILK!")
+class HomeView(TemplateView):
+    template_name = 'home.html'
 
 
 class LoginRequired(object):

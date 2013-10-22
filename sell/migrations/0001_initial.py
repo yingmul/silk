@@ -19,10 +19,22 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'sell', ['ImageAttachment'])
 
+        # Adding model 'Picture'
+        db.create_table(u'sell_picture', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('file', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50, blank=True)),
+            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+        ))
+        db.send_create_signal(u'sell', ['Picture'])
+
 
     def backwards(self, orm):
         # Deleting model 'ImageAttachment'
         db.delete_table(u'sell_imageattachment')
+
+        # Deleting model 'Picture'
+        db.delete_table(u'sell_picture')
 
 
     models = {
@@ -70,6 +82,13 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'thumbnail': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'})
+        },
+        u'sell.picture': {
+            'Meta': {'object_name': 'Picture'},
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'file': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'blank': 'True'})
         }
     }
 

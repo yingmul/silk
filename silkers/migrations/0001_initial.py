@@ -14,6 +14,9 @@ class Migration(SchemaMigration):
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], unique=True)),
             ('shoe_size', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
             ('dress_size', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('city', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('state', self.gf('django.contrib.localflavor.us.models.USStateField')(max_length=2, null=True, blank=True)),
+            ('picture', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
         ))
         db.send_create_signal(u'silkers', ['UserProfile'])
 
@@ -62,9 +65,12 @@ class Migration(SchemaMigration):
         },
         u'silkers.userprofile': {
             'Meta': {'object_name': 'UserProfile'},
+            'city': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'dress_size': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'shoe_size': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'state': ('django.contrib.localflavor.us.models.USStateField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'unique': 'True'})
         }
     }

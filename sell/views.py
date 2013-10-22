@@ -1,5 +1,3 @@
-from django.http import HttpResponse, Http404
-from django.utils import simplejson
 from django.views.generic import CreateView, ListView, DeleteView
 from upload.serialize import serialize
 from sell.models import Picture
@@ -28,37 +26,12 @@ from silk.views import LoginRequired
 #         self.sell_form = SellImageUploadForm(data=request.POST, prefix='sell')
 
 
-def multiple_uploader(request):
-    if request.POST:
-        if request.FILES is None:
-            raise Http404("No objects uploaded")
-        f = request.FILES['file']
-
-        a = Picture()
-        a.creator = request.user
-        a.file.save(f.name, f)
-        a.save()
-
-        result = [ {'name': f.name,
-                       'size': f.size,
-                       'url': a.file.url,
-                       },]
-
-        response_data = simplejson.dumps(result)
-        if "application/json" in request.META['HTTP_ACCEPT_ENCODING']:
-            mimetype = 'application/json'
-        else:
-            mimetype = 'text/plain'
-        return HttpResponse(response_data, mimetype=mimetype)
-    else:
-        return HttpResponse('Only POST accepted')
-
-
 class PictureCreateView(LoginRequired, CreateView):
     model = Picture
 
-
     def form_valid(self, form):
+        # setting creator to be the logged in user
+        form.instance.creator = self.request.user
         self.object = form.save()
         files = [serialize(self.object)]
         data = {'files': files}

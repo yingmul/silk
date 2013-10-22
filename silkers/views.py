@@ -1,6 +1,7 @@
 import os
 import uuid
-
+from django.contrib.auth import authenticate
+from django.views.decorators.csrf import csrf_protect
 from django.contrib.formtools.wizard.views import SessionWizardView
 from django.conf import settings
 from django.views.generic.edit import FormMixin
@@ -8,8 +9,9 @@ from django.views.generic.base import TemplateView
 from django.http import HttpResponseRedirect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.core.files.storage import FileSystemStorage
+from django.core.urlresolvers import reverse
 
 from silkers.forms import RegistrationBasicForm, RegistrationExtraForm, LoginForm
 from models import UserProfile
@@ -48,6 +50,11 @@ class RegistrationWizard(SessionWizardView):
             city=user_profile_data['city'],
             state=user_profile_data['state']
         )
+        # Now log the user in after registration
+        auth_user = authenticate(username=user_data['user_name'], password=user_data['password'])
+        if auth_user is not None:
+            if auth_user.is_active:
+                login(self.request, auth_user)
         return HttpResponseRedirect('/')
 
 
@@ -88,3 +95,11 @@ class LoginView(FormMixin, TemplateView):
             return self.form_valid(self.login_form)
         else:
             return self.form_invalid(self.login_form)
+
+
+@sensitive_post_parameters()
+@csrf_protect
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('login'))
+
