@@ -1,8 +1,26 @@
-from django.views.generic import CreateView, ListView, DeleteView
+from django.views.generic import TemplateView, CreateView, ListView, DeleteView
+from django.views.generic.edit import FormMixin
 from upload.serialize import serialize
-from sell.models import Picture
 from upload.response import JSONResponse, response_mimetype
+from sell.models import Picture
 from silk.views import LoginRequired
+from sell.forms import SellOutfitStepOneForm
+
+
+class SellOutfitView(LoginRequired, FormMixin, TemplateView):
+    template_name = 'sell/picture_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SellOutfitView, self).get_context_data(**kwargs)
+
+        context.update({
+            'outfit_form': self.outfit_form,
+        })
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.outfit_form = SellOutfitStepOneForm()
+        return super(SellOutfitView, self).get(request, *args, **kwargs)
 
 
 class PictureCreateView(LoginRequired, CreateView):
@@ -33,8 +51,9 @@ class PictureDeleteView(LoginRequired, DeleteView):
 class PictureListView(LoginRequired, ListView):
     model = Picture
 
-    def get_queryset(self):
-        return Picture.objects.filter(creator=self.request.user)
+    #TODO: get this to work
+    # def get_queryset(self):
+    #     return Picture.objects.filter(seller=self.request.user)
 
     def render_to_response(self, context, **response_kwargs):
         files = [ serialize(p) for p in self.get_queryset() ]

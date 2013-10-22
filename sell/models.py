@@ -2,12 +2,19 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+class Outfit(models.Model):
+    """
+    Represent an outfit from seller
+    """
+    user = models.ForeignKey(User, blank=True, null=True)
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=200, blank=True)
+
+
 class Picture(models.Model):
     file = models.ImageField(upload_to="pictures")
     slug = models.SlugField(max_length=50, blank=True)
-    #NOTE: this foreign key really shouldn't be null
-    #  but this is to get around using PictureCreateView
-    seller = models.ForeignKey(User, blank=True, null=True)
+    outfit = models.ForeignKey(Outfit, blank=True, null=True)
 
     def __unicode__(self):
         return self.file.name
@@ -21,6 +28,7 @@ class Picture(models.Model):
         super(Picture, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        """delete -- Remove to leave file."""
         self.file.delete(False)
         super(Picture, self).delete(*args, **kwargs)
+
+
