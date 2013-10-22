@@ -2,6 +2,8 @@ from django.conf.urls import patterns, include, url
 from silkers.views import RegistrationWizard, LoginView
 from silkers.forms import RegistrationBasicForm, RegistrationExtraForm
 from django.contrib import admin
+from django.conf import settings
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -17,4 +19,12 @@ urlpatterns = patterns('',
     url(r'^register/$', RegistrationWizard.as_view([RegistrationBasicForm, RegistrationExtraForm])),
     url(r'^login/$', LoginView.as_view()),
     url(r'^sell/', include('sell.urls')),
+
 )
+
+#TODO: configure web server to serve static file via MEDIA_URL in settings
+if settings.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}))
+
