@@ -1,5 +1,4 @@
-from django.views.generic import TemplateView, CreateView, ListView, DeleteView
-from django.views.generic.edit import FormMixin
+from django.views.generic import CreateView, ListView, DeleteView
 from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import SessionWizardView
 from upload.serialize import serialize
@@ -39,52 +38,6 @@ class SellWizard(SessionWizardView):
             picture.save()
 
         return HttpResponseRedirect('/')
-
-# class SellOutfitView(LoginRequired, FormMixin, TemplateView):
-#     template_name = 'sell/sell_outfit.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(SellOutfitView, self).get_context_data(**kwargs)
-#
-#         context.update({
-#             'outfit_form': self.outfit_form,
-#         })
-#         return context
-#
-#     def get(self, request, *args, **kwargs):
-#         self.outfit_form = SellOutfitStepOneForm()
-#         return super(SellOutfitView, self).get(request, *args, **kwargs)
-#
-#     # TODO: this is temp only
-#     def get_success_url(self):
-#         return '.'
-#
-#     def form_valid(self, form):
-#         outfit = Outfit.objects.create(
-#             user=self.request.user,
-#             name=form.cleaned_data['name'],
-#             description=form.cleaned_data['description'],
-#         )
-#
-#         # set the outfit to all the pictures that were created in this form
-#         pictures = Picture.objects.filter(
-#             seller=self.request.user,
-#             outfit__isnull=True)
-#
-#         for picture in pictures:
-#             picture.outfit = outfit
-#             picture.save()
-#
-#         return super(SellOutfitView, self).form_valid(form)
-#
-#     def post(self, request, *args, **kwargs):
-#         self.request = request
-#         self.outfit_form = SellOutfitStepOneForm(data=request.POST)
-#
-#         if self.outfit_form.is_valid():
-#             return self.form_valid(self.outfit_form)
-#         else:
-#             return self.form_invalid(self.outfit_form)
 
 
 class PictureCreateView(LoginRequired, CreateView):
