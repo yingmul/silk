@@ -1,5 +1,5 @@
 from django import forms
-
+from sell.models import Piece
 
 class SellOutfitStepOneForm(forms.Form):
     """
@@ -13,9 +13,10 @@ class SellOutfitStepOneForm(forms.Form):
     )
 
 
-class SellOutfitStepTwoForm(forms.Form):
+class SellOutfitStepTwoForm(forms.ModelForm):
     """
     Second step of selling an outfit, including upload pictures of individual pieces to sell
     """
-    price = forms.DecimalField(decimal_places=2)
-    brand = forms.CharField(max_length=100)
+    class Meta:
+        model = Piece
+        fields = ['price', 'brand', 'category', 'condition']

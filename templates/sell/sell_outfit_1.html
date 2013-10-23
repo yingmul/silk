@@ -2,7 +2,7 @@
 {% load upload_tags %}
 {% load i18n %}
 
-{%  block content_block %}
+{% block content_block %}
 <p>Ready to start selling? It's easy!</p>
 
 <p>First, post some pictures of your fabulous outfit:</p>
@@ -52,6 +52,7 @@
     <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
 </form>
 
+
 {% upload_js %}
 
 <form id="outfitform" method="post" action=".">
@@ -62,15 +63,9 @@
     <input type="submit" value="{% trans "Next" %}"/>
 </form>
 
-
-{#  <div class="attachments-upload">#}
-{#    <div id="images"></div>#}
-{#    <form id="sell_form" action="." method="post">#}
-{#        {% csrf_token %}#}
-{#        {{ sell_form.as_p }}#}
-{#        <input type="submit" value="{% trans 'Submit' %}"/>#}
-{#    </form>#}
-{##}
-{#  </div>#}
-
 {%  endblock content_block %}
+
+{% block override_script_block %}
+    <!-- The main application script -->
+    <script src="{{STATIC_URL}}js/sell_outfit_upload_main_1.js"></script>
+{% endblock override_script_block %}

@@ -12,6 +12,7 @@
 /*jslint nomen: true, regexp: true */
 /*global $, window, blueimp */
 
+// this file is used in sell_outfit_1.html since it needs to call different url in ajax call
 $(function () {
     'use strict';
 

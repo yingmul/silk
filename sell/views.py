@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import SessionWizardView
 from upload.serialize import serialize
 from upload.response import JSONResponse, response_mimetype
-from sell.models import Picture, Outfit
+from sell.models import Picture, Outfit, Piece
 from silk.views import LoginRequired
 from sell.forms import SellOutfitStepOneForm, SellOutfitStepTwoForm
 
@@ -28,13 +28,34 @@ class SellWizard(SessionWizardView):
             description=outfit_form_data['description'],
         )
 
-        # set the outfit to all the pictures that were created in this form
-        pictures = Picture.objects.filter(
+        # set the outfit to all the outfit pictures that were created in this form
+        outfit_pictures = Picture.objects.filter(
             seller=self.request.user,
-            outfit__isnull=True)
+            outfit__isnull=True,
+            type='o')
 
-        for picture in pictures:
+        for picture in outfit_pictures:
             picture.outfit = outfit
+            picture.save()
+
+        # create piece and set pictures.piece to aht
+        piece_form_data = form_list[1].cleaned_data
+        piece = Piece.objects.create(
+            price=piece_form_data['price'],
+            brand=piece_form_data['brand'],
+            category=piece_form_data['category'],
+            condition=piece_form_data['condition'],
+            outfit=outfit,
+        )
+
+        piece_pictures = Picture.objects.filter(
+            seller=self.request.user,
+            piece__isnull=True,
+            type='p'
+        )
+        # set all the piece picture's piece
+        for picture in piece_pictures:
+            picture.piece = piece
             picture.save()
 
         return HttpResponseRedirect('/')
@@ -46,6 +67,13 @@ class PictureCreateView(LoginRequired, CreateView):
     def form_valid(self, form):
         # setting seller to be the logged in user
         form.instance.seller = self.request.user
+
+        if "piece" in self.kwargs:
+            # picture is for a piece, and not outfit
+            form.instance.type = 'p'
+        else:
+            form.instance.type = 'o'
+
         self.object = form.save()
         files = [serialize(self.object)]
         data = {'files': files}
@@ -68,9 +96,19 @@ class PictureDeleteView(LoginRequired, DeleteView):
 class PictureListView(LoginRequired, ListView):
     model = Picture
 
-    # Display only the pictures that were created by this user, and hasn't tied to an outfit yet
     def get_queryset(self):
-        return Picture.objects.filter(seller=self.request.user, outfit__isnull=True)
+        if "piece" in self.kwargs:
+            # display pictures for this seller, of type 1 (piece) and hasn't tied to a piece yet
+            return Picture.objects.filter(
+                seller=self.request.user,
+                type='p',
+                piece__isnull=True)
+        else:
+            # display pictures for this seller, of type 0 (outfit) and hasn't tied to an outfit yet
+            return Picture.objects.filter(
+                seller=self.request.user,
+                type='o',
+                outfit__isnull=True)
 
     def render_to_response(self, context, **response_kwargs):
         files = [ serialize(p) for p in self.get_queryset() ]
