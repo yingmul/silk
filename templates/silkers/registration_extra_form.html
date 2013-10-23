@@ -12,7 +12,7 @@
             {{ wizard.form.user_name }}
         </div>
         {{ wizard.form.as_p }}
-        <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
-        <input type="submit" value="{% trans "submit" %}"/>
+        <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "<<" %}</button>
+        <input type="submit" value="{% trans "Submit" %}"/>
     </form>
 {% endblock content_block %}

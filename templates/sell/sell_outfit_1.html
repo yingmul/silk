@@ -54,9 +54,11 @@
 
 {% upload_js %}
 
-<form id="outfitform" method="post" action="/outfit/create">
+<form id="outfitform" method="post" action=".">
     {% csrf_token %}
-    {{ outfit_form.as_p }}
+
+    {{ wizard.management_form }}
+    {{ wizard.form.as_p }}
     <input type="submit" value="{% trans "Next" %}"/>
 </form>
 
