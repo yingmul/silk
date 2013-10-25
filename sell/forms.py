@@ -1,5 +1,6 @@
 from django import forms
-from sell.models import Piece
+from sell.models import Piece, Picture
+
 
 class SellOutfitStepOneForm(forms.Form):
     """
@@ -12,11 +13,51 @@ class SellOutfitStepOneForm(forms.Form):
         label=u'Description (Optional)'
     )
 
+    def __init__(self, *args, **kwargs):
+        if 'user' in kwargs:
+            self._user = kwargs['user']
+            del kwargs['user']
+        else:
+            raise Exception('User was not passed in kwargs when initializing form SellOutfitStepOneForm')
+        super(SellOutfitStepOneForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        # need to make sure the seller uploaded pictures in the fileupload form
+        outfit_pics = Picture.objects.filter(
+            seller=self._user,
+            type='o',
+            outfit__isnull=True)
+
+        if not outfit_pics:
+            # throw an error to tell seller to upload pictures for outfit
+            raise forms.ValidationError(u'Remember to upload one or more of your outfit pictures!')
+        return self.cleaned_data
+
 
 class SellOutfitStepTwoForm(forms.ModelForm):
     """
     Second step of selling an outfit, including upload pictures of individual pieces to sell
     """
+    def __init__(self, *args, **kwargs):
+        if 'user' in kwargs:
+            self._user = kwargs['user']
+            del kwargs['user']
+        else:
+            raise Exception('User was not passed in kwargs when initializing form SellOutfitStepTwoForm')
+        super(SellOutfitStepTwoForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        # need to make sure the seller uploaded pictures in the fileupload form
+        piece_pics = Picture.objects.filter(
+            seller=self._user,
+            type='p',
+            piece__isnull=True)
+
+        if not piece_pics:
+            # throw an error to tell seller to upload pictures for outfit
+            raise forms.ValidationError(u'Remember to upload one or more pictures!')
+        return self.cleaned_data
+
     class Meta:
         model = Piece
         fields = ['price', 'brand', 'category', 'condition']

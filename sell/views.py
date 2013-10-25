@@ -19,6 +19,12 @@ class SellWizard(SessionWizardView):
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
 
+    def get_form_kwargs(self, step):
+        """
+        Override get_form_kwargs, to pass the user to the form's __init__ via kwargs
+        """
+        return {'user': self.request.user}
+
     def done(self, form_list, **kwargs):
         outfit_form_data = form_list[0].cleaned_data
 
