@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content_block %}
+<form method="post" action=".">
+    {% csrf_token %}
+    {{ wizard.management_form }}
+    preview your outfit!
+    <input type="submit" value="{% trans "Done" %}"/>
+</form>
+{% endblock content_block %}

@@ -57,7 +57,8 @@ class Picture(models.Model):
     # Note: this really shouldn't be null, this is so it can be set in PictureCreateView.form_valid
     seller = models.ForeignKey(User, blank=True, null=True)
     type = models.CharField(choices=TYPE, max_length=1, blank=True, null=True)
-
+    # sets whether the picture should be displayed in the PictureListView
+    display = models.BooleanField(default=True)
     def __unicode__(self):
         return self.file.name
 

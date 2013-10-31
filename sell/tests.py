@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from sell.forms import SellOutfitStepOneForm, SellOutfitStepTwoForm
+from sell.forms import SellOutfitForm, SellPieceForm
 from django.forms import ValidationError
 
 
@@ -19,7 +19,7 @@ class SimpleTest(TestCase):
         kwargs = {
             'user': self.user
         }
-        form = SellOutfitStepOneForm(data, **kwargs)
+        form = SellOutfitForm(data, **kwargs)
         with self.assertRaises(ValidationError):
             self.assertFalse(form.clean())
 
@@ -30,7 +30,7 @@ class SimpleTest(TestCase):
         kwargs = {
             'user': self.user
         }
-        form = SellOutfitStepTwoForm(data, **kwargs)
+        form = SellPieceForm(data, **kwargs)
         with self.assertRaises(ValidationError):
             self.assertFalse(form.clean())
 

@@ -168,3 +168,10 @@ LOGGING = {
         },
     }
 }
+
+########################
+# SILK CUSTOM SETTINGS #
+########################
+# setting for maximum number of piece you can sell in the forms, this is a HACK since
+# couldn't figure out how to dynamically add forms into FormWizard
+MAX_PIECE_SELL_FORMS = 5

@@ -2,7 +2,7 @@ from django import forms
 from sell.models import Piece, Picture
 
 
-class SellOutfitStepOneForm(forms.Form):
+class SellOutfitForm(forms.Form):
     """
     First step of selling an outfit, including basic info of outfit and its pictures
     """
@@ -19,7 +19,7 @@ class SellOutfitStepOneForm(forms.Form):
             del kwargs['user']
         else:
             raise Exception('User was not passed in kwargs when initializing form SellOutfitStepOneForm')
-        super(SellOutfitStepOneForm, self).__init__(*args, **kwargs)
+        super(SellOutfitForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         # need to make sure the seller uploaded pictures in the fileupload form
@@ -34,17 +34,24 @@ class SellOutfitStepOneForm(forms.Form):
         return self.cleaned_data
 
 
-class SellOutfitStepTwoForm(forms.ModelForm):
+class SellPieceForm(forms.ModelForm):
     """
     Second step of selling an outfit, including upload pictures of individual pieces to sell
     """
+    CHOICES = ((1, 'Yes',), (0, 'No',))
+    more_pieces = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        choices=CHOICES,
+        required=True,
+        label="Is there any more pieces from this outfit you'd like to sell")
+
     def __init__(self, *args, **kwargs):
         if 'user' in kwargs:
             self._user = kwargs['user']
             del kwargs['user']
         else:
             raise Exception('User was not passed in kwargs when initializing form SellOutfitStepTwoForm')
-        super(SellOutfitStepTwoForm, self).__init__(*args, **kwargs)
+        super(SellPieceForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         # need to make sure the seller uploaded pictures in the fileupload form
@@ -61,3 +68,13 @@ class SellOutfitStepTwoForm(forms.ModelForm):
     class Meta:
         model = Piece
         fields = ['price', 'brand', 'category', 'condition']
+
+
+class SellPreviewForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        if 'user' in kwargs:
+            self._user = kwargs['user']
+            del kwargs['user']
+        else:
+            raise Exception('User was not passed in kwargs when initializing form SellPieceForm')
+        super(SellPreviewForm, self).__init__(*args, **kwargs)
