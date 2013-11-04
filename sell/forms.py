@@ -14,17 +14,17 @@ class SellOutfitForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        if 'user' in kwargs:
-            self._user = kwargs['user']
-            del kwargs['user']
+        if 'request' in kwargs:
+            self.request = kwargs['request']
+            del kwargs['request']
         else:
-            raise Exception('User was not passed in kwargs when initializing form SellOutfitStepOneForm')
+            raise Exception('Request was not passed in kwargs when initializing form SellOutfitStepOneForm')
         super(SellOutfitForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         # need to make sure the seller uploaded pictures in the fileupload form
         outfit_pics = Picture.objects.filter(
-            seller=self._user,
+            seller=self.request.user,
             type='o',
             outfit__isnull=True)
 
@@ -46,23 +46,29 @@ class SellPieceForm(forms.ModelForm):
         label="Is there any more pieces from this outfit you'd like to sell")
 
     def __init__(self, *args, **kwargs):
-        if 'user' in kwargs:
-            self._user = kwargs['user']
-            del kwargs['user']
+        if 'request' in kwargs:
+             self.request = kwargs['request']
+             del kwargs['request']
         else:
-            raise Exception('User was not passed in kwargs when initializing form SellOutfitStepTwoForm')
+            raise Exception('Request was not passed in kwargs when initializing form SellOutfitStepTwoForm')
         super(SellPieceForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         # need to make sure the seller uploaded pictures in the fileupload form
-        piece_pics = Picture.objects.filter(
-            seller=self._user,
-            type='p',
-            piece__isnull=True)
+        if self.request.session['check_for_sell_piece_pics']:
+            # set this value back to False, so calls from FormWizards will not need to check again
+            # for this instance of the form
+            self.request.session['check_for_sell_piece_pics'] = False
 
-        if not piece_pics:
-            # throw an error to tell seller to upload pictures for outfit
-            raise forms.ValidationError(u'Remember to upload one or more pictures!')
+            piece_pics = Picture.objects.filter(
+                seller=self.request.user,
+                type='p',
+                piece__isnull=True,
+                piece_step=0)
+
+            if not piece_pics:
+                # throw an error to tell seller to upload pictures for outfit
+                raise forms.ValidationError(u'Remember to upload one or more pictures!')
         return self.cleaned_data
 
     class Meta:
@@ -72,9 +78,9 @@ class SellPieceForm(forms.ModelForm):
 
 class SellPreviewForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        if 'user' in kwargs:
-            self._user = kwargs['user']
-            del kwargs['user']
+        if 'request' in kwargs:
+            self.request = kwargs['request']
+            del kwargs['request']
         else:
-            raise Exception('User was not passed in kwargs when initializing form SellPieceForm')
+            raise Exception('Request was not passed in kwargs when initializing form SellPieceForm')
         super(SellPreviewForm, self).__init__(*args, **kwargs)

@@ -6,7 +6,7 @@ from django.contrib.formtools.wizard.views import SessionWizardView
 from django.conf import settings
 from django.views.generic.edit import FormMixin
 from django.views.generic.base import TemplateView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.decorators.debug import sensitive_post_parameters
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
@@ -70,8 +70,9 @@ class LoginView(FormMixin, TemplateView):
         return context
 
     def get(self, request, *args, **kwargs):
-        self.login_form = LoginForm()
+        self.request.session.set_test_cookie()
 
+        self.login_form = LoginForm()
         self.request = request
         return super(LoginView, self).get(request, *args, **kwargs)
 
@@ -80,21 +81,22 @@ class LoginView(FormMixin, TemplateView):
 
     def form_valid(self, form):
         login(self.request, self.login_form.get_user())
-
-        if self.request.session.test_cookie_worked():
-            self.request.session.delete_test_cookie()
-
         return super(LoginView, self).form_valid(form)
 
     @sensitive_post_parameters()
     def post(self, request, *args, **kwargs):
         self.request = request
-        self.login_form = LoginForm(data=request.POST)
+        #BUG: not quite working, fix this (may need to set test cookie somewhere else instead of get
+        if self.request.session.test_cookie_worked():
+            self.request.session.delete_test_cookie()
+            self.login_form = LoginForm(data=request.POST)
 
-        if self.login_form.is_valid():
-            return self.form_valid(self.login_form)
+            if self.login_form.is_valid():
+                return self.form_valid(self.login_form)
+            else:
+                return self.form_invalid(self.login_form)
         else:
-            return self.form_invalid(self.login_form)
+            return HttpResponse("Please enable cookies and try again.")
 
 
 @sensitive_post_parameters()

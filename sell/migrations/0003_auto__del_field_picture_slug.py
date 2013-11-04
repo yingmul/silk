@@ -8,21 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Piece'
-        db.create_table(u'sell_piece', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('price', self.gf('django.db.models.fields.IntegerField')()),
-            ('brand', self.gf('django.db.models.fields.CharField')(max_length=50, blank=True)),
-            ('category', self.gf('django.db.models.fields.CharField')(max_length='20')),
-            ('condition', self.gf('django.db.models.fields.CharField')(max_length='5')),
-            ('outfit', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sell.Outfit'])),
-        ))
-        db.send_create_signal(u'sell', ['Piece'])
+        # Deleting field 'Picture.slug'
+        db.delete_column(u'sell_picture', 'slug')
 
 
     def backwards(self, orm):
-        # Deleting model 'Piece'
-        db.delete_table(u'sell_piece')
+        # Adding field 'Picture.slug'
+        db.add_column(u'sell_picture', 'slug',
+                      self.gf('django.db.models.fields.SlugField')(default='', max_length=50, blank=True),
+                      keep_default=False)
 
 
     models = {
@@ -74,8 +68,10 @@ class Migration(SchemaMigration):
             'file': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'outfit': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sell.Outfit']", 'null': 'True', 'blank': 'True'}),
+            'piece': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sell.Piece']", 'null': 'True', 'blank': 'True'}),
+            'piece_step': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'blank': 'True'}),
             'seller': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'blank': 'True'})
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'})
         },
         u'sell.piece': {
             'Meta': {'object_name': 'Piece'},
@@ -84,7 +80,7 @@ class Migration(SchemaMigration):
             'condition': ('django.db.models.fields.CharField', [], {'max_length': "'5'"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'outfit': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sell.Outfit']"}),
-            'price': ('django.db.models.fields.IntegerField', [], {})
+            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'})
         }
     }
 

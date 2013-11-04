@@ -8,30 +8,46 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'ImageAttachment'
-        db.create_table(u'sell_imageattachment', (
+        # Adding model 'Outfit'
+        db.create_table(u'sell_outfit', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('file', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
-            ('thumbnail', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(related_name='image_clothes', to=orm['auth.User'])),
-            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
-            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('description', self.gf('django.db.models.fields.CharField')(max_length=200, blank=True)),
         ))
-        db.send_create_signal(u'sell', ['ImageAttachment'])
+        db.send_create_signal(u'sell', ['Outfit'])
+
+        # Adding model 'Piece'
+        db.create_table(u'sell_piece', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=8, decimal_places=2)),
+            ('brand', self.gf('django.db.models.fields.CharField')(max_length=50, blank=True)),
+            ('category', self.gf('django.db.models.fields.CharField')(max_length='20')),
+            ('condition', self.gf('django.db.models.fields.CharField')(max_length='5')),
+            ('outfit', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sell.Outfit'])),
+        ))
+        db.send_create_signal(u'sell', ['Piece'])
 
         # Adding model 'Picture'
         db.create_table(u'sell_picture', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('file', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50, blank=True)),
+            ('outfit', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sell.Outfit'], null=True, blank=True)),
+            ('piece', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sell.Piece'], null=True, blank=True)),
             ('seller', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
+            ('piece_step', self.gf('django.db.models.fields.IntegerField')(default=0)),
         ))
         db.send_create_signal(u'sell', ['Picture'])
 
 
     def backwards(self, orm):
-        # Deleting model 'ImageAttachment'
-        db.delete_table(u'sell_imageattachment')
+        # Deleting model 'Outfit'
+        db.delete_table(u'sell_outfit')
+
+        # Deleting model 'Piece'
+        db.delete_table(u'sell_piece')
 
         # Deleting model 'Picture'
         db.delete_table(u'sell_picture')
@@ -74,21 +90,32 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'sell.imageattachment': {
-            'Meta': {'object_name': 'ImageAttachment'},
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'image_clothes'", 'to': u"orm['auth.User']"}),
-            'file': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
+        u'sell.outfit': {
+            'Meta': {'object_name': 'Outfit'},
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'thumbnail': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'sell.picture': {
             'Meta': {'object_name': 'Picture'},
             'file': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'outfit': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sell.Outfit']", 'null': 'True', 'blank': 'True'}),
+            'piece': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sell.Piece']", 'null': 'True', 'blank': 'True'}),
+            'piece_step': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'seller': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'blank': 'True'})
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'blank': 'True'}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'})
+        },
+        u'sell.piece': {
+            'Meta': {'object_name': 'Piece'},
+            'brand': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
+            'category': ('django.db.models.fields.CharField', [], {'max_length': "'20'"}),
+            'condition': ('django.db.models.fields.CharField', [], {'max_length': "'5'"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'outfit': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sell.Outfit']"}),
+            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'})
         }
     }
 
