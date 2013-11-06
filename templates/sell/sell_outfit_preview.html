@@ -5,7 +5,31 @@
 <form method="post" action=".">
     {% csrf_token %}
     {{ wizard.management_form }}
-    preview your outfit!
+    <h2>{% trans "Preview your outfit!" %}</h2>
+    <span class="preview">
+        <h3> Outfit </h3>
+        <b>{% trans "Name of outfit:"%}</b> {{ preview.outfit.name }}<br/>
+        <b>{% trans "Description" %}</b>
+        <p>{{ preview.outfit.description }}</p>
+        {% for outfit_url in preview.outfit.pictures %}
+            <img src="{{ outfit_url }}"/>
+        {% endfor %}
+
+        <h3> Piece(s) </h3>
+        {% for piece in preview.pieces %}
+            <h4>{% trans "Piece" %} {{ piece.number }}</h4>
+            {% trans "Price: " %} {{ piece.price }}<br/>
+            {% trans "Brand: " %} {{ piece.brand }}<br/>
+            {% trans "Category: " %} {{ piece.category }}<br/>
+            {% trans "Condition: " %} {{ piece.condition_display }}<br/>
+
+            {% for piece_url in piece.pictures %}
+                <img src="{{ piece_url }}"/>
+            {% endfor %}
+        {% endfor %}
+
+    </span>
+    <br/>
     <input type="submit" value="{% trans "Done" %}"/>
 </form>
 {% endblock content_block %}

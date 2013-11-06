@@ -68,6 +68,9 @@ def upload_js():
                 <i class="glyphicon glyphicon-trash"></i>
                 <span>{%=locale.fileupload.destroy%}</span>
             </button>
+            <button class="btn btn-primary mark" data-url="{%=file.markMainUrl%}">
+                <span>{%=locale.fileupload.markAsMain%}</span>
+            </button>
         </td>
     </tr>
 {% } %}

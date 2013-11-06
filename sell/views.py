@@ -5,8 +5,9 @@ from django.contrib.formtools.wizard.views import SessionWizardView
 from upload.serialize import serialize
 from django.utils import six
 from django.utils.datastructures import SortedDict
+from django.views.generic.detail import BaseDetailView, SingleObjectTemplateResponseMixin
 from upload.response import JSONResponse, response_mimetype
-from sell.models import Picture, Outfit, Piece
+from sell.models import Picture, Outfit, Piece, condition_display
 from silk.views import LoginRequired
 from sell.forms import SellPieceForm
 
@@ -75,38 +76,68 @@ class SellWizard(LoginRequired, SessionWizardView):
         return super(SellWizard, self).render_done(form, **kwargs)
 
     def get_context_data(self, form, **kwargs):
-        self.request.session['check_for_sell_piece_pics'] = False
         context = super(SellWizard, self).get_context_data(form=form, **kwargs)
-        from pprint import pprint
-        pprint(self.get_all_cleaned_data())
+
+        # only call get_cleaned_data when it's last step, for preview
+        if int(self.storage.current_step) == settings.MAX_PIECE_SELL_FORMS + 1:
+            context["preview"] = self.get_all_cleaned_data()
         return context
 
     def get_all_cleaned_data(self):
         """
-        Overwrites this method, so only in the last step, we return all the cleaned data.
-        Also don't check if form is valid here, since it won't check the pictures existence check.
+        Overwriting this to skip checking photo existence.
+        And also set the key in cleaned_data based on form_key, so we can have one dict for each piece form
+        Returns data in this format:
+        {
+            "outfit": {"name": , "description": , "pictures": [list of outfit pic urls],
+            "pieces":
+            [{"price", "brand", "category", "condition", "pictures": [list of piece pic urls]}]
+        }
         """
-        cleaned_data = {}
-        if int(self.storage.current_step) == settings.MAX_PIECE_SELL_FORMS + 1:
-            self.request.session['check_for_sell_piece_pics'] = False
+        self.request.session['check_for_sell_piece_pics'] = False
 
-            for form_key in self.get_form_list():
-                form_obj = self.get_form(
-                    step=form_key,
-                    data=self.storage.get_step_data(form_key),
-                    files=self.storage.get_step_files(form_key)
-                )
-                if form_obj.is_valid():
-                    if isinstance(form_obj.cleaned_data, (tuple, list)):
-                        cleaned_data.update({
-                            'formset-%s' % form_key: form_obj.cleaned_data
-                        })
-                    else:
-                        cleaned_data.update({
-                            '%s' % form_key: form_obj.cleaned_data
-                        })
+        preview_data = {}
+        pieces_data = []
+        for form_key in self.get_form_list():
+            form_obj = self.get_form(
+                step=form_key,
+                data=self.storage.get_step_data(form_key),
+                files=self.storage.get_step_files(form_key)
+            )
+            if form_obj.is_valid():
+                step = int(form_key)
+                if step == 0:
+                    # this is outfit form
+                    preview_data["outfit"] = form_obj.cleaned_data
 
-        return cleaned_data
+                    outfit_pictures = Picture.objects.filter(
+                        seller=self.request.user,
+                        outfit__isnull=True,
+                        type='o')
+                    pic_urls = []
+                    for pic in outfit_pictures:
+                        pic_urls.append(pic.file.url)
+                    preview_data["outfit"]["pictures"] = pic_urls
+                else:
+                    piece = form_obj.cleaned_data
+                    # convert condition to its display value
+                    piece["condition_display"] = condition_display[piece["condition"]]
+                    piece["number"] = step
+                    piece_pictures = Picture.objects.filter(
+                        seller=self.request.user,
+                        piece__isnull=True,
+                        type='p',
+                        piece_step=step
+                    )
+                    piece_pic_urls = []
+                    for pic in piece_pictures:
+                        piece_pic_urls.append(pic.file.url)
+                    piece["pictures"] = piece_pic_urls
+                    pieces_data.append(piece)
+
+        preview_data["pieces"] = pieces_data
+
+        return preview_data
 
     def get_form_kwargs(self, step):
         """
@@ -219,6 +250,18 @@ class PictureDeleteView(LoginRequired, DeleteView):
         self.object = self.get_object()
         self.object.delete()
         response = JSONResponse(True, mimetype=response_mimetype(request))
+        response['Content-Disposition'] = 'inline; filename=files.json'
+        return response
+
+
+class PictureMarkMainView(LoginRequired, SingleObjectTemplateResponseMixin, BaseDetailView):
+    model = Picture
+
+    def post(self, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_main_photo = True
+        self.object.save()
+        response = JSONResponse(True, mimetype=response_mimetype(self.request))
         response['Content-Disposition'] = 'inline; filename=files.json'
         return response
 

@@ -11,23 +11,33 @@ class Outfit(models.Model):
     description = models.CharField(max_length=200, blank=True)
 
 
+# dictionary used in Piece model and in SellPreviewForm
+condition_display = {
+    'nwt': 'New With Tags',
+    'nwot': 'New Without Tags',
+    'e': 'Excellent (like new)',
+    'g': 'Good',
+    'f': 'Fair',
+    'p': 'Poor'
+}
+
 class Piece(models.Model):
     CATEGORY = [
-        ('shoes', 'Shoes'),
-        ('accessories', 'Accessories'),
-        ('tops', 'Tops'),
-        ('bottoms', 'Bottoms'),
-        ('dress', 'Dress'),
-        ('outerwear', 'Outerwear')
+        ('Shoes', 'Shoes'),
+        ('Accessories', 'Accessories'),
+        ('Tops', 'Tops'),
+        ('Bottoms', 'Bottoms'),
+        ('Dress', 'Dress'),
+        ('Outerwear', 'Outerwear')
     ]
 
     CONDITION = [
-        ('nwt', 'New With Tags'),
-        ('nwot', 'New Without Tags'),
-        ('e', 'Excellent (like new)'),
-        ('g', 'Good'),
-        ('f', 'Fair'),
-        ('p', 'Poor')
+        ('nwt', condition_display['nwt']),
+        ('nwot', condition_display['nwot']),
+        ('e', condition_display['e']),
+        ('g', condition_display['g']),
+        ('f', condition_display['f']),
+        ('p', condition_display['p'])
     ]
     price = models.DecimalField(max_digits=8, decimal_places=2)
     brand = models.CharField(max_length=50, blank=True)
@@ -53,6 +63,7 @@ class Picture(models.Model):
     outfit = models.ForeignKey(Outfit, blank=True, null=True)
     piece = models.ForeignKey(Piece, blank=True, null=True)
 
+    is_main_photo = models.BooleanField(default=False)
     # Note: this really shouldn't be null, this is so it can be set in PictureCreateView.form_valid
     seller = models.ForeignKey(User, blank=True, null=True)
     type = models.CharField(choices=TYPE, max_length=1, blank=True, null=True)

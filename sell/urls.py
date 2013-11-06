@@ -2,7 +2,7 @@ from django.conf.urls import patterns
 from django.conf.urls import url
 from django.conf import settings
 from sell.views import SellWizard, \
-    PictureCreateView, PictureDeleteView, PictureListView
+    PictureCreateView, PictureDeleteView, PictureListView, PictureMarkMainView
 from sell.forms import SellOutfitForm, SellPieceForm, SellPreviewForm
 
 # allow maximum of 10 sell piece forms, HACK
@@ -21,4 +21,6 @@ urlpatterns = patterns('',
     # urls for creating pictures for piece
     url(r'^piece/new/$', PictureCreateView.as_view(), {'piece':True}, name='sell-piece-new'),
     url(r'^piece/view/$', PictureListView.as_view(), {'piece':True}, name='sell-piece-view'),
+
+    url(r'^markAsMain/(?P<pk>\d+)$', PictureMarkMainView.as_view(), name='sell-mark-as-main'),
 )

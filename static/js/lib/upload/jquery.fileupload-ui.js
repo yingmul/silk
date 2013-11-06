@@ -322,6 +322,14 @@
                 } else {
                     removeNode();
                 }
+            },
+            markMain: function (e, data) {
+                var that = $(this).data('blueimp-fileupload') ||
+                        $(this).data('fileupload')
+
+                if (data.url) {
+                    $.ajax(data).done();
+                }
             }
         },
 
@@ -479,6 +487,15 @@
             }, button.data()));
         },
 
+        _markAsMainHandler: function(e) {
+            e.preventDefault();
+            var button = $(e.currentTarget);
+            this._trigger('markMain', e, $.extend({
+                context: button.closest('.template-download'),
+                type: 'POST'
+            }, button.data()));
+        },
+
         _forceReflow: function (node) {
             return $.support.transition && node.length &&
                 node[0].offsetWidth;
@@ -557,7 +574,8 @@
             this._on(this.options.filesContainer, {
                 'click .start': this._startHandler,
                 'click .cancel': this._cancelHandler,
-                'click .delete': this._deleteHandler
+                'click .delete': this._deleteHandler,
+                'click .mark': this._markAsMainHandler
             });
             this._initButtonBarEventHandlers();
         },

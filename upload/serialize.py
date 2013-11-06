@@ -33,6 +33,7 @@ def serialize(instance, file_attr='file'):
         'size': obj.size,
         'deleteUrl': reverse('sell-delete', args=[instance.pk]),
         'deleteType': 'DELETE',
+        'markMainUrl': reverse('sell-mark-as-main', args=[instance.pk]),
     }
 
 

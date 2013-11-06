@@ -24,6 +24,7 @@ window.locale = {
         "error": "Error",
         "start": "Start",
         "cancel": "Cancel",
-        "destroy": "Delete"
+        "destroy": "Delete",
+        "markAsMain": "Mark As Main"
     }
 };
