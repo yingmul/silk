@@ -148,7 +148,7 @@ class SellWizard(LoginRequired, SessionWizardView):
     def get(self, request, *args, **kwargs):
         self.request.session['check_for_sell_piece_pics'] = True
 
-        #remove any pictures that did not get tied to an outfit or a piece
+        # remove any pictures that did not get tied to an outfit or a piece
         Picture.objects.filter(
             seller=self.request.user,
             piece__isnull=True,
@@ -222,6 +222,23 @@ class SellWizard(LoginRequired, SessionWizardView):
         return HttpResponseRedirect('/')
 
 
+def get_current_photos(self):
+    if "piece" in self.kwargs:
+        # display pictures for this seller, of type 1 (piece) and hasn't tied to a piece yet (step=0)
+        return Picture.objects.filter(
+            seller=self.request.user,
+            type='p',
+            piece__isnull=True,
+            piece_step=0,
+        )
+    else:
+        # display pictures for this seller, of type 0 (outfit) and hasn't tied to an outfit yet
+        return Picture.objects.filter(
+            seller=self.request.user,
+            type='o',
+            outfit__isnull=True)
+
+
 class PictureCreateView(LoginRequired, CreateView):
     model = Picture
 
@@ -232,11 +249,14 @@ class PictureCreateView(LoginRequired, CreateView):
         if "piece" in self.kwargs:
             # picture is for a piece, and not outfit
             form.instance.type = 'p'
+            makePrimaryUrl = 'sell-piece-make-primary'
         else:
             form.instance.type = 'o'
+            makePrimaryUrl = 'sell-make-primary'
 
         self.object = form.save()
-        files = [serialize(self.object)]
+        # pass the appropriate makePrimaryUrl for this object (Picture)
+        files = [serialize(self.object, makePrimaryUrl)]
         data = {'files': files}
         response = JSONResponse(data, mimetype=response_mimetype(self.request))
         response['Content-Disposition'] = 'inline; filename=files.json'
@@ -254,13 +274,31 @@ class PictureDeleteView(LoginRequired, DeleteView):
         return response
 
 
-class PictureMarkMainView(LoginRequired, SingleObjectTemplateResponseMixin, BaseDetailView):
+def make_primary_photo_false(photo_filter):
+    if photo_filter.count() > 1:
+        #TODO: convert this to log with ERROR
+        print 'In PictureMakePrimaryView, found number of old primary photo greater than 1: ' \
+            + str(photo_filter.count())
+
+    for photo in photo_filter:
+        photo.is_primary = False
+        photo.save()
+
+
+class PictureMakePrimaryView(LoginRequired, SingleObjectTemplateResponseMixin, BaseDetailView):
     model = Picture
 
     def post(self, *args, **kwargs):
+        # make the original primary Picture (if there is any) to not a primary photo
+        make_primary_photo_false(
+            get_current_photos(self).
+            filter(is_primary=True))
+
+        # make this Picture a primary photo
         self.object = self.get_object()
-        self.object.is_main_photo = True
+        self.object.is_primary = True
         self.object.save()
+
         response = JSONResponse(True, mimetype=response_mimetype(self.request))
         response['Content-Disposition'] = 'inline; filename=files.json'
         return response
@@ -270,24 +308,15 @@ class PictureListView(LoginRequired, ListView):
     model = Picture
 
     def get_queryset(self):
-        if "piece" in self.kwargs:
-            # display pictures for this seller, of type 1 (piece) and hasn't tied to a piece yet
-            return Picture.objects.filter(
-                seller=self.request.user,
-                type='p',
-                piece__isnull=True,
-                piece_step=0,
-            )
-                # display=True)
-        else:
-            # display pictures for this seller, of type 0 (outfit) and hasn't tied to an outfit yet
-            return Picture.objects.filter(
-                seller=self.request.user,
-                type='o',
-                outfit__isnull=True)
+        return get_current_photos(self)
 
     def render_to_response(self, context, **response_kwargs):
-        files = [ serialize(p) for p in self.get_queryset() ]
+        if "piece" in self.kwargs:
+            makePrimaryUrl = 'sell-piece-make-primary'
+        else:
+            makePrimaryUrl = 'sell-make-primary'
+
+        files = [ serialize(p, makePrimaryUrl) for p in self.get_queryset() ]
         data = {'files': files}
         response = JSONResponse(data, mimetype=response_mimetype(self.request))
         response['Content-Disposition'] = 'inline; filename=files.json'

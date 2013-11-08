@@ -141,6 +141,7 @@
                         var file = files[index] ||
                                 {error: 'Empty file upload result'};
                         deferred = that._addFinishedDeferreds();
+
                         that._transition($(this)).done(
                             function () {
                                 var node = $(this);
@@ -323,12 +324,23 @@
                     removeNode();
                 }
             },
-            markMain: function (e, data) {
+            makePrimary: function (e, data) {
                 var that = $(this).data('blueimp-fileupload') ||
-                        $(this).data('fileupload')
+                        $(this).data('fileupload'),
+                    makeNode = function () {
+                        // make all other make buttons show and text hide
+                        $("button.make").show();
+                        $(".make-primary").hide();
+
+                        // make this button hide and text row for this row
+                        $(this).find("button.make").hide();
+                        $(this).find(".make-primary").show()
+                    };
 
                 if (data.url) {
-                    $.ajax(data).done();
+                    $.ajax(data).done(makeNode);
+                } else {
+                    makeNode();
                 }
             }
         },
@@ -487,10 +499,10 @@
             }, button.data()));
         },
 
-        _markAsMainHandler: function(e) {
+        _makePrimaryHandler: function(e) {
             e.preventDefault();
             var button = $(e.currentTarget);
-            this._trigger('markMain', e, $.extend({
+            this._trigger('makePrimary', e, $.extend({
                 context: button.closest('.template-download'),
                 type: 'POST'
             }, button.data()));
@@ -575,7 +587,7 @@
                 'click .start': this._startHandler,
                 'click .cancel': this._cancelHandler,
                 'click .delete': this._deleteHandler,
-                'click .mark': this._markAsMainHandler
+                'click .make': this._makePrimaryHandler
             });
             this._initButtonBarEventHandlers();
         },

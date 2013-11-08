@@ -29,8 +29,17 @@ class SellOutfitForm(forms.Form):
             outfit__isnull=True)
 
         if not outfit_pics:
-            # throw an error to tell seller to upload pictures for outfit
             raise forms.ValidationError(u'Remember to upload one or more of your outfit pictures!')
+
+        # make sure primary photo was selected
+        if outfit_pics.filter(is_primary=True).count() == 0:
+            if outfit_pics.count() == 1:
+                # if there is only one outfit picture, default this to primary
+                for pic in outfit_pics:
+                    pic.is_primary=True
+                    pic.save()
+            else:
+                raise forms.ValidationError(u'Please select one of the pictures as the default display picture.')
         return self.cleaned_data
 
 
@@ -69,6 +78,16 @@ class SellPieceForm(forms.ModelForm):
             if not piece_pics:
                 # throw an error to tell seller to upload pictures for outfit
                 raise forms.ValidationError(u'Remember to upload one or more pictures!')
+
+            # make sure primary photo was selected
+            if piece_pics.filter(is_primary=True).count() == 0:
+                if piece_pics.count() == 1:
+                    # if there is only one photo, just mark this as primary
+                    for pic in piece_pics:
+                        pic.is_primary = True
+                        pic.save()
+                else:
+                    raise forms.ValidationError(u'Please select one of the pictures as the primary picture.')
         return self.cleaned_data
 
     class Meta:

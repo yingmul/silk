@@ -63,11 +63,11 @@ class Picture(models.Model):
     outfit = models.ForeignKey(Outfit, blank=True, null=True)
     piece = models.ForeignKey(Piece, blank=True, null=True)
 
-    is_main_photo = models.BooleanField(default=False)
+    is_primary = models.BooleanField(default=False)
     # Note: this really shouldn't be null, this is so it can be set in PictureCreateView.form_valid
     seller = models.ForeignKey(User, blank=True, null=True)
     type = models.CharField(choices=TYPE, max_length=1, blank=True, null=True)
-    # sets which step in the piece form, the picture was uploaded to
+    # sets which step in the piece form, the picture was uploaded to (default=0 means it hasn't been tied to a step yet)
     piece_step = models.PositiveSmallIntegerField(default=0, blank=True)
     def __unicode__(self):
         return self.file.name

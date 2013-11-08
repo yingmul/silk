@@ -25,6 +25,6 @@ window.locale = {
         "start": "Start",
         "cancel": "Cancel",
         "destroy": "Delete",
-        "markAsMain": "Mark As Main"
+        "makePrimary": "Make Primary"
     }
 };

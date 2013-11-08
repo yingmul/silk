@@ -17,14 +17,19 @@ def order_name(name):
     return name[:10] + "..." + name[-7:]
 
 
-def serialize(instance, file_attr='file'):
+def serialize(instance, makePrimaryUrl, file_attr='file'):
     """serialize -- Serialize a Picture instance into a dict.
 
     instance -- Picture instance
+    makePrimaryUrl -- url to be used when user click on 'Make Primary' for this Picture
+                -- needs to know if it's a Piece or Outfit photo in order to do the
+                -- right filter inside PictureMakePrimaryView
     file_attr -- attribute name that contains the FileField or ImageField
 
     """
     obj = getattr(instance, file_attr)
+    # used in upload_tags, to show the 'Make Primary' button or not
+    isPrimary = getattr(instance, 'is_primary')
     return {
         'url': obj.url,
         'name': order_name(obj.name),
@@ -33,7 +38,8 @@ def serialize(instance, file_attr='file'):
         'size': obj.size,
         'deleteUrl': reverse('sell-delete', args=[instance.pk]),
         'deleteType': 'DELETE',
-        'markMainUrl': reverse('sell-mark-as-main', args=[instance.pk]),
+        'makePrimaryUrl': reverse(makePrimaryUrl, args=[instance.pk]),
+        'isPrimary': isPrimary
     }
 
 

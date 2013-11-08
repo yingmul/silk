@@ -68,8 +68,14 @@ def upload_js():
                 <i class="glyphicon glyphicon-trash"></i>
                 <span>{%=locale.fileupload.destroy%}</span>
             </button>
-            <button class="btn btn-primary mark" data-url="{%=file.markMainUrl%}">
-                <span>{%=locale.fileupload.markAsMain%}</span>
+
+            <span class="make-primary" {% if (!file.isPrimary) { %} style="display:none" {% } %} >
+                Primary
+            </span>
+
+            <button class="btn btn-primary make" data-url="{%=file.makePrimaryUrl%}"
+                {% if (file.isPrimary) { %} style="display:none" {% } %}>
+                <span>{%=locale.fileupload.makePrimary%}</span>
             </button>
         </td>
     </tr>

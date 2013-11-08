@@ -50,7 +50,6 @@
     $.widget('blueimp.fileupload', $.blueimp.fileupload, {
 
         options: {
-            /*
             // The regular expression for allowed file types, matches
             // against either file type or file name:
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
@@ -59,8 +58,7 @@
             // The minimum allowed file size in bytes:
             minFileSize: undefined, // No minimal file size
             // The limit of files to be uploaded:
-            maxNumberOfFiles: 10,
-            */
+            maxNumberOfFiles: 6,
 
             // Function returning the current number of files,
             // has to be overriden for maxNumberOfFiles validation:
