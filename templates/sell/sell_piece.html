@@ -1,6 +1,7 @@
 {% extends "sell/sell_base.html" %}
 {% load upload_tags %}
 {% load i18n %}
+{% load thumbnail %}
 
 {%  block content_block %}
 <p>Which pieces in your outfit are you selling?</p>
@@ -54,5 +55,5 @@
 
 {% block override_script_block %}
     <!-- The main application script -->
-    <script src="{{STATIC_URL}}js/sell_outfit_upload_main_2.js"></script>
+    <script src="{{STATIC_URL}}js/sell_piece_upload_main.js"></script>
 {% endblock override_script_block %}

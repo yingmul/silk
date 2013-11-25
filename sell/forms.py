@@ -39,7 +39,7 @@ class SellOutfitForm(forms.Form):
                     pic.is_primary=True
                     pic.save()
             else:
-                raise forms.ValidationError(u'Please select one of the pictures as the default display picture.')
+                raise forms.ValidationError(u'Please select one of the pictures as the primary picture.')
         return self.cleaned_data
 
 

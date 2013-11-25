@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'south',
+    'sorl.thumbnail',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'silkers',

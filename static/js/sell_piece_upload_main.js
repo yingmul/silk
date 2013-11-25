@@ -12,7 +12,7 @@
 /*jslint nomen: true, regexp: true */
 /*global $, window, blueimp */
 
-// this file is used in sell_outfit_1.html since it needs to call different url in ajax call
+// this file is used in sell_piece.html since it needs to call different url in ajax call
 $(function () {
     'use strict';
 
@@ -58,13 +58,25 @@ $(function () {
             });
         }
     } else {
+        $('#fileupload').fileupload('option', {
+            // Enable image resizing, except for Android and Opera,
+            // which actually support image resizing, but fail to
+            // send Blob objects via XHR requests:
+            disableImageResize: /Android(?!.*Chrome)|Opera/
+                .test(window.navigator.userAgent),
+            maxFileSize: 10000000, // 10 MB
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+            maxNumberOfFiles: 6,
+            autoUpload: true
+        });
+
         // Load existing files:
         $('#fileupload').addClass('fileupload-processing');
         $.ajax({
             // Uncomment the following to send cross-domain cookies:
             //xhrFields: {withCredentials: true},
             //url: $('#fileupload').fileupload('option', 'url'),
-            url: '/sell/view/',
+            url: '/sell/piece/view/',
             dataType: 'json',
             context: $('#fileupload')[0]
         }).always(function () {

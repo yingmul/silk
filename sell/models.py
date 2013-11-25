@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+from sorl.thumbnail import delete
 
 class Outfit(models.Model):
     """
@@ -54,25 +54,34 @@ class Picture(models.Model):
     if type=outfit, outfit FK cannot be null
     if type=piece, piece FK cannot be null
     The above restriction is not enforced in the code right now.
+
+    The following fields really shouldn't be nullable, they need to be because the values are being
+    set later in the PictureCreateView's form_valid:
+        thumbnail
+        outfit
+        seller
+        type
     """
     # type of this picture, for outfit or piece
     TYPE = [('o', 'outfit'), ('p', 'piece')]
 
     file = models.ImageField(upload_to="pictures")
-    # Note: this really shouldn't be null, this is set after outfit is created
+    # field for sorl's thumbnail url
+    thumbnail_url = models.URLField(blank=True)
     outfit = models.ForeignKey(Outfit, blank=True, null=True)
     piece = models.ForeignKey(Piece, blank=True, null=True)
 
     is_primary = models.BooleanField(default=False)
-    # Note: this really shouldn't be null, this is so it can be set in PictureCreateView.form_valid
     seller = models.ForeignKey(User, blank=True, null=True)
-    type = models.CharField(choices=TYPE, max_length=1, blank=True, null=True)
+    type = models.CharField(choices=TYPE, max_length=1, blank=True)
     # sets which step in the piece form, the picture was uploaded to (default=0 means it hasn't been tied to a step yet)
     piece_step = models.PositiveSmallIntegerField(default=0, blank=True)
+
     def __unicode__(self):
         return self.file.name
 
     def delete(self, *args, **kwargs):
+        delete(self.file)
         self.file.delete(False)
         super(Picture, self).delete(*args, **kwargs)
 

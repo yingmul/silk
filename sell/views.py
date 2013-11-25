@@ -6,15 +6,17 @@ from upload.serialize import serialize
 from django.utils import six
 from django.utils.datastructures import SortedDict
 from django.views.generic.detail import BaseDetailView, SingleObjectTemplateResponseMixin
+from django.views.generic.base import TemplateView
+from sorl.thumbnail import get_thumbnail
+from django.db.models import Q
 from upload.response import JSONResponse, response_mimetype
 from sell.models import Picture, Outfit, Piece, condition_display
 from silk.views import LoginRequired
 from sell.forms import SellPieceForm
 
-
-TEMPLATES = {"0": "sell/sell_outfit_1.html"}
+TEMPLATES = {"0": "sell/sell_outfit.html"}
 for i in range(1, settings.MAX_PIECE_SELL_FORMS + 1):
-    TEMPLATES[str(i)]="sell/sell_outfit_2.html"
+    TEMPLATES[str(i)]="sell/sell_piece.html"
 TEMPLATES[str(settings.MAX_PIECE_SELL_FORMS+1)]="sell/sell_outfit_preview.html"
 
 def show_more_piece_form_condition(wizard, current_step):
@@ -70,6 +72,10 @@ class SellWizard(LoginRequired, SessionWizardView):
 
         return form_list
 
+    def get(self, request, *args, **kwargs):
+        self.request.session['check_for_sell_piece_pics'] = True
+        return super(SellWizard, self).get(request, *args, **kwargs)
+
     def render_done(self, form, **kwargs):
         #aliu: set session check to False to not have to check for piece pics
         self.request.session['check_for_sell_piece_pics'] = False
@@ -116,7 +122,7 @@ class SellWizard(LoginRequired, SessionWizardView):
                         type='o')
                     pic_urls = []
                     for pic in outfit_pictures:
-                        pic_urls.append(pic.file.url)
+                        pic_urls.append(pic.thumbnail_url)
                     preview_data["outfit"]["pictures"] = pic_urls
                 else:
                     piece = form_obj.cleaned_data
@@ -131,7 +137,7 @@ class SellWizard(LoginRequired, SessionWizardView):
                     )
                     piece_pic_urls = []
                     for pic in piece_pictures:
-                        piece_pic_urls.append(pic.file.url)
+                        piece_pic_urls.append(pic.thumbnail_url)
                     piece["pictures"] = piece_pic_urls
                     pieces_data.append(piece)
 
@@ -144,23 +150,6 @@ class SellWizard(LoginRequired, SessionWizardView):
         Override get_form_kwargs, to pass the request to the form's __init__ via kwargs
         """
         return {'request': self.request}
-
-    def get(self, request, *args, **kwargs):
-        self.request.session['check_for_sell_piece_pics'] = True
-
-        # remove any pictures that did not get tied to an outfit or a piece
-        Picture.objects.filter(
-            seller=self.request.user,
-            piece__isnull=True,
-            type='p'
-        ).delete()
-
-        Picture.objects.filter(
-            seller=self.request.user,
-            outfit__isnull=True,
-            type='o'
-        ).delete()
-        return super(SellWizard, self).get(request, *args, **kwargs)
 
     def process_step(self, form):
         # Link the pictures uploaded to the current step
@@ -239,6 +228,17 @@ def get_current_photos(self):
             outfit__isnull=True)
 
 
+def make_primary_photo_false(photo_filter):
+    if photo_filter.count() > 1:
+        #TODO: convert this to log with ERROR
+        print 'In PictureMakePrimaryView, found number of old primary photo greater than 1: ' \
+            + str(photo_filter.count())
+
+    for photo in photo_filter:
+        photo.is_primary = False
+        photo.save()
+
+
 class PictureCreateView(LoginRequired, CreateView):
     model = Picture
 
@@ -249,18 +249,32 @@ class PictureCreateView(LoginRequired, CreateView):
         if "piece" in self.kwargs:
             # picture is for a piece, and not outfit
             form.instance.type = 'p'
-            makePrimaryUrl = 'sell-piece-make-primary'
+            make_primary_url = 'sell-piece-make-primary'
         else:
             form.instance.type = 'o'
-            makePrimaryUrl = 'sell-make-primary'
+            make_primary_url = 'sell-make-primary'
 
         self.object = form.save()
-        # pass the appropriate makePrimaryUrl for this object (Picture)
-        files = [serialize(self.object, makePrimaryUrl)]
+
+        # save form again to set the thumbnail_url
+        thumbnail = get_thumbnail(self.object, '100x100', crop='center', quality=99)
+        form.instance.thumbnail_url = thumbnail.url
+        self.object = form.save()
+
+        # pass the appropriate make_primary_url for this object (Picture)
+        self.object.file.make_primary_url = make_primary_url
+        files = [serialize(self.object)]
         data = {'files': files}
         response = JSONResponse(data, mimetype=response_mimetype(self.request))
         response['Content-Disposition'] = 'inline; filename=files.json'
         return response
+
+    def form_invalid(self, form):
+        # TODO: fix this to log it as an error
+        # An error occurred from the program's point of view (not user)
+        from pprint import pprint
+        pprint(form.errors)
+        return super(PictureCreateView, self).form_invalid(form)
 
 
 class PictureDeleteView(LoginRequired, DeleteView):
@@ -272,17 +286,6 @@ class PictureDeleteView(LoginRequired, DeleteView):
         response = JSONResponse(True, mimetype=response_mimetype(request))
         response['Content-Disposition'] = 'inline; filename=files.json'
         return response
-
-
-def make_primary_photo_false(photo_filter):
-    if photo_filter.count() > 1:
-        #TODO: convert this to log with ERROR
-        print 'In PictureMakePrimaryView, found number of old primary photo greater than 1: ' \
-            + str(photo_filter.count())
-
-    for photo in photo_filter:
-        photo.is_primary = False
-        photo.save()
 
 
 class PictureMakePrimaryView(LoginRequired, SingleObjectTemplateResponseMixin, BaseDetailView):
@@ -312,11 +315,15 @@ class PictureListView(LoginRequired, ListView):
 
     def render_to_response(self, context, **response_kwargs):
         if "piece" in self.kwargs:
-            makePrimaryUrl = 'sell-piece-make-primary'
+            make_primary_url = 'sell-piece-make-primary'
         else:
-            makePrimaryUrl = 'sell-make-primary'
+            make_primary_url = 'sell-make-primary'
 
-        files = [ serialize(p, makePrimaryUrl) for p in self.get_queryset() ]
+        files = []
+        for p in self.get_queryset():
+            p.file.make_primary_url = make_primary_url
+            files.append(serialize(p))
+
         data = {'files': files}
         response = JSONResponse(data, mimetype=response_mimetype(self.request))
         response['Content-Disposition'] = 'inline; filename=files.json'

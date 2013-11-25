@@ -1,0 +1,6 @@
+*** this does not work yet ***
+pip install sorl-thumbnail
+
+ brew install libjpeg
+
+pip install PIL
