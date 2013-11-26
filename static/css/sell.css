@@ -18,3 +18,8 @@
     bottom: 0;
     left: 20px;
 }
+
+.sell-form {
+    clear: both;
+    padding-top: 25px;
+}
