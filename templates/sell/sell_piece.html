@@ -55,5 +55,20 @@
 
 {% block override_script_block %}
     <!-- The main application script -->
-    <script src="{{STATIC_URL}}js/sell_piece_upload_main.js"></script>
+    <script src="{{STATIC_URL}}js/sell_upload_main.js"></script>
+    <script>
+        $.ajax({
+            // Uncomment the following to send cross-domain cookies:
+            //xhrFields: {withCredentials: true},
+            //url: $('#fileupload').fileupload('option', 'url'),
+            url: '/sell/piece/view/',
+            dataType: 'json',
+            context: $('#fileupload')[0]
+        }).always(function () {
+            $(this).removeClass('fileupload-processing');
+        }).done(function (result) {
+            $(this).fileupload('option', 'done')
+                .call(this, null, {result: result});
+        });
+    </script>
 {% endblock override_script_block %}

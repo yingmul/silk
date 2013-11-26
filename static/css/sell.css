@@ -1,6 +1,20 @@
 @charset "UTF-8";
 
 .photo-upload {
-    float: left
+    position: relative;
+    float: left;
+    margin: 10px 10px 10px 30px;
+    height: 260px;
+    width: 250px;
+}
 
+.preview-img {
+    display: block;
+    margin: auto;
+}
+
+.sell-photo-button {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
 }
