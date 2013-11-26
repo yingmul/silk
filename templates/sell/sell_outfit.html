@@ -37,12 +37,13 @@
         </div>
     </div>
     <!-- The table listing the files available for upload/download -->
-    <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+    <div class="files"></div>
 </form>
 
 
 {% upload_js %}
 
+<div class="clear-both">
 <form id="outfitform" method="post" action=".">
     {% csrf_token %}
 
@@ -50,6 +51,7 @@
     {{ wizard.form.as_p }}
     <input type="submit" value="{% trans "Next" %}"/>
 </form>
+</div>
 
 {%  endblock content_block %}
 

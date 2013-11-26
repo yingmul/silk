@@ -6,9 +6,7 @@ from upload.serialize import serialize
 from django.utils import six
 from django.utils.datastructures import SortedDict
 from django.views.generic.detail import BaseDetailView, SingleObjectTemplateResponseMixin
-from django.views.generic.base import TemplateView
 from sorl.thumbnail import get_thumbnail
-from django.db.models import Q
 from upload.response import JSONResponse, response_mimetype
 from sell.models import Picture, Outfit, Piece, condition_display
 from silk.views import LoginRequired
@@ -239,6 +237,19 @@ def make_primary_photo_false(photo_filter):
         photo.save()
 
 
+def get_thumbnail_size(file):
+    """
+    Returns the thumbnail size to pass in to sorl's get_thumbnail function.
+    Want to make the appropriate size based on the orientation of the photo
+    """
+    if file.height > file.width:
+        # this is a portrait photo
+        return '150x200'
+    else:
+        # this is a landscape photo
+        return '200x150'
+
+
 class PictureCreateView(LoginRequired, CreateView):
     model = Picture
 
@@ -257,7 +268,12 @@ class PictureCreateView(LoginRequired, CreateView):
         self.object = form.save()
 
         # save form again to set the thumbnail_url
-        thumbnail = get_thumbnail(self.object, '100x100', crop='center', quality=99)
+        thumbnail = get_thumbnail(
+            self.object,
+            get_thumbnail_size(self.object.file),
+            crop='center',
+            quality=99)
+
         form.instance.thumbnail_url = thumbnail.url
         self.object = form.save()
 
