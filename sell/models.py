@@ -40,7 +40,7 @@ class Piece(models.Model):
         ('p', condition_display['p'])
     ]
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    brand = models.CharField(max_length=50, blank=True)
+    brand = models.CharField(max_length=50)
     #TODO: add size -- depend on category
     category = models.CharField(choices=CATEGORY, max_length='20')
     condition = models.CharField(choices=CONDITION, max_length='5')

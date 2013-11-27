@@ -15,7 +15,7 @@ from django.core.urlresolvers import reverse
 
 from silkers.forms import RegistrationBasicForm, RegistrationExtraForm, LoginForm
 from models import UserProfile
-
+from sell.models import Picture
 
 FORMS = [("0", RegistrationBasicForm),
          ("1", RegistrationExtraForm)]
@@ -102,6 +102,20 @@ class LoginView(FormMixin, TemplateView):
 @sensitive_post_parameters()
 @csrf_protect
 def logout_view(request):
+    # on log out, remove any outfit and piece photos that were not tied to the outfits/pieces
+    pics = Picture.objects.filter(
+            seller=request.user,
+            piece__isnull=True,
+            type='p'
+        ) | Picture.objects.filter(
+            seller=request.user,
+            outfit__isnull=True,
+            type='o'
+        )
+
+    for pic in pics:
+        pic.delete()
+
     logout(request)
     return HttpResponseRedirect(reverse('login'))
 
