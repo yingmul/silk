@@ -59,7 +59,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = '/Users/aliu/MyProject/uploads/'
+MEDIA_ROOT = '/Users/aliu/project/uploads/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -176,3 +176,6 @@ LOGGING = {
 # setting for maximum number of piece you can sell in the forms, this is a HACK since
 # couldn't figure out how to dynamically add forms into FormWizard
 MAX_PIECE_SELL_FORMS = 5
+
+# setting for the thumbnail size for sorl
+SORL_THUMBNAIL_SIZE = '180x200'

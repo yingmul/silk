@@ -237,19 +237,6 @@ def make_primary_photo_false(photo_filter):
         photo.save()
 
 
-def get_thumbnail_size(file):
-    """
-    Returns the thumbnail size to pass in to sorl's get_thumbnail function.
-    Want to make the appropriate size based on the orientation of the photo
-    """
-    if file.height > file.width:
-        # this is a portrait photo
-        return '150x200'
-    else:
-        # this is a landscape photo
-        return '200x150'
-
-
 class PictureCreateView(LoginRequired, CreateView):
     model = Picture
 
@@ -270,8 +257,7 @@ class PictureCreateView(LoginRequired, CreateView):
         # save form again to set the thumbnail_url
         thumbnail = get_thumbnail(
             self.object,
-            get_thumbnail_size(self.object.file),
-            crop='center',
+            settings.SORL_THUMBNAIL_SIZE,
             quality=99)
 
         form.instance.thumbnail_url = thumbnail.url

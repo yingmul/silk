@@ -37,13 +37,13 @@ $(function () {
         // Enable image resizing, except for Android and Opera,
         // which actually support image resizing, but fail to
         // send Blob objects via XHR requests:
-        /*
-        // TODO:get client re-size to actually work with imageMaxWidth and imageMaxHeight
-        // right now it's resizing it, but can't detect the orientation before re-sizing
         disableImageResize: /Android(?!.*Chrome)|Opera/
             .test(window.navigator.userAgent),
-        */
-        maxFileSize: 10000000, // 10 MB
+        imageMaxWidth: 500,
+        imageMaxHeight: 600,
+        imageCrop: false,
+
+        maxFileSize: 1572864, // 1.5 MB
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
         maxNumberOfFiles: 6,
         autoUpload: true,
