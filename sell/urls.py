@@ -17,10 +17,10 @@ urlpatterns = patterns('',
     url(r'^new/$', PictureCreateView.as_view(), name='sell-new'),
     url(r'^view/$', PictureListView.as_view(), name='sell-view'),
     url(r'^delete/(?P<pk>\d+)$', PictureDeleteView.as_view(), name='sell-delete'),
-    url(r'^makePrimary/(?P<pk>\d+)$', PictureMakePrimaryView.as_view(), name='sell-make-primary'),
+    url(r'^makePrimary/(?P<step>\d+)/(?P<pk>\d+)$', PictureMakePrimaryView.as_view(), name='sell-make-primary'),
 
     # urls for creating pictures for piece
-    url(r'^piece/new/$', PictureCreateView.as_view(), {'piece':True}, name='sell-piece-new'),
-    url(r'^piece/view/$', PictureListView.as_view(), {'piece':True}, name='sell-piece-view'),
-    url(r'^piece/makePrimary/(?P<pk>\d+)$', PictureMakePrimaryView.as_view(), {'piece':True}, name='sell-piece-make-primary'),
+    url(r'^piece/new/(?P<step>\d+)/$', PictureCreateView.as_view(), {'piece':True}, name='sell-piece-new'),
+    url(r'^piece/view/(?P<step>\d+)/$', PictureListView.as_view(), {'piece':True}, name='sell-piece-view'),
+    url(r'^piece/makePrimary/(?P<step>\d+)/(?P<pk>\d+)/$', PictureMakePrimaryView.as_view(), {'piece':True}, name='sell-piece-make-primary'),
 )

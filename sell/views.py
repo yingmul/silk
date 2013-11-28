@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.views.generic import CreateView, ListView, DeleteView
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -149,21 +150,6 @@ class SellWizard(LoginRequired, SessionWizardView):
         """
         return {'request': self.request}
 
-    def process_step(self, form):
-        # Link the pictures uploaded to the current step
-        if isinstance(form, SellPieceForm):
-            piece_pictures = Picture.objects.filter(
-                seller=self.request.user,
-                piece__isnull=True,
-                type='p',
-                piece_step=0
-            )
-            for pic in piece_pictures:
-                pic.piece_step = int(self.storage.current_step)
-                pic.save()
-
-        return super(SellWizard, self).process_step(form)
-
     def done(self, form_list, **kwargs):
         outfit_form_data = form_list[0].cleaned_data
 
@@ -209,19 +195,20 @@ class SellWizard(LoginRequired, SessionWizardView):
         return HttpResponseRedirect('/')
 
 
-def get_current_photos(self):
-    if "piece" in self.kwargs:
-        # display pictures for this seller, of type 1 (piece) and hasn't tied to a piece yet (step=0)
+def get_current_photos(is_piece, user, curr_step):
+    if is_piece:
+        # display pictures for this seller, of type 'p' (piece) and hasn't tied to a piece yet:
+        # step = curr_step: photos that were uploaded in current step for piece forms
         return Picture.objects.filter(
-            seller=self.request.user,
+            seller=user,
             type='p',
             piece__isnull=True,
-            piece_step=0,
+            piece_step=curr_step
         )
     else:
-        # display pictures for this seller, of type 0 (outfit) and hasn't tied to an outfit yet
+        # display pictures for this seller, of type 'o' (outfit) and hasn't tied to an outfit yet
         return Picture.objects.filter(
-            seller=self.request.user,
+            seller=user,
             type='o',
             outfit__isnull=True)
 
@@ -243,14 +230,15 @@ class PictureCreateView(LoginRequired, CreateView):
     def form_valid(self, form):
         # setting seller to be the logged in user
         form.instance.seller = self.request.user
-        form.instance.piece_step = 0
         if "piece" in self.kwargs:
             # picture is for a piece, and not outfit
             form.instance.type = 'p'
             make_primary_url = 'sell-piece-make-primary'
+            form.instance.piece_step = self.kwargs['step']
         else:
             form.instance.type = 'o'
             make_primary_url = 'sell-make-primary'
+            form.instance.piece_step = 0
 
         self.object = form.save()
 
@@ -295,9 +283,13 @@ class PictureMakePrimaryView(LoginRequired, SingleObjectTemplateResponseMixin, B
 
     def post(self, *args, **kwargs):
         # make the original primary Picture (if there is any) to not a primary photo
-        make_primary_photo_false(
-            get_current_photos(self).
-            filter(is_primary=True))
+        curr_step = int(kwargs['step'])
+
+        existing_primary_photos = \
+            get_current_photos("piece" in kwargs, self.request.user, curr_step)\
+                .filter(is_primary=True)
+
+        make_primary_photo_false(existing_primary_photos)
 
         # make this Picture a primary photo
         self.object = self.get_object()
@@ -312,17 +304,17 @@ class PictureMakePrimaryView(LoginRequired, SingleObjectTemplateResponseMixin, B
 class PictureListView(LoginRequired, ListView):
     model = Picture
 
-    def get_queryset(self):
-        return get_current_photos(self)
-
     def render_to_response(self, context, **response_kwargs):
+        curr_step = 0
         if "piece" in self.kwargs:
             make_primary_url = 'sell-piece-make-primary'
+            curr_step = int(self.kwargs['step'])
         else:
             make_primary_url = 'sell-make-primary'
 
         files = []
-        for p in self.get_queryset():
+        curr_photos = get_current_photos("piece" in self.kwargs, self.request.user, curr_step)
+        for p in curr_photos:
             p.file.make_primary_url = make_primary_url
             files.append(serialize(p))
 

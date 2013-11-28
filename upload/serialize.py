@@ -46,7 +46,7 @@ def serialize(instance, file_attr='file'):
         'size': obj.size,
         'deleteUrl': reverse('sell-delete', args=[instance.pk]),
         'deleteType': 'DELETE',
-        'makePrimaryUrl': reverse(obj.make_primary_url, args=[instance.pk]),
+        'makePrimaryUrl': reverse(obj.make_primary_url, args=[instance.piece_step, instance.pk]),
         'isPrimary': is_primary
     }
 

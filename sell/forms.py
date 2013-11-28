@@ -69,11 +69,12 @@ class SellPieceForm(forms.ModelForm):
             # for this instance of the form
             self.request.session['check_for_sell_piece_pics'] = False
 
+            # use self.prefix as current step, minor hack :)
             piece_pics = Picture.objects.filter(
                 seller=self.request.user,
                 type='p',
                 piece__isnull=True,
-                piece_step=0)
+                piece_step=int(self.prefix))
 
             if not piece_pics:
                 # throw an error to tell seller to upload pictures for outfit
