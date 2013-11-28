@@ -313,7 +313,9 @@ class PictureListView(LoginRequired, ListView):
             make_primary_url = 'sell-make-primary'
 
         files = []
-        curr_photos = get_current_photos("piece" in self.kwargs, self.request.user, curr_step)
+        curr_photos = \
+            get_current_photos("piece" in self.kwargs, self.request.user, curr_step)\
+                .order_by('-is_primary')
         for p in curr_photos:
             p.file.make_primary_url = make_primary_url
             files.append(serialize(p))
