@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content_block %}
+    <h3>{{ object.name }}</h3>
+    <p> {{ object.description }} </p>
+    {% for picture in object.picture_set.all %}
+        <img src="{{ picture.thumbnail_url }}">
+    {% endfor %}
+
+    <h4>{% trans "Seller Info" %}</h4>
+    {{ object.user.username }}
+
+    <h4>Pieces</h4>
+    {% for piece_picture in piece_pictures %}
+        <a href="/piece/{{ piece_picture.piece.pk }}">
+            <img src="{{ piece_picture.thumbnail_url }}">
+        </a>
+    {% endfor %}
+{% endblock content_block %}

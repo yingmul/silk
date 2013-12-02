@@ -1,4 +1,3 @@
-from django.db.models import Q
 from django.views.generic import CreateView, ListView, DeleteView
 from django.conf import settings
 from django.http import HttpResponseRedirect

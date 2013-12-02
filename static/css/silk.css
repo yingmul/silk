@@ -9,6 +9,11 @@ body {
     margin-left:auto;
     margin-right:auto;
 }
+
 .clear-both {
     clear: both;
+}
+
+.photo-display {
+    float: left;
 }

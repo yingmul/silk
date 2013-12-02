@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content_block %}
+    {% trans "Price: " %}{{ object.price }}
+    {% trans "Brand: " %}{{ object.brand }}
+    {% trans "Category: " %}{{ object.category }}
+    {% trans "Condition: " %}{{ object.condition }}
+    <div>
+    {% for picture in object.picture_set.all %}
+        <img src="{{ picture.thumbnail_url }}"/>
+    {% endfor %}
+    </div>
+{% endblock content_block %}

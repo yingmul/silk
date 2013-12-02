@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from silkers.views import RegistrationWizard, LoginView
 from silkers.forms import RegistrationBasicForm, RegistrationExtraForm
-from silk.views import HomeView
+from silk.views import HomeView, OutfitDetailView, PieceDetailView
 from django.contrib import admin
 from django.conf import settings
 
@@ -20,8 +20,11 @@ urlpatterns = patterns('',
     url(r'^register/$', RegistrationWizard.as_view([RegistrationBasicForm, RegistrationExtraForm])),
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', 'silkers.views.logout_view', name='logout'),
+
     url(r'^sell/', include('sell.urls')),
 
+    url(r'^outfit/(?P<pk>\d+)$', OutfitDetailView.as_view(), name='outfit-detail'),
+    url(r'^piece/(?P<pk>\d+)$', PieceDetailView.as_view(), name='piece-detail'),
 )
 
 #TODO: configure web server to serve static file via MEDIA_URL in settings

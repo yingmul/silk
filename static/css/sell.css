@@ -5,8 +5,8 @@
     float: left;
     margin: 10px 10px 10px 30px;
     padding:10px 0 20px 0;
-    height: 280px;
-    width: 250px;
+    height: 360px;
+    width: 320px;
     border: 1px solid;
     border-radius: 10px;
     box-shadow: 10px 10px 5px #D0D0D0;
@@ -21,7 +21,7 @@
 .sell-photo-button {
     position: absolute;
     bottom: 0;
-    left: 20px;
+    left: 55px;
     padding-bottom: 10px;
 }
 
