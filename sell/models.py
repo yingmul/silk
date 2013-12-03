@@ -9,6 +9,7 @@ class Outfit(models.Model):
     user = models.ForeignKey(User)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=200, blank=True)
+    num_likes = models.PositiveIntegerField(default=0)
 
 
 # dictionary used in Piece model and in SellPreviewForm

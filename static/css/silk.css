@@ -1,19 +1,28 @@
 @charset "UTF-8";
 
-body {
-    padding: 10px 20px 20px 10px;
-}
-
-.center
-{
-    margin-left:auto;
-    margin-right:auto;
-}
-
-.clear-both {
-    clear: both;
-}
-
 .photo-display {
     float: left;
+    position: relative;
+    margin: 10px 10px 10px 20px;
+    padding: 10px 8px 10px 8px;
+    /*height: 360px;*/
+    /*width: 320px;*/
+    border: 1px groove;
+    border-radius: 2px;
+    background-color: white;
+}
+
+.preview-img {
+    display: block;
+    margin: auto;
+}
+
+.outfit-buttons {
+    padding-top: 8px;
+}
+
+.outfit-name {
+    border-bottom: 1px solid #c9c9c9;
+    font-size: 14px;
+    padding-top: 5px;
 }

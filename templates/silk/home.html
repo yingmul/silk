@@ -15,6 +15,15 @@
                 <a href="/outfit/{{ picture.outfit.pk }}">
                     <img class="preview-img" src="{{ picture.thumbnail_url }}">
                 </a>
+                <div class="outfit-name">
+                    {{ picture.outfit.name }}
+                </div>
+                <div class="outfit-buttons">
+                    <button id="{{ picture.outfit.pk }}" class="button outfit-like-btn" type="button">{% trans "Like" %}</button>
+                    <button class="button" type="button">{% trans "Share" %}</button>
+                    {% trans "By: " %} {{ picture.outfit.user.username }}
+                    <span class="num-outfit-likes">{{ picture.outfit.num_likes }}</span>
+                </div>
             </div>
         {% empty %}
             {% trans "No pictures yet."%}
