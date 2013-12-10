@@ -16,6 +16,7 @@ def get_all_outfit_pictures(request, pk):
     outfit = Outfit.objects.get(pk=pk)
     pictures = Picture.objects.filter(
         outfit=outfit,
+        is_primary=False,
     )
     for pic in pictures:
         outfit_urls.append(pic.thumbnail_url)

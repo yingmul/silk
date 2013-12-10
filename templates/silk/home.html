@@ -12,9 +12,12 @@
     <div class="photos">
         {% for picture in object_list %}
             <div class="photo-display">
-                <a data-toggle="modal" data-id="{{ picture.outfit.pk }}" class="outfit-modal" href="#outfitModal">
-                    <img class="preview-img" src="{{ picture.thumbnail_url }}">
-                </a>
+                <div class="photo-image" id="{{ picture.outfit.pk }}">
+                    <a data-toggle="modal" data-id="{{ picture.outfit.pk }}" class="outfit-modal" href="#outfitModal">
+                        <img class="preview-img" src="{{ picture.thumbnail_url }}">
+                        <img class="loading-img" src="{{ STATIC_URL }}img/loading.gif">
+                    </a>
+                </div>
                 <div class="outfit-name">
                     {{ picture.outfit.name }}
                 </div>

@@ -15,6 +15,7 @@
 .preview-img {
     display: block;
     margin: auto;
+    position: relative;
 }
 
 .outfit-buttons {
@@ -25,4 +26,11 @@
     border-bottom: 1px solid #c9c9c9;
     font-size: 14px;
     padding-top: 5px;
+}
+
+.loading-img {
+    top: 135px;
+    left: 115px;
+    position: absolute;
+    display: none;
 }
