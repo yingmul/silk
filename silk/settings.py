@@ -178,4 +178,4 @@ LOGGING = {
 MAX_PIECE_SELL_FORMS = 5
 
 # setting for the thumbnail size for sorl
-SORL_THUMBNAIL_SIZE = '260x280'
+SORL_THUMBNAIL_SIZE = '230x270'

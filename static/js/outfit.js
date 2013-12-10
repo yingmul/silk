@@ -13,4 +13,14 @@ $(function () {
         );
     });
 
+    $(document).on("click", ".outfit-modal", function () {
+        var pk = $(this).data('id');
+
+
+        $(".modal-body #bookId").val( pk );
+        // As pointed out in comments,
+        // it is superfluous to have to manually call the modal.
+        // $('#addBookDialog').modal('show');
+    });
+
 });
