@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'silkers',
     'sell',
     'upload',
+    'outfit',
 )
 
 # A sample logging configuration. The only tangible logging

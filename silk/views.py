@@ -24,4 +24,4 @@ class HomeView(LoginRequired, ListView):
             type='o',
             outfit__isnull=False,
             is_primary=True
-        )
+        ).order_by('-outfit__created')

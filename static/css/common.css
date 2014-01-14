@@ -5,6 +5,10 @@ body {
     background: #f6f6f6;
 }
 
+.title {
+    font-size: 24px;
+}
+
 .center
 {
     margin-left:auto;

@@ -1,20 +1,48 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load picture_filter %}
 
 {% block content_block %}
-    <h3>{{ object.name }}</h3>
-    <p> {{ object.description }} </p>
-    {% for picture in object.picture_set.all %}
-        <img src="{{ picture.thumbnail_url }}">
-    {% endfor %}
+    <div class="outfit-detail">
+        <span class="outfit-pictures">
+            <div class="outfit-selected-pic">
+                <img class="outfit-selected-img" src="{{ object.picture_set.all|primary_picture }}"/>
+            </div>
 
-    <h4>{% trans "Seller Info" %}</h4>
-    {{ object.user.username }}
+            <div id="outfit-carousel">
+                {% for picture in object.picture_set.all %}
+                    <img class="carousel-img" src="{{ picture.thumbnail_url }}">
+                {% endfor %}
+            </div>
+            <a id="outfit_previous" class="prev" href="#">{% trans "Previous" %}</a>
+            <a id="outfit_next" class="next" href="#">{% trans "Next" %}</a>
+        </span>
 
-    <h4>Pieces</h4>
-    {% for piece_picture in piece_pictures %}
-        <a href="/piece/{{ piece_picture.piece.pk }}">
-            <img src="{{ piece_picture.thumbnail_url }}">
-        </a>
-    {% endfor %}
+        <span class="outfit-desc">
+            <div class="title">{{ object.name }}</div>
+            {% if object.description %}
+                <h3>{% trans 'Description' %}</h3>
+                <p> {{ object.description }} </p>
+            {% endif %}
+        </span>
+        <span class="outfit-pieces">
+            <div class="title">{% trans 'Items for Sale' %}</div>
+            <div class="outfit-pieces-wrapper">
+                {% for piece in object.piece_set.all %}
+                    <span class="outfit-piece">
+                        <a href="/piece/{{ piece.pk }}">
+                        <img class="outfit-piece-picture" src="{{ piece.picture_set.all|primary_picture_thumbnail }}">
+                        {% for pic in piece.picture_set.all|picture_thumbnail_no_primary %}
+                            <img class="outfit-piece-picture-other" src="{{ pic }}">
+                        {% endfor %}
+                        </a>
+                        <span class="outfit-piece-desc">${{ piece.price }}</span>
+                    </span>
+                {% endfor %}
+            </div>
+
+            <h4>{% trans "Seller Info" %}</h4>
+            {{ object.user.username }}
+        </span>
+    </div>
 {% endblock content_block %}

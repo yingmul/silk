@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 from sorl.thumbnail import delete
+from django.utils import timezone
+
 
 class Outfit(models.Model):
     """
@@ -10,6 +12,7 @@ class Outfit(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=200, blank=True)
     num_likes = models.PositiveIntegerField(default=0)
+    created = models.DateTimeField(default=timezone.now)
 
 
 # dictionary used in Piece model and in SellPreviewForm

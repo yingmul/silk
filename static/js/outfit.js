@@ -1,5 +1,4 @@
 $(function () {
-
     // Update number of likes when user clicks on 'like' button on an outfit
     $(".outfit-like-btn").click(function(){
         var pk = $(this).attr('id');
@@ -13,19 +12,14 @@ $(function () {
         );
     });
 
-    $(document).on("click", ".outfit-modal", function () {
-        var pk = $(this).data('id');
-
-
-        $(".modal-body #bookId").val( pk );
-    });
-
-
     // Function to display rest of outfit angles when hovered over on home page
     // these variables are not ideal, they are set in success which is used in the unhovered part of the function
+    //TODO: figure out a better way to do this, setting global variables like swapImageFunc
+    // makes the pictures on home page get swapped sometimes, and clear interval doesn't work all the time
     var primaryImage;
     var swapImageFunc;
-    $(".photo-image").hover(function() {
+
+    var outfitHoverInFunc = function() {
         $.ajax({
             context: this,
             type: 'GET',
@@ -50,10 +44,16 @@ $(function () {
                 }, 1000);
             }
         });
+    };
 
-    }, function() {
+    var outfitHoverOutFunc = function() {
         clearInterval(swapImageFunc);
         $(this).find('.preview-img').attr('src', primaryImage);
-    });
+    };
 
+    $(".photo-image").hoverIntent({
+        over: outfitHoverInFunc,
+        out: outfitHoverOutFunc,
+        timeout: 400
+    });
 });
