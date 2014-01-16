@@ -1,50 +1,15 @@
 @charset "UTF-8";
 
-.outfit-detail {
+/*Shared styles between outfit_detail and piece_detail */
+.product-detail {
     padding: 0 20px 20px 20px;
     overflow: hidden;
 }
 
-.outfit-pictures {
+.product-pictures {
     float: left;
     width: 450px;
     padding: 0 20px 40px 20px;
-}
-
-.outfit-desc {
-    float: left;
-    width: 200px;
-}
-
-.outfit-piece {
-    display: inline-block;
-    height: 300px;
-    width: 240px;
-    position: relative;
-}
-
-.outfit-piece-desc {
-    position: absolute;
-    top: 270px;
-}
-
-.outfit-pieces-wrapper {
-    padding-top: 10px;
-}
-
-.outfit-pieces {
-    float: right;
-    width: 550px;
-    padding-left: 20px;
-}
-
-#outfit-carousel {
-    width: 870px;
-    height: 175px;
-    top: 20px;
-    left: 45px;
-    overflow: hidden;
-    display: block;
 }
 
 .carousel-img {
@@ -53,7 +18,21 @@
     cursor: pointer;
 }
 
-#outfit_previous{
+#product_carousel {
+    width: 870px;
+    height: 175px;
+    top: 20px;
+    left: 45px;
+    overflow: hidden;
+    display: block;
+}
+
+.selected-img {
+    width: 400px;
+    height: 450px;
+}
+
+#carousel_previous{
     text-indent: -9999em;
     background: #f6f6f6 url('/static/img/arrow.png') no-repeat scroll -30px -31px;
     left: 27px;
@@ -64,12 +43,12 @@
     display: block;
 }
 
-#outfit_previous.disabled{
+#carousel_previous.disabled{
     background-position: -160px -31px;
     background-color: #f6f6f6;
 }
 
-#outfit_next{
+#carousel_next{
     text-indent: -9999em;
     background: #f6f6f6 url('/static/img/arrow.png') no-repeat scroll -31px -151px;
     left: 397px;
@@ -80,21 +59,10 @@
     display: block;
 }
 
-#outfit_next.disabled {
+#carousel_next.disabled {
     background-position: -160px -151px
 }
 
-.outfit-selected-img {
-    width: 400px;
-    height: 450px;
-}
-
-.outfit-piece-picture {
-    padding: 0 18px 10px 0;
-}
-
-/*TODO: fix this when I get less*/
-.outfit-piece-picture-other {
-    padding: 0 18px 10px 0;
-    display: none;
+.product-price {
+    font-size: 20px;
 }

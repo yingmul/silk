@@ -1,21 +1,18 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load picture_filter %}
+{% load outfit_filter %}
 
 {% block content_block %}
-    <div class="outfit-detail">
-        <span class="outfit-pictures">
-            <div class="outfit-selected-pic">
-                <img class="outfit-selected-img" src="{{ object.picture_set.all|primary_picture }}"/>
-            </div>
-
-            <div id="outfit-carousel">
+    <div class="product-detail">
+        <span class="product-pictures">
+            <img class="selected-img" src="{{ object.picture_set.all|primary_picture }}"/>
+            <div id="product_carousel">
                 {% for picture in object.picture_set.all %}
                     <img class="carousel-img" src="{{ picture.thumbnail_url }}">
                 {% endfor %}
             </div>
-            <a id="outfit_previous" class="prev" href="#">{% trans "Previous" %}</a>
-            <a id="outfit_next" class="next" href="#">{% trans "Next" %}</a>
+            <a id="carousel_previous" class="prev" href="#">{% trans "Previous" %}</a>
+            <a id="carousel_next" class="next" href="#">{% trans "Next" %}</a>
         </span>
 
         <span class="outfit-desc">
@@ -36,7 +33,11 @@
                             <img class="outfit-piece-picture-other" src="{{ pic }}">
                         {% endfor %}
                         </a>
-                        <span class="outfit-piece-desc">${{ piece.price }}</span>
+                        <div class="outfit-piece-desc">
+                            <div>{{ piece.brand }}</div>
+                            <div>${{ piece.price }}</div>
+                            <div>{{ piece.condition | get_condition_text}}</div>
+                        </div>
                     </span>
                 {% endfor %}
             </div>

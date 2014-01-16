@@ -47,6 +47,12 @@ class SellPieceForm(forms.ModelForm):
     """
     Second step of selling an outfit, including upload pictures of individual pieces to sell
     """
+    description = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+        label=u'Description (Optional)'
+    )
+
     CHOICES = ((1, 'Yes',), (0, 'No',))
     more_pieces = forms.ChoiceField(
         widget=forms.RadioSelect,
@@ -93,7 +99,7 @@ class SellPieceForm(forms.ModelForm):
 
     class Meta:
         model = Piece
-        fields = ['price', 'brand', 'category', 'condition']
+        fields = ['price', 'brand', 'category', 'condition', 'description']
 
 
 class SellPreviewForm(forms.Form):

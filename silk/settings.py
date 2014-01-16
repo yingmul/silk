@@ -90,6 +90,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -124,6 +125,8 @@ TEMPLATE_DIRS = (
     (os.path.join(PROJECT_ROOT, 'templates'),)
 )
 
+COMPRESS_PRECOMPILERS = (('text/less', "/usr/local/bin/lessc '{infile}' '{outfile}'"),)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -136,6 +139,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    "compressor",
     'silkers',
     'sell',
     'upload',

@@ -1,14 +1,30 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load outfit_filter %}
 
 {% block content_block %}
-    {% trans "Price: " %}{{ object.price }}
-    {% trans "Brand: " %}{{ object.brand }}
-    {% trans "Category: " %}{{ object.category }}
-    {% trans "Condition: " %}{{ object.condition }}
-    <div>
-    {% for picture in object.picture_set.all %}
-        <img src="{{ picture.thumbnail_url }}"/>
-    {% endfor %}
+    <div class="product-detail">
+        <span class="product-pictures">
+            <img class="selected-img" src="{{ object.picture_set.all|primary_picture }}"/>
+            <div id="product_carousel">
+                {% for picture in object.picture_set.all %}
+                    <img class="carousel-img" src="{{ picture.thumbnail_url }}">
+                {% endfor %}
+            </div>
+            <a id="carousel_previous" class="prev" href="#">{% trans "Previous" %}</a>
+            <a id="carousel_next" class="next" href="#">{% trans "Next" %}</a>
+        </span>
+
+        <div class="title">{{ object.brand }} {{ object.category }}</div>
+
+        <div class="product-price">${{ object.price }}</div>
+        <div><div class="label">{% trans "BRAND: " %}</div>{{ object.brand }}</div>
+        <div><div class="label">{% trans "CATEGORY: " %}</div>{{ object.category }}</div>
+        <div><div class="label">{% trans "CONDITION: " %}</div>{{ object.condition | get_condition_text}}</div>
+
+        {% if object.description %}
+            <div>{{ object.description }}</div>
+        {% endif %}
+
     </div>
 {% endblock content_block %}

@@ -1,28 +1,4 @@
 $(function () {
-    $('#outfit-carousel').on("click", "img", function() {
-        var clickedImg = $(this).attr('src');
-        $('.outfit-selected-img').attr('src', clickedImg);
-    });
-
-    $('#outfit-carousel').carouFredSel({
-        auto: false,
-        circular: false,
-        height: "variable",
-        infinite: false,
-        items: {
-            width: 100,
-            visible: 3
-        },
-        next: {
-            button: "#outfit_next",
-            key: "right"
-        },
-        prev: {
-            button: "#outfit_previous",
-            key: "left"
-        }
-    });
-
     var swapImageFunc;
     var primaryImage;
     var pieceHoverInFunc = function() {
@@ -51,5 +27,4 @@ $(function () {
         out: pieceHoverOutFunc,
         timeout: 400
     });
-
 });

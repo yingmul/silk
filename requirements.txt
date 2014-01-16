@@ -1,6 +1,15 @@
+**When deploying, do this***
+in settings.py, add site name to this
+ALLOWED_HOSTS = []
+
+**end**
 *** this does not work yet ***
 pip install sorl-thumbnail
 
  brew install libjpeg
 
+installed nodejs
 pip install PIL
+pip install django_compressor
+npm install -g less // installed this globally
+

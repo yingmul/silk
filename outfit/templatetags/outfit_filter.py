@@ -1,4 +1,5 @@
 from django import template
+from sell.models import condition_display
 
 register = template.Library()
 
@@ -18,3 +19,9 @@ def primary_picture_thumbnail(value):
 def picture_thumbnail_no_primary(value):
     pictures = value.filter(is_primary=False)
     return [pic.thumbnail_url for pic in pictures]
+
+@register.filter
+def get_condition_text(value):
+    return condition_display[value]
+
+
