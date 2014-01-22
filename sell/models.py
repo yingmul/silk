@@ -43,11 +43,13 @@ class Piece(models.Model):
         ('f', condition_display['f']),
         ('p', condition_display['p'])
     ]
+
     price = models.DecimalField(max_digits=8, decimal_places=2)
     brand = models.CharField(max_length=50)
-    #TODO: add size -- depend on category
-    category = models.CharField(choices=CATEGORY, max_length='20')
-    condition = models.CharField(choices=CONDITION, max_length='5')
+    # TODO: (nice to have) make size into a drop down field when category change values
+    size = models.CharField(max_length=5)
+    category = models.CharField(choices=CATEGORY, max_length=20)
+    condition = models.CharField(choices=CONDITION, max_length=5)
     description = models.CharField(max_length=200, blank=True)
     outfit = models.ForeignKey(Outfit)
 

@@ -1,17 +1,41 @@
 @charset "UTF-8";
 
-body {
-    padding: 10px 20px 20px 20px;
+// the following is to show a scrollbar on a div that's scrollable
+// since by default safari and firefox on ios does not show a scrollbar unless clicked into
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
 }
 
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0,0,0,.5);
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+body {
+  padding: 10px 20px 20px 20px;
+  background-color: #F8F8F8;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
+}
+
+
 .title {
-    font-size: 26px;
-    text-transform: uppercase;
-    color: #00CED1;
+  font-size: 32px;
+  text-transform: uppercase;
+  color: @brand-primary;
+  font-family: museo-sans-rounded, sans-serif;
+}
+
+
+.sub-title {
+  font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
+  font-size: 14px;
 }
 
 .label {
     font-size: 14px;
+    font-weight: bold;
     color: #717171;
 }
 
@@ -25,43 +49,9 @@ body {
     clear: both;
 }
 
-.button {
-	-moz-box-shadow: 3px 4px 0px 0px #899599;
-	-webkit-box-shadow: 3px 4px 0px 0px #899599;
-	box-shadow: 3px 4px 0px 0px #899599;
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #bab1ba));
-	background:-moz-linear-gradient(top, #ededed 5%, #bab1ba 100%);
-	background:-webkit-linear-gradient(top, #ededed 5%, #bab1ba 100%);
-	background:-o-linear-gradient(top, #ededed 5%, #bab1ba 100%);
-	background:-ms-linear-gradient(top, #ededed 5%, #bab1ba 100%);
-	background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#bab1ba',GradientType=0);
-	background-color:#ededed;
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-	border:1px solid #d6bcd6;
-	display:inline-block;
-	cursor:pointer;
-	color:#3a8a9e;
-	font-family:Verdana;
-	font-size:13px;
-	font-weight:bold;
-	padding:5px 11px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #e1e2ed;
-}
-.button:hover {
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #bab1ba), color-stop(1, #ededed));
-	background:-moz-linear-gradient(top, #bab1ba 5%, #ededed 100%);
-	background:-webkit-linear-gradient(top, #bab1ba 5%, #ededed 100%);
-	background:-o-linear-gradient(top, #bab1ba 5%, #ededed 100%);
-	background:-ms-linear-gradient(top, #bab1ba 5%, #ededed 100%);
-	background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#bab1ba', endColorstr='#ededed',GradientType=0);
-	background-color:#bab1ba;
-}
-.button:active {
-	position:relative;
-	top:1px;
+.display-box {
+  background-color: #F0F0F0;
+  -moz-box-shadow: 0 0 5px #888;
+  -webkit-box-shadow: 0 0 5px #888;
+  box-shadow: 0 0 5px #888;
 }

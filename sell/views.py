@@ -177,6 +177,8 @@ class SellWizard(LoginRequired, SessionWizardView):
                     brand=piece_form_data['brand'],
                     category=piece_form_data['category'],
                     condition=piece_form_data['condition'],
+                    description=piece_form_data['description'],
+                    size=piece_form_data['size'],
                     outfit=outfit,
                 )
 

@@ -3,28 +3,58 @@
 {% load outfit_filter %}
 
 {% block content_block %}
-    <div class="product-detail">
+    <div class="piece-detail">
+        <span class="piece-thumbnails">
+            {% for picture in object.picture_set.all %}
+                <img class="piece-thumbnail-img" src="{{ picture.thumbnail_url }}">
+            {% endfor %}
+        </span>
         <span class="product-pictures">
-            <img class="selected-img" src="{{ object.picture_set.all|primary_picture }}"/>
-            <div id="product_carousel">
-                {% for picture in object.picture_set.all %}
-                    <img class="carousel-img" src="{{ picture.thumbnail_url }}">
-                {% endfor %}
+            <img class="piece-selected-img img-rounded" src="{{ object.picture_set.all|primary_picture }}"/>
+            <div class="piece-comments">
+                <div class="comment-line sub-title">
+                    {% trans 'COMMENTS' %} (<span id="num_comments">{{ comments.count }}</span>)
+                </div>
+                <div id="existing_comments">
+                    {# Note if changing this, needs to change 'addComment' in piece_details.js #}
+                    {% for comment in comments %}
+                         <div class="comment-line">
+                            <div class="comment-name">{{ comment.author.username }}</div>
+                            <div>{{ comment.comment }}</div>
+                         </div>
+                    {% endfor %}
+                </div>
+                <form id="piece_comment" method="post" data-submit="ajax" action="{% url "piece-comment" pk=object.pk %}">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <input type="submit" value="{% trans "Post" %}"/>
+                </form>
+
+
             </div>
-            <a id="carousel_previous" class="prev" href="#">{% trans "Previous" %}</a>
-            <a id="carousel_next" class="next" href="#">{% trans "Next" %}</a>
         </span>
 
-        <div class="title">{{ object.brand }} {{ object.category }}</div>
+        <span class="piece-description">
+            <div class="title">{{ object.brand }} {{ object.category }}</div>
 
-        <div class="product-price">${{ object.price }}</div>
-        <div><div class="label">{% trans "BRAND: " %}</div>{{ object.brand }}</div>
-        <div><div class="label">{% trans "CATEGORY: " %}</div>{{ object.category }}</div>
-        <div><div class="label">{% trans "CONDITION: " %}</div>{{ object.condition | get_condition_text}}</div>
+            <div class="product-price">${{ object.price }}</div>
+            <div class="piece-data">
+                <div><div class="label">{% trans "SIZE:" %}</div>{{ object.size }}</div>
+                <div><div class="label">{% trans "BRAND: " %}</div>{{ object.brand }}</div>
+                <div><div class="label">{% trans "CATEGORY: " %}</div>{{ object.category }}</div>
+                <div><div class="label">{% trans "CONDITION: " %}</div>{{ object.condition | get_condition_text}}</div>
+                {% if object.description %}
+                    <br/>
+                    <p class="description-label">{{ object.description }}</p>
+                {% endif %}
+            </div>
+            <button type="button" class="btn btn-primary">
+                <strong>{% trans 'Buy Now' %}</strong>
+            </button>
+            <div>Like Share</div>
 
-        {% if object.description %}
-            <div>{{ object.description }}</div>
-        {% endif %}
+            Shop {{ object.outfit.user }}'s closet
+        </span>
 
     </div>
 {% endblock content_block %}

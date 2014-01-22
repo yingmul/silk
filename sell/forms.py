@@ -99,7 +99,7 @@ class SellPieceForm(forms.ModelForm):
 
     class Meta:
         model = Piece
-        fields = ['price', 'brand', 'category', 'condition', 'description']
+        fields = ['price', 'size', 'brand', 'category', 'condition', 'description']
 
 
 class SellPreviewForm(forms.Form):

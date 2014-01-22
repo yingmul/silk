@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     'sell',
     'upload',
     'outfit',
+    'piece',
 )
 
 # A sample logging configuration. The only tangible logging
