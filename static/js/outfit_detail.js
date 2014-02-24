@@ -27,4 +27,26 @@ $(function () {
         out: pieceHoverOutFunc,
         timeout: 400
     });
+
+    // below is for adding a comment
+    var options = {
+        success:    addComment,  // post-submit callback
+        timeout:    3000,
+        dataType:   'json',
+        clearForm: true,          // clear all form fields after successful submit
+        resetForm: true           // reset the form after successful submit
+    };
+
+    // bind form using 'ajaxForm'
+    $('#outfit_comment').ajaxForm(options);
+
+    // post-submit callback
+    function addComment(responseJson, statusText, xhr, $form)  {
+        $('#num_comments').text(responseJson['num_comments']);
+        $('#existing_comments').append(
+            '<div class="comment-line">' +
+            '<div class="comment-name">' + responseJson['author'] + '</div>' +
+            '<div>' + responseJson['comment'] + '</div></div>'
+        )
+    }
 });

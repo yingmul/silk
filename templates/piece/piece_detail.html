@@ -10,7 +10,7 @@
             {% endfor %}
         </span>
         <span class="product-pictures">
-            <img class="piece-selected-img img-rounded" src="{{ object.picture_set.all|primary_picture }}"/>
+            <img class="selected-img img-rounded" src="{{ object.picture_set.all|primary_picture }}"/>
             <div class="piece-comments">
                 <div class="comment-line sub-title">
                     {% trans 'COMMENTS' %} (<span id="num_comments">{{ comments.count }}</span>)
@@ -29,8 +29,6 @@
                     {{ comment_form.as_p }}
                     <input type="submit" value="{% trans "Post" %}"/>
                 </form>
-
-
             </div>
         </span>
 
@@ -49,11 +47,15 @@
                 {% endif %}
             </div>
             <button type="button" class="btn btn-primary">
-                <strong>{% trans 'Buy Now' %}</strong>
+                <a class="button-link"
+                   href="mailto:{{ object.outfit.user.email }}?subject=Interested in Piece: {{ object.brand }} {{ object.category }}">
+                    {% trans 'Buy Now' %}
+                </a>
             </button>
-            <div>Like Share</div>
 
-            Shop {{ object.outfit.user }}'s closet
+            <div>
+                Shop {{ object.outfit.user }}'s closet
+            </div>
         </span>
 
     </div>

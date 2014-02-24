@@ -1,11 +1,6 @@
 @charset "UTF-8";
 
 /*Shared styles between outfit_detail and piece_detail */
-.product-detail {
-    padding: 0 20px 20px 20px;
-    overflow: hidden;
-}
-
 .product-pictures {
     float: left;
     width: 450px;
@@ -28,7 +23,7 @@
 }
 
 .selected-img {
-    width: 400px;
+    width: 380px;
     height: 450px;
 }
 
@@ -65,4 +60,19 @@
 
 .product-price {
     font-size: 20px;
+}
+
+.comment-line {
+  border-bottom: 1px solid @border-gray;
+  padding-bottom: 4px;
+}
+
+.comment-name {
+  font-weight: bold;
+  color: @brand-primary;
+}
+
+#existing_comments {
+  max-height: 170px;
+  overflow: scroll;
 }

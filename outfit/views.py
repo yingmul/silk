@@ -1,15 +1,21 @@
 import simplejson as json
 from django.views.generic import DetailView
+from django.views.generic.edit import BaseFormView
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from sell.models import Outfit, Piece, Picture
 from silk.views import LoginRequired
+from piece.forms import CommentForm
+from piece.models import Comment
 
 @login_required
-def like_outfit(request, pk):
+def like_outfit(request, pk, like):
     outfit = Outfit.objects.get(pk=pk)
-    outfit.num_likes += 1
+    if like == 'true':
+        outfit.num_likes += 1
+    else:
+        outfit.num_likes -= 1
     outfit.save()
     return HttpResponse(outfit.num_likes)
 
@@ -45,8 +51,43 @@ class OutfitDetailView(LoginRequired, DetailView):
                     piece_pictures.append(picture)
                     break
 
+        comments = Comment.objects.filter(
+            outfit=self.get_object().pk
+        ).order_by('created')
+
         context.update({
-            'piece_pictures': piece_pictures
+            'piece_pictures': piece_pictures,
+            'comment_form': CommentForm(),
+            'comments': comments,
         })
 
         return context
+
+class OutfitCommentView(LoginRequired, BaseFormView):
+    form_class = CommentForm
+    def form_valid(self, form):
+        comment = form.cleaned_data['comment']
+        author = self.request.user
+
+        # create a new Comment object
+        outfit_pk = self.kwargs.get('pk')
+        outfit = Outfit.objects.get(pk=outfit_pk)
+        Comment.objects.create(
+            author=author,
+            comment=comment,
+            outfit=outfit,
+        )
+
+        num_comments = Comment.objects.filter(outfit=outfit).count()
+
+        result = {
+            'comment': comment,
+            'author': author.username,
+            'num_comments': num_comments,
+        }
+
+        return HttpResponse(
+            json.dumps(result),
+            mimetype="application/json",
+            status=200
+        )

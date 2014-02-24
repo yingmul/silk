@@ -1,21 +1,56 @@
 @charset "UTF-8";
 
+.outfit-detail {
+  padding: 30px 20px 20px 20px;
+  margin: 20px 100px 10px 80px;
+  width: 1200px;
+  overflow: hidden;
+  background-color: white;
+}
+
 .outfit-desc {
     float: left;
-    width: 200px;
+    width: 400px;
+    height: 450px;
+}
+
+.outfit-data {
+  width: 90%;
+}
+
+.outfit-data-top {
+  margin-top: 20px;
 }
 
 .outfit-piece {
     display: inline-block;
-    height: 340px;
+    height: 280px;
     width: 240px;
     position: relative;
 }
 
+.seller-info {
+  width: 100%;
+  height: 120px;
+  padding: 10px 10px 10px 20px;
+  margin-top: 30px;
+}
+
+.seller-info-detail {
+  margin-top: 10px;
+}
+.seller-pic {
+  width: 60px;
+  height: 60px;
+  margin-right: 20px;
+  background-color: white;
+  float: left;
+}
+
 .outfit-piece-desc {
     position: absolute;
-    top: 270px;
-    width: 240px;
+    top: 200px;
+    width: 160px;
     text-align: center;
 }
 
@@ -25,12 +60,14 @@
 
 .outfit-pieces {
     float: right;
-    width: 550px;
+    width: 210px;
     padding-left: 20px;
 }
 
 .outfit-piece-picture {
-    padding: 0 18px 10px 0;
+  padding: 0 18px 10px 0;
+  width: 180px;
+  height: 200px;
 }
 
 /*TODO: fix this when I get less*/
@@ -38,3 +75,19 @@
     padding: 0 18px 10px 0;
     display: none;
 }
+
+.like-heart {
+  padding-right: 4px;
+}
+
+.outfit-comments {
+  .display-box;
+  width: 360px;
+  margin-top: 30px;
+  padding: 5px 0px 10px 5px;
+
+  #id_comment {
+    width: 350px;
+  }
+}
+

@@ -1,9 +1,10 @@
 $(function () {
     $('.piece-thumbnails').on("click", "img", function() {
         var clickedImg = $(this).attr('src');
-        $('.piece-selected-img').attr('src', clickedImg);
+        $('.selected-img').attr('src', clickedImg);
     });
 
+    // below is for adding a comment
     var options = {
         success:    addComment,  // post-submit callback
         timeout:    3000,

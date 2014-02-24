@@ -3,6 +3,7 @@ $(function () {
     $(".outfit-like-btn").click(function(){
         var pk = $(this).attr('id');
         var like = $(this).closest(".outfit-buttons").find(".num-outfit-likes");
+        //TODO: make this to add 'true' or 'false' at the end of the url
         $.get(
             '/outfit/like/'+pk,
             function(responseText){
@@ -11,6 +12,31 @@ $(function () {
             "html"
         );
     });
+
+    $('.btn-counter').click(function() {
+        var $this = $(this),
+            count = $this.attr('data-count'),
+            pk = $(this).attr('id'),
+            likeness = !($this.hasClass('active'));
+
+        $.get(
+            '/outfit/like/'+pk+'/'+likeness,
+            function(responseText){
+                $this.toggleClass('active');
+                $this.attr('data-count', responseText);
+
+                if (likeness) {
+                    $('.like-empty-heart').css('display', 'none');
+                    $('.like-heart').css('display', 'inline');
+                } else {
+                    $('.like-heart').css('display', 'none');
+                    $('.like-empty-heart').css('display', 'inline');
+                }
+            },
+            "html"
+        );
+    })
+
 
     // Function to display rest of outfit angles when hovered over on home page
     // these variables are not ideal, they are set in success which is used in the unhovered part of the function
