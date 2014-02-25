@@ -48,7 +48,7 @@
             </div>
             <button type="button" class="btn btn-primary">
                 <a class="button-link"
-                   href="mailto:{{ object.outfit.user.email }}?subject=Interested in Piece: {{ object.brand }} {{ object.category }}">
+                   href="mailto:{{ object.outfit.user.email }}?subject={{ object.brand }} {{ object.category }}&body={{ request.build_absolute_uri|urlencode }}">
                     {% trans 'Buy Now' %}
                 </a>
             </button>
