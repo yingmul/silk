@@ -4,15 +4,14 @@
 
 {% block content_block %}
     <div class="outfit-detail">
+        <span class="outfit-thumbnails">
+            {% for picture in object.picture_set.all %}
+                <img class="thumbnail-img" src="{{ picture.thumbnail_url }}">
+            {% endfor %}
+        </span>
+
         <span class="product-pictures">
             <img class="selected-img" src="{{ object.picture_set.all|primary_picture }}"/>
-            <div id="product_carousel">
-                {% for picture in object.picture_set.all %}
-                    <img class="carousel-img" src="{{ picture.thumbnail_url }}">
-                {% endfor %}
-            </div>
-            <a id="carousel_previous" class="prev" href="#">{% trans "Previous" %}</a>
-            <a id="carousel_next" class="next" href="#">{% trans "Next" %}</a>
         </span>
 
         <span class="outfit-desc">

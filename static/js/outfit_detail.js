@@ -1,4 +1,9 @@
 $(function () {
+    $('.outfit-thumbnails').on("click", "img", function() {
+        var clickedImg = $(this).attr('src');
+        $('.selected-img').attr('src', clickedImg);
+    });
+
     var swapImageFunc;
     var primaryImage;
     var pieceHoverInFunc = function() {
