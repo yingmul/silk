@@ -3,7 +3,7 @@ from django.views.generic import DetailView
 from django.views.generic.edit import BaseFormView
 from django.http import HttpResponse
 
-from sell.models import Piece
+from sell.models import Piece, Picture
 from silk.views import LoginRequired
 from piece.forms import CommentForm
 from piece.models import Comment
@@ -19,9 +19,19 @@ class PieceDetailView(LoginRequired, DetailView):
             piece=self.get_object().pk
         ).order_by('created')
 
+        other_outfit_pictures = Picture.objects.filter(
+            seller=self.get_object().outfit.user,
+            is_primary=True,
+            type='o',
+            outfit__isnull=False,
+        ).exclude(
+            outfit=self.get_object().outfit
+        ).order_by('-outfit__created')[:8]
+
         context.update({
             'comment_form': CommentForm(),
             'comments': comments,
+            'other_outfits': other_outfit_pictures
         })
 
         return context

@@ -20,7 +20,6 @@ class HomeView(LoginRequired, ListView):
 
     def get_queryset(self):
         return Picture.objects.filter(
-            seller=self.request.user,
             type='o',
             outfit__isnull=False,
             is_primary=True

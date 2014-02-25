@@ -53,9 +53,16 @@
                 </a>
             </button>
 
-            <div>
-                Shop {{ object.outfit.user }}'s closet
-            </div>
+            {% if other_outfits %}
+                <div class="piece-closet">
+                    <span class="sub-title-small">Shop {{ object.outfit.user }}'s closet</span>
+                    <div class="piece-closet-img">
+                        {% for other in other_outfits %}
+                            <img class="piece-other-outfit-img" src="{{ other.thumbnail_url }}">
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
         </span>
 
     </div>
