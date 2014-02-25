@@ -34,7 +34,6 @@ $(function () {
     );
 
     $('#fileupload').fileupload('option', {
-        imageOrientation: true,
         // Enable image resizing, except for Android and Opera,
         // which actually support image resizing, but fail to
         // send Blob objects via XHR requests:
@@ -43,6 +42,10 @@ $(function () {
         imageMaxWidth: 500,
         imageMaxHeight: 600,
         imageCrop: true,
+
+//        disableImageMetaDataSave: true, // Otherwise orientation is broken on iOS Safari
+        imageOrientation: true,
+//        previewOrientation: 0,
 
         maxFileSize: 1572864, // 1.5 MB
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,

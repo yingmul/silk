@@ -43,7 +43,7 @@ def upload_js():
     <div class="template-download fade photo-upload">
         <span class="preview">
             {% if (file.thumbnailUrl) { %}
-                <img class="preview-img" src="{%=file.thumbnailUrl%}">
+                <img class="preview-img upload-preview" src="{%=file.thumbnailUrl%}">
             {% } %}
         </span>
         {% if (file.error) { %}

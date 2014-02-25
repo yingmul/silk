@@ -190,5 +190,6 @@ LOGGING = {
 # couldn't figure out how to dynamically add forms into FormWizard
 MAX_PIECE_SELL_FORMS = 5
 
-# setting for the thumbnail size for sorl
-SORL_THUMBNAIL_SIZE = '230x270'
+# setting for the thumbnail size for sorl,
+# making it in a bigger size so we keep one version, since original photo uploaded orientation is not kept (bug)
+SORL_THUMBNAIL_SIZE = '380x450'

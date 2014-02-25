@@ -7,11 +7,13 @@ register = template.Library()
 def primary_picture(value):
     """Given a set of pictures in value, return the picture that's marked as primary"""
     primary_picture = value.get(is_primary=True)
-    return primary_picture.file.url
+    # returns the thumbnail url, since the orientation is maintained with sorl's thumbnail
+    # return primary_picture.url
+    return primary_picture.thumbnail_url
 
 @register.filter
 def primary_picture_thumbnail(value):
-    """Given a set of pictures in value, return the picture that's marked as primary"""
+    """Given a set of pictures in value, return the picture (thumbnail) that's marked as primary"""
     primary_picture = value.get(is_primary=True)
     return primary_picture.thumbnail_url
 
