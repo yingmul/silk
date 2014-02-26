@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from sorl.thumbnail import delete
+from sorl.thumbnail import delete, ImageField
 from django.utils import timezone
 
 
@@ -10,7 +10,7 @@ class Outfit(models.Model):
     """
     user = models.ForeignKey(User)
     name = models.CharField(max_length=50)
-    description = models.CharField(max_length=200, blank=True)
+    description = models.CharField(max_length=500, blank=True)
     num_likes = models.PositiveIntegerField(default=0)
     created = models.DateTimeField(default=timezone.now)
 
@@ -50,7 +50,7 @@ class Piece(models.Model):
     size = models.CharField(max_length=5)
     category = models.CharField(choices=CATEGORY, max_length=20)
     condition = models.CharField(choices=CONDITION, max_length=5)
-    description = models.CharField(max_length=200, blank=True)
+    description = models.CharField(max_length=500, blank=True)
     outfit = models.ForeignKey(Outfit)
 
 
@@ -72,7 +72,8 @@ class Picture(models.Model):
     # type of this picture, for outfit or piece
     TYPE = [('o', 'outfit'), ('p', 'piece')]
 
-    file = models.ImageField(upload_to="pictures")
+    file = ImageField(upload_to="pictures")
+
     # field for sorl's thumbnail url
     thumbnail_url = models.URLField(blank=True)
     outfit = models.ForeignKey(Outfit, blank=True, null=True)

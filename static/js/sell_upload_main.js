@@ -41,7 +41,7 @@ $(function () {
             .test(window.navigator.userAgent),
         imageMaxWidth: 500,
         imageMaxHeight: 600,
-        imageCrop: true,
+        imageCrop: false,
 
 //        disableImageMetaDataSave: true, // Otherwise orientation is broken on iOS Safari
         imageOrientation: true,

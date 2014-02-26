@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 from sell.models import Piece, Picture
 
 
@@ -50,7 +51,9 @@ class SellPieceForm(forms.ModelForm):
     description = forms.CharField(
         widget=forms.Textarea,
         required=False,
-        label=u'Description (Optional)'
+        label=u'Description (Optional)',
+        error_messages=
+        {'max_length': _(u'Description allows at most %(max)d characters (it has %(length)d).')},
     )
 
     CHOICES = ((1, 'Yes',), (0, 'No',))
@@ -58,7 +61,7 @@ class SellPieceForm(forms.ModelForm):
         widget=forms.RadioSelect,
         choices=CHOICES,
         required=True,
-        label="Is there any more pieces from this outfit you'd like to sell")
+        label="Are there more pieces from this outfit you'd like to sell?")
 
     def __init__(self, *args, **kwargs):
         if 'request' in kwargs:

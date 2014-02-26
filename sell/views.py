@@ -247,7 +247,7 @@ class PictureCreateView(LoginRequired, CreateView):
         thumbnail = get_thumbnail(
             self.object,
             settings.SORL_THUMBNAIL_SIZE,
-            crop='center',
+            crop=False,
             quality=99)
 
         form.instance.thumbnail_url = thumbnail.url
