@@ -8,6 +8,7 @@ class SellOutfitForm(forms.Form):
     First step of selling an outfit, including basic info of outfit and its pictures
     """
     name = forms.CharField(max_length=50, label=u'Name of Outfit')
+    price = forms.DecimalField(max_digits=8, decimal_places=2, label=u'Price for Entire Outfit')
     description = forms.CharField(
         widget=forms.Textarea,
         required=False,
