@@ -4,56 +4,59 @@
 {% load thumbnail %}
 
 {% block content_block %}
-<p>Ready to start selling? It's easy!</p>
+<div class="sell-outfit">
 
-<p>First, post some pictures of your fabulous outfit:</p>
-<br>
-
-<!-- The file upload form used as target for the file upload widget -->
-<form id="fileupload" method="post" action="/sell/new/"  enctype="multipart/form-data">
-    {% csrf_token %}
-    <!-- Redirect browsers with JavaScript disabled to the origin page -->
-    <!--<noscript><input type="hidden" name="redirect" value="http://blueimp.github.io/jQuery-File-Upload/"></noscript>-->
-    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-    <div class="row fileupload-buttonbar">
-        <div class="col-lg-7">
-            <!-- The fileinput-button span is used to style the file input field as button -->
-            <span class="btn btn-primary fileinput-button">
-                <i class="glyphicon glyphicon-plus"></i>
-                <span>{% trans "Add photos..." %}</span>
-                <input type="file" name="file" multiple>
-            </span>
-            {% trans "OR drag and drop photos below" %}
-            <!-- The loading indicator is shown during file processing -->
-            <span class="fileupload-loading"></span>
-        </div>
-        <!-- The global progress information -->
-        <div class="col-lg-5 fileupload-progress fade">
-            <!-- The global progress bar -->
-            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
-            </div>
-            <!-- The extended global progress information -->
-            <div class="progress-extended">&nbsp;</div>
-        </div>
+    <div class="sell-outfit-instruction">
+        <div class="title text-center">{% trans "Make a Sale" %}</div>
+        <div class="sub-text text-center">{% trans "Spread your fashion sense by selling outfits one at a time!" %}</div>
     </div>
-    <!-- The div listing the files available for upload/download -->
-    <div class="files"></div>
-</form>
+    <div class="sell-outfit-form">
+    <!-- The file upload form used as target for the file upload widget -->
+    <form id="fileupload" method="post" action="/sell/new/"  enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- Redirect browsers with JavaScript disabled to the origin page -->
+        <!--<noscript><input type="hidden" name="redirect" value="http://blueimp.github.io/jQuery-File-Upload/"></noscript>-->
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div class="row fileupload-buttonbar">
+            <div class="col-lg-7">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <span class="btn btn-primary fileinput-button">
+                    <span class="glyphicon glyphicon-upload"></span>
+                    <span>{% trans "Add photos..." %}</span>
+                    <input type="file" name="file" multiple>
+                </span>
+                {% trans 'or' %}
+                <span class="bold">{% trans "drag and drop photos below" %}</span>
+                <!-- The loading indicator is shown during file processing -->
+                <span class="fileupload-loading"></span>
+            </div>
+            <!-- The global progress information -->
+            <div class="col-lg-5 fileupload-progress fade">
+                <!-- The global progress bar -->
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                </div>
+                <!-- The extended global progress information -->
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+        <!-- The div listing the files available for upload/download -->
+        <div class="files"></div>
+    </form>
+    </div>
 
+    {% upload_js %}
 
-{% upload_js %}
+    <div class="sell-form">
+    <form id="outfitform" method="post" action=".">
+        {% csrf_token %}
 
-<div class="sell-form">
-<form id="outfitform" method="post" action=".">
-    {% csrf_token %}
-
-    {{ wizard.management_form }}
-    {{ wizard.form.as_p }}
-    <input type="submit" value="{% trans "Next" %}"/>
-</form>
+        {{ wizard.management_form }}
+        {{ wizard.form.as_p }}
+        <input type="submit" value="{% trans "Next" %}"/>
+    </form>
+    </div>
 </div>
-
 {% endblock content_block %}
 
 {% block override_script_block %}
