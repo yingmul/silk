@@ -17,4 +17,6 @@ npm install -g less // installed this globally
 
 pip install sorl-thumbnail
 
+pip install django-floppyforms==1.1
+
 

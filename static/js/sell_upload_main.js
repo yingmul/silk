@@ -33,6 +33,16 @@ $(function () {
         )
     );
 
+    // aliu: replaces the add callback
+    $('#fileupload').
+        bind('fileuploadadd', function (e, data) {
+            $('.drag-area').hide();
+        }).bind('fileuploaddestroyed', function (e, data) {
+           if ($('.photo-upload').length == 0) {
+               $('.drag-area').show();
+           }
+        });
+
     $('#fileupload').fileupload('option', {
         // Enable image resizing, except for Android and Opera,
         // which actually support image resizing, but fail to
@@ -53,14 +63,14 @@ $(function () {
         autoUpload: true,
 
         // The maximum width of the preview images:
-        previewMaxWidth: 150,
+        previewMaxWidth: 230,
         // The maximum height of the preview images:
-        previewMaxHeight: 180,
+        previewMaxHeight: 265,
 
         messages: {
             maxNumberOfFiles: 'Maximum number of files exceeded (up to 6 is allowed)',
             acceptFileTypes: 'File type not allowed',
-            maxFileSize: 'File is too large (max size is 10MB)',
+            maxFileSize: 'File is too large (max size is 1.5MB)',
             minFileSize: 'File is too small'
         }
     });

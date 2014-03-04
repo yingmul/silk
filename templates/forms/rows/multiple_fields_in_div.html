@@ -1,0 +1,35 @@
+{% comment %}
+This template renders the rows as divs it is based on floppyforms/rows/p.html.
+Unlike floppyforms/rows/p.html it will not automaticaly add a ':' to the end of
+the label.
+
+And it displays the fields passed in on a single row, sharing the same css_classes.
+{% endcomment %}
+{% load floppyforms %}
+
+{% block row %}
+<div class="row">
+{% for field in fields %}
+{% with classes=css_classes label=field.label|default:field.label help_text=help_text|default:field.help_text required=field.field.required %}
+{% block field %}
+<div class="{{field.html_name}} {% if classes or row_classes %} {{ classes }} {{ row_classes }}{% endif %}">
+{% if field.errors %}
+<div class="input-error">
+    <div class="message">{% for error in field.errors %}{{ error }} {% endfor %}</div>
+</div>
+{% endif %}
+{% block label %}
+{% if field|id %}<label for="{{ field|id }}">{% endif %}
+    {% if required or force_required %}<span class="asterisk">*</span>{% endif %}
+    {{ label }}
+{% if field|id %}</label>{% endif %}
+{% endblock %}
+{% block widget %}<span class="formfield-wrapper">{% formfield field %}</span>{% endblock %}
+{% block help_text %}{% if help_text %}<span class="helptext">{{ help_text }}</span>{% endif %}{% endblock %}
+{% block hidden_fields %}{% for field in hidden_fields %}{{ field.as_hidden }}{% endfor %}{% endblock %}
+</div>
+{% endblock %}
+{% endwith %}
+{% endfor %}
+</div>
+{% endblock %}

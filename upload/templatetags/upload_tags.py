@@ -40,6 +40,11 @@ def upload_js():
 </script>
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
+<!-- hide drag-area if there are photos already uploaded -->
+{% if (o.files.length > 0) { %}
+    {% $('.drag-area').hide(); %}
+{% } %}
+
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <div class="template-download fade photo-upload">
         <span class="preview">
@@ -71,7 +76,6 @@ def upload_js():
 {% } %}
 </script>
 """
-
 
 
 

@@ -1,4 +1,4 @@
-from django import forms
+import floppyforms as forms
 from django.utils.translation import ugettext_lazy as _
 from sell.models import Piece, Picture
 
@@ -7,12 +7,34 @@ class SellOutfitForm(forms.Form):
     """
     First step of selling an outfit, including basic info of outfit and its pictures
     """
-    name = forms.CharField(max_length=50, label=u'Name of Outfit')
-    price = forms.DecimalField(max_digits=8, decimal_places=2, label=u'Price for Entire Outfit')
-    description = forms.CharField(
-        widget=forms.Textarea,
+    name = forms.CharField(
+        max_length=50,
+        label=u'Name',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': "Give your outfit a cool name."
+            }
+        ),
+    )
+
+    price = forms.DecimalField(
         required=False,
-        label=u'Description (Optional)'
+        widget = forms.TextInput(
+            attrs={
+                'placeholder': "Price for all the pieces for sale in this outfit."
+            }
+        )
+    )
+    description = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'rows': 3,
+                'placeholder':
+                    "What inspired you? Where or when would you wear this outfit? Share your story!"
+            }
+        ),
+        max_length=500,
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):
@@ -31,7 +53,7 @@ class SellOutfitForm(forms.Form):
             outfit__isnull=True)
 
         if not outfit_pics:
-            raise forms.ValidationError(u'Remember to upload one or more of your outfit pictures!')
+            raise forms.ValidationError(u'Remember to upload one or more of your outfit photos!')
 
         # make sure primary photo was selected
         if outfit_pics.filter(is_primary=True).count() == 0:
@@ -41,7 +63,8 @@ class SellOutfitForm(forms.Form):
                     pic.is_primary=True
                     pic.save()
             else:
-                raise forms.ValidationError(u'Please select one of the pictures as the primary picture.')
+                raise forms.ValidationError(
+                    u"Please select a primary photo by clicking on the 'Make Primary' button. This photo will be made the display photo.")
         return self.cleaned_data
 
 

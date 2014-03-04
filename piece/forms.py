@@ -1,4 +1,4 @@
-from django import forms
+import floppyforms as forms
 from models import Comment
 
 
