@@ -10,7 +10,7 @@ class Outfit(models.Model):
     """
     user = models.ForeignKey(User)
     name = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
+    price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     description = models.CharField(max_length=500, blank=True)
     num_likes = models.PositiveIntegerField(default=0)
     created = models.DateTimeField(default=timezone.now)

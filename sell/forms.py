@@ -75,6 +75,8 @@ class SellPieceForm(forms.ModelForm):
     """
     Second step of selling an outfit, including upload pictures of individual pieces to sell
     """
+    #TODO: fix this so we don't need to do these one off definitons. Can use monkey patching to fix
+    # This is needed for now to use HTML5 form to do client side validation
     price = forms.DecimalField(
         required=True
     )
