@@ -3,6 +3,10 @@ from django.utils.translation import ugettext_lazy as _
 from sell.models import Piece, Picture
 
 
+make_primary_error_message=\
+    _(u"Please select a primary photo from above by clicking on the 'Make Primary' button. "
+      u"This photo will be made the display photo.")
+
 class SellOutfitForm(forms.Form):
     """
     First step of selling an outfit, including basic info of outfit and its pictures
@@ -12,7 +16,7 @@ class SellOutfitForm(forms.Form):
         label=u'Name',
         widget=forms.TextInput(
             attrs={
-                'placeholder': "Give your outfit a cool name."
+                'placeholder': _(u"Give your outfit a cool name.")
             }
         ),
     )
@@ -21,7 +25,7 @@ class SellOutfitForm(forms.Form):
         required=False,
         widget = forms.TextInput(
             attrs={
-                'placeholder': "Price for all the pieces for sale in this outfit."
+                'placeholder': _(u"Price for all the pieces for sale in this outfit.")
             }
         )
     )
@@ -30,7 +34,7 @@ class SellOutfitForm(forms.Form):
             attrs={
                 'rows': 3,
                 'placeholder':
-                    "What inspired you? Where or when would you wear this outfit? Share your story!"
+                _(u"What inspired you? Where or when would you wear this outfit? Share your story!")
             }
         ),
         max_length=500,
@@ -42,7 +46,7 @@ class SellOutfitForm(forms.Form):
             self.request = kwargs['request']
             del kwargs['request']
         else:
-            raise Exception('Request was not passed in kwargs when initializing form SellOutfitStepOneForm')
+            raise Exception('Request was not passed in kwargs when initializing form SellOutfitForm')
         super(SellOutfitForm, self).__init__(*args, **kwargs)
 
     def clean(self):
@@ -63,8 +67,7 @@ class SellOutfitForm(forms.Form):
                     pic.is_primary=True
                     pic.save()
             else:
-                raise forms.ValidationError(
-                    u"Please select a primary photo by clicking on the 'Make Primary' button. This photo will be made the display photo.")
+                raise forms.ValidationError(make_primary_error_message)
         return self.cleaned_data
 
 
@@ -72,12 +75,33 @@ class SellPieceForm(forms.ModelForm):
     """
     Second step of selling an outfit, including upload pictures of individual pieces to sell
     """
+    price = forms.DecimalField(
+        required=True
+    )
+
+    size = forms.CharField(
+        required=True,
+        widget = forms.TextInput(
+            attrs={
+                'placeholder': _(u"Enter 'N/A' if there is no size.")
+            }
+        )
+    )
+
+    brand = forms.CharField(
+        required=True
+    )
+
     description = forms.CharField(
-        widget=forms.Textarea,
+        widget=forms.Textarea(
+            attrs={
+                'rows': 5,
+                'placeholder':
+                _(u"Any damages? Does the size run too small or too large?")
+            }
+        ),
+        max_length=500,
         required=False,
-        label=u'Description (Optional)',
-        error_messages=
-        {'max_length': _(u'Description allows at most %(max)d characters (it has %(length)d).')},
     )
 
     CHOICES = ((1, 'Yes',), (0, 'No',))
@@ -85,14 +109,15 @@ class SellPieceForm(forms.ModelForm):
         widget=forms.RadioSelect,
         choices=CHOICES,
         required=True,
-        label="Are there more pieces from this outfit you'd like to sell?")
+        label=_(u"Are there more pieces from this outfit you'd like to sell?")
+    )
 
     def __init__(self, *args, **kwargs):
         if 'request' in kwargs:
              self.request = kwargs['request']
              del kwargs['request']
         else:
-            raise Exception('Request was not passed in kwargs when initializing form SellOutfitStepTwoForm')
+            raise Exception('Request was not passed in kwargs when initializing form SellPieceForm')
         super(SellPieceForm, self).__init__(*args, **kwargs)
 
     def clean(self):
@@ -111,7 +136,7 @@ class SellPieceForm(forms.ModelForm):
 
             if not piece_pics:
                 # throw an error to tell seller to upload pictures for outfit
-                raise forms.ValidationError(u'Remember to upload one or more pictures!')
+                raise forms.ValidationError(_(u'Remember to upload one or more photos above!'))
 
             # make sure primary photo was selected
             if piece_pics.filter(is_primary=True).count() == 0:
@@ -121,7 +146,7 @@ class SellPieceForm(forms.ModelForm):
                         pic.is_primary = True
                         pic.save()
                 else:
-                    raise forms.ValidationError(u'Please select one of the pictures as the primary picture.')
+                    raise forms.ValidationError(make_primary_error_message)
         return self.cleaned_data
 
     class Meta:

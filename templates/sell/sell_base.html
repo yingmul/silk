@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content_block %}
+<div class="sell-page row">
+    <div class="row">
+        <div class="sell-header col-md-6 col-md-offset-3">
+            <div class="title text-center">{% trans "Make a Sale" %}</div>
+            <div class="sub-text text-center">{% trans "Spread your fashion sense by selling outfits one at a time!" %}</div>
+        </div>
+    </div>
+    {% block sell_content_block %}
+    {% endblock sell_content_block %}
+</div>
+{% endblock content_block %}

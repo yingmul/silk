@@ -5,9 +5,15 @@
 }
 
 .label {
-    font-size: 14px;
-    font-weight: bold;
-    color: #717171;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #717171;
+}
+
+li>label {
+  font-weight: normal;
+  margin-top: 2px;
 }
 
 .title {
@@ -27,9 +33,14 @@
   text-transform: uppercase;
 }
 
-.page-title {
+.sub-title-large {
   .sub-title;
   font-size: 20px;
+}
+
+.page-title {
+  .sub-title;
+  font-size: 24px;
   color: @orange;
 }
 
@@ -37,6 +48,11 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 18px;
   color: @brand-primary;
+}
+
+.section-text {
+  .sub-title;
+  font-size: 18px;
 }
 
 .sub-text {

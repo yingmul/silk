@@ -118,10 +118,13 @@ class SellWizard(LoginRequired, SessionWizardView):
                         seller=self.request.user,
                         outfit__isnull=True,
                         type='o')
+                    outfit_primary_pic = outfit_pictures.get(is_primary=True)
                     pic_urls = []
                     for pic in outfit_pictures:
                         pic_urls.append(pic.thumbnail_url)
                     preview_data["outfit"]["pictures"] = pic_urls
+                    preview_data["outfit"]["primary"] = outfit_primary_pic.thumbnail_url
+
                 else:
                     piece = form_obj.cleaned_data
                     # convert condition to its display value
@@ -133,10 +136,12 @@ class SellWizard(LoginRequired, SessionWizardView):
                         type='p',
                         piece_step=step
                     )
+                    piece_primary_pic = piece_pictures.get(is_primary=True)
                     piece_pic_urls = []
                     for pic in piece_pictures:
                         piece_pic_urls.append(pic.thumbnail_url)
                     piece["pictures"] = piece_pic_urls
+                    piece["primary"] = piece_primary_pic.thumbnail_url
                     pieces_data.append(piece)
 
         preview_data["pieces"] = pieces_data
@@ -156,6 +161,7 @@ class SellWizard(LoginRequired, SessionWizardView):
             user=self.request.user,
             name=outfit_form_data['name'],
             description=outfit_form_data['description'],
+            price=outfit_form_data['price']
         )
 
         # set the outfit to all the outfit pictures that were created in this form

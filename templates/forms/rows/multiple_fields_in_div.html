@@ -13,11 +13,7 @@ And it displays the fields passed in on a single row, sharing the same css_class
 {% with classes=css_classes label=field.label|default:field.label help_text=help_text|default:field.help_text required=field.field.required %}
 {% block field %}
 <div class="{{field.html_name}} {% if classes or row_classes %} {{ classes }} {{ row_classes }}{% endif %}">
-{% if field.errors %}
-<div class="input-error">
-    <div class="message">{% for error in field.errors %}{{ error }} {% endfor %}</div>
-</div>
-{% endif %}
+
 {% block label %}
 {% if field|id %}<label for="{{ field|id }}">{% endif %}
     {% if required or force_required %}<span class="asterisk">*</span>{% endif %}
@@ -27,6 +23,12 @@ And it displays the fields passed in on a single row, sharing the same css_class
 {% block widget %}<span class="formfield-wrapper">{% formfield field %}</span>{% endblock %}
 {% block help_text %}{% if help_text %}<span class="helptext">{{ help_text }}</span>{% endif %}{% endblock %}
 {% block hidden_fields %}{% for field in hidden_fields %}{{ field.as_hidden }}{% endfor %}{% endblock %}
+{% if field.errors %}
+<div class="input-error">
+    <span class="glyphicon glyphicon-hand-up"></span>
+    <span class="message">{% for error in field.errors %}{{ error }} {% endfor %}</span>
+</div>
+{% endif %}
 </div>
 {% endblock %}
 {% endwith %}

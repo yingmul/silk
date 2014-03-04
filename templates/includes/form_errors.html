@@ -1,0 +1,13 @@
+{% load floppyforms %}
+
+{% comment %}
+this is for adding form errors on top of each floppy form if that form has an inline layout
+{% endcomment %}
+{% if form.non_field_errors or form|hidden_field_errors %}
+    <div class="row">
+         <ul class="errorList">
+             {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+             {% for error in form|hidden_field_errors %}<li>{{ error }}</li>{% endfor %}
+         </ul>
+    </div>
+{% endif %}

@@ -1,36 +1,86 @@
-{% extends "base.html" %}
+{% extends "sell/sell_base.html" %}
 {% load i18n %}
+{% load outfit_filter %}
 
-{% block content_block %}
+{% block sell_content_block %}
+<div class="sell-title">
+    <div class="page-title">{% trans "Preview" %}</div>
+    <div>{% trans "Preview all the information you just entered. If you want to make any edits, click on the 'prev' button on the bottom." %}</div>
+</div>
+
+<div class="preview-body">
 <form method="post" action=".">
     {% csrf_token %}
     {{ wizard.management_form }}
-    <h2>{% trans "Preview your outfit!" %}</h2>
-    <span class="preview">
-        <h3> Outfit </h3>
-        <b>{% trans "Name of outfit:"%}</b> {{ preview.outfit.name }}<br/>
-        <b>{% trans "Description" %}</b>
-        <p>{{ preview.outfit.description }}</p>
-        {% for outfit_url in preview.outfit.pictures %}
-            <img src="{{ outfit_url }}"/>
-        {% endfor %}
+        <div class="preview-info">
+            <div class="sub-title-large preview-title">{% trans "Preview Outfit" %}</div>
+            <span class="preview-thumbnails">
+                {% for outfit_url in preview.outfit.pictures %}
+                    <img class="thumbnail-img" src="{{ outfit_url }}">
+                {% endfor %}
+            </span>
 
-        <h3> Piece(s) </h3>
+            <span class="product-pictures">
+                <img class="selected-img" src="{{ preview.outfit.primary }}"/>
+            </span>
+
+            <span class="preview-desc">
+                <div class="title">{{ preview.outfit.name }}</div>
+                <div class="outfit-data">
+                    <div class="outfit-data-top">
+                        {% if preview.outfit.description %}
+                            <p> {{ preview.outfit.description }} </p>
+                        {% endif %}
+                    </div>
+                    {% if preview.outfit.price %}
+                        <div><span class="label">{% trans "Price:"%}</span>${{ preview.outfit.price }}</div>
+                    {% endif %}
+                </div>
+            </span>
+        </div>
+
+        <div class="sub-title-large preview-title">{% trans "Preview Piece(s)" %}</div>
+
         {% for piece in preview.pieces %}
-            <h4>{% trans "Piece" %} {{ piece.number }}</h4>
-            {% trans "Price: " %} {{ piece.price }}<br/>
-            {% trans "Brand: " %} {{ piece.brand }}<br/>
-            {% trans "Category: " %} {{ piece.category }}<br/>
-            {% trans "Condition: " %} {{ piece.condition_display }}<br/>
+            <div class="preview-info">
+                <div class="section-text preview-title">{% trans "Piece" %} {{ piece.number }}</div>
 
-            {% for piece_url in piece.pictures %}
-                <img src="{{ piece_url }}"/>
-            {% endfor %}
+                <span class="preview-thumbnails">
+                    {% for piece_url in piece.pictures %}
+                        <img class="thumbnail-img" src="{{ piece_url }}"/>
+                    {% endfor %}
+                </span>
+
+                <span class="product-pictures">
+                    <img class="selected-img" src="{{ piece.primary }}"/>
+                </span>
+
+                <span class="preview-desc">
+                    <div class="title">{{ piece.brand }} {{ piece.category }}</div>
+
+                    <div class="product-price">${{ piece.price }}</div>
+                    <div class="piece-data">
+                        <div><div class="label">{% trans "SIZE:" %}</div>{{ piece.size }}</div>
+                        <div><div class="label">{% trans "BRAND: " %}</div>{{ piece.brand }}</div>
+                        <div><div class="label">{% trans "CATEGORY: " %}</div>{{ piece.category }}</div>
+                        <div><div class="label">{% trans "CONDITION: " %}</div>{{ piece.condition_display}}</div>
+                        {% if piece.description %}
+                            <br/>
+                            <p class="description-label">{{ piece.description }}</p>
+                        {% endif %}
+                    </div>
+                </span>
+            </div>
         {% endfor %}
 
-    </span>
-    <br/>
-    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
-    <input type="submit" value="{% trans "Done" %}"/>
+    <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-prev" value="{{ wizard.steps.prev }}">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        {% trans "Prev" %}
+    </button>
+    <button type="submit" class="btn btn-primary">
+        {% trans "Done!" %}
+    </button>
+
 </form>
-{% endblock content_block %}
+</div>
+{% endblock sell_content_block %}

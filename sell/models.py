@@ -70,6 +70,9 @@ class Picture(models.Model):
         seller
         type
     """
+    class Meta:
+        ordering = ['-is_primary']
+
     # type of this picture, for outfit or piece
     TYPE = [('o', 'outfit'), ('p', 'piece')]
 
@@ -93,6 +96,3 @@ class Picture(models.Model):
         delete(self.file)
         self.file.delete(False)
         super(Picture, self).delete(*args, **kwargs)
-
-
-

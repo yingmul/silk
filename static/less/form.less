@@ -1,21 +1,51 @@
 @charset "UTF-8";
 
 form {
-  input {
-    height: 35px;
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
     width: 100%;
     margin-bottom: 15px;
   }
+
+  input:not([type="checkbox"]):not([type="radio"]){
+    height: 35px;
+    padding-left: 5px;
+  }
+
   textarea {
-    width: 100%;
+    padding-left: 5px;
+  }
+
+  input[type="radio"] {
+    margin-right: 5px;
+    margin-top: 0;
+  }
+
+  select {
+    font-size: 16px;
+    padding: 5px;
+    line-height: 1;
+    height: 34px;
+    border-radius: 0;
+    border-color: @gray-light;
   }
 
   .errorList {
     color: @orange;
+    font-weight: bold;
   }
 
   .input-error {
     color: @orange;
+    background-color: @gray-lighter;
+    border: 1px solid @gray-light;
+    padding: 3px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding-left: 10px;
   }
 }
 

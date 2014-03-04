@@ -1,59 +1,44 @@
-{% extends "base.html" %}
+{% extends "sell/sell_base.html" %}
 {% load upload_tags %}
 {% load i18n %}
 {% load thumbnail %}
+{% load floppyforms %}
 
-{%  block content_block %}
-<p>Which pieces in your outfit are you selling?</p>
-
-<br>
-<p>Piece {{ wizard.steps.step0 }}</p>
-<!-- The file upload form used as target for the file upload widget -->
-<form id="fileupload" method="post" action="/sell/piece/new/{{ wizard.steps.step0 }}/"  enctype="multipart/form-data">
-    {% csrf_token %}
-    <!-- Redirect browsers with JavaScript disabled to the origin page -->
-    <!--<noscript><input type="hidden" name="redirect" value="http://blueimp.github.io/jQuery-File-Upload/"></noscript>-->
-    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-    <div class="row fileupload-buttonbar">
-        <div class="col-lg-7">
-            <!-- The fileinput-button span is used to style the file input field as button -->
-            <span class="btn btn-primary fileinput-button">
-                <i class="glyphicon glyphicon-plus"></i>
-                <span>{% trans "Add photos..." %}</span>
-                <input type="file" name="file" multiple>
-            </span>
-            {% trans "OR drag and drop photos below" %}
-            <!-- The loading indicator is shown during file processing -->
-            <span class="fileupload-loading"></span>
-        </div>
-        <!-- The global progress information -->
-        <div class="col-lg-5 fileupload-progress fade">
-            <!-- The global progress bar -->
-            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
-            </div>
-            <!-- The extended global progress information -->
-            <div class="progress-extended">&nbsp;</div>
-        </div>
-    </div>
-    <!-- The div listing the files available for upload/download -->
-    <div class="files"></div>
-</form>
-
-{% upload_js %}
-<div class="sell-form">
-<form id="pieceform" method="post" action=".">
-    {% csrf_token %}
-
-    {{ wizard.management_form }}
-    {{ wizard.form.as_p }}
-    <p>
-        <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "Prev Step" %}</button>
-        <input type="submit" value="{% trans "Next" %}"/>
-    </p>
-</form>
+{%  block sell_content_block %}
+<div class="sell-title">
+    <div class="page-title">{% trans "Piece "%} {{ wizard.steps.step0 }}</div>
+    <div>{% trans "Now enter information on the pieces from this outfit that you want to sell. (Up to 5 pieces per outfit)" %}</div>
 </div>
-{%  endblock content_block %}
+
+{% include "sell/includes/sell_upload_photos.html" with form_action="/sell/piece/new/" form_step=wizard.steps.step0 %}
+
+<div class="sell-form row">
+    {% form wizard.form using %}
+    <form id="pieceform" method="post" action=".">
+        {% csrf_token %}
+        {{ wizard.management_form }}
+        {% formconfig row using "forms/rows/multiple_fields_in_div.html" %}
+        <div class="align-left col-md-9 col-md-offset-1">
+            {%  include "includes/form_errors.html" with form=wizard.form%}
+            {% formrow form.price form.size form.brand with css_classes="col-md-3" %}
+            {% formrow form.category form.condition with css_classes="col-md-4"%}
+            {% formrow form.description with css_classes="col-md-9" %}
+            {% formrow form.more_pieces with css_classes="col-md-9" %}
+        </div>
+        <div class="col-md-2 col-md-offset-1 sell-form-button">
+            <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-prev" value="{{ wizard.steps.prev }}">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                {% trans "Prev" %}
+            </button>
+            <button type="submit" class="btn btn-primary">
+                {% trans "Next" %}
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+    </form>
+    {% endform %}
+</div>
+{%  endblock sell_content_block %}
 
 {% block override_script_block %}
     <script>
