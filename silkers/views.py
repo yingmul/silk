@@ -25,8 +25,9 @@ TEMPLATES = {"0": "silkers/registration_basic_form.html",
 
 
 class RegistrationWizard(SessionWizardView):
-    file_storage = FileSystemStorage(
-        location=os.path.join(settings.MEDIA_ROOT, 'profile', str(uuid.uuid4())[:8]))
+    #TODO DEPLOY
+    # file_storage = FileSystemStorage(
+    #     location=os.path.join(settings.MEDIA_ROOT, 'profile', str(uuid.uuid4())[:8]))
 
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
