@@ -17,7 +17,7 @@ if environ.has_key('DATABASE_URL'):
         'PORT': url.port,
     }
 
-COMPRESS_PRECOMPILERS = (('text/less', "/usr/local/bin/lessc '{infile}' '{outfile}'"),)
+COMPRESS_PRECOMPILERS = (('text/less', "lessc '{infile}' '{outfile}'"),)
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
