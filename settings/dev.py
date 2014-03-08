@@ -44,3 +44,5 @@ MEDIA_ROOT = '/Users/aliu/project/uploads/'
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
 MEDIA_URL = '/media/'
+
+COMPRESS_PRECOMPILERS = (('text/less', "/usr/local/bin/lessc '{infile}' '{outfile}'"),)

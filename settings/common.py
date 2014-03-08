@@ -90,8 +90,6 @@ TEMPLATE_DIRS = (
     (os.path.join(PROJECT_ROOT, 'templates'),)
 )
 
-COMPRESS_PRECOMPILERS = (('text/less', "/usr/local/bin/lessc '{infile}' '{outfile}'"),)
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
