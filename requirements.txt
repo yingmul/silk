@@ -1,22 +1,20 @@
-**When deploying, do this***
-in settings.py, add site name to this
-ALLOWED_HOSTS = []
+Django==1.5.2
+dj-database-url==0.2.2
+dj-static==0.0.5
+django-toolbelt==0.0.1
+gunicorn==18.0
+psycopg2==2.5.2
+pystache==0.5.3
+static==1.0.2
+wsgiref==0.1.2
 
-**end**
-
-
-*** this does not work yet ***
-pip install sorl-thumbnail
-
- brew install libjpeg
-
-installed nodejs
-pip install PIL
-pip install django_compressor
-npm install -g less // installed this globally
-
-pip install sorl-thumbnail
-
-pip install django-floppyforms==1.1
-
-
+PIL==1.1.7
+Pillow==2.3.0
+South==0.8.2
+django-appconf==0.6
+django-compressor==1.3
+django-floppyforms==1.1
+ply==3.4
+simplejson==3.3.1
+six==1.5.2
+sorl-thumbnail==11.12
