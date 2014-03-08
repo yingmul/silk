@@ -1,5 +1,8 @@
 from settings.common import *
 
+DEBUG=False
+TEMPLATE_DEBUG = DEBUG
+
 from os import environ
 from urlparse import urlparse
 
