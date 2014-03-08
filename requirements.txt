@@ -8,7 +8,7 @@ pystache==0.5.3
 static==1.0.2
 wsgiref==0.1.2
 
-PIL==1.1.7
+PIL==1.1.6
 Pillow==2.3.0
 South==0.8.2
 django-appconf==0.6
