@@ -1,1 +1,1 @@
-web:gunicorn silk.wsgi
+web: gunicorn silk.wsgi
