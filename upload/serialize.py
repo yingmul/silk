@@ -34,6 +34,9 @@ def serialize(instance, file_attr='file'):
     is_primary -- tells whether this picture is a primary photo or not
     """
     obj = getattr(instance, file_attr)
+    from pprint import pprint
+    pprint('obj', obj)
+    print 'obj', obj
     # used in upload_tags, to show the 'Make Primary' button or not
     is_primary = getattr(instance, 'is_primary')
     thumbnail_url = getattr(instance, 'thumbnail_url')
@@ -41,7 +44,9 @@ def serialize(instance, file_attr='file'):
     return {
         'url': obj.url,
         'name': order_name(obj.name),
-        'type': mimetypes.guess_type(obj.path)[0] or 'image/png',
+        # 'type': mimetypes.guess_type(obj.path)[0] or 'image/png',
+        #TODO DEPLOY: getting full path doesn't work with S3 storage
+        'type': 'image/png',
         'thumbnailUrl': thumbnail_url,
         'size': obj.size,
         'deleteUrl': reverse('sell-delete', args=[instance.pk]),
