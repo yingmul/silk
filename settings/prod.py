@@ -17,6 +17,7 @@ if environ.has_key('DATABASE_URL'):
         'PORT': url.port,
     }
 
+COMPRESS_OFFLINE = True
 COMPRESS_PRECOMPILERS = (('text/less', "lessc '{infile}' '{outfile}'"),)
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
