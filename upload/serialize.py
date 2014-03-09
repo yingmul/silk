@@ -34,9 +34,6 @@ def serialize(instance, file_attr='file'):
     is_primary -- tells whether this picture is a primary photo or not
     """
     obj = getattr(instance, file_attr)
-    from pprint import pprint
-    pprint('obj', obj)
-    print 'obj', obj
     # used in upload_tags, to show the 'Make Primary' button or not
     is_primary = getattr(instance, 'is_primary')
     thumbnail_url = getattr(instance, 'thumbnail_url')
