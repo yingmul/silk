@@ -41,22 +41,14 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/var/www/example.com/media/"
-# MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media'),
-#
-# # URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# # trailing slash.
-# # Examples: "http://example.com/media/", "http://media.example.com/"
-# MEDIA_URL = '/media/'
-
+AWS_QUERYSTRING_AUTH = False
+AWS_HEADERS = {
+  'Cache-Control': 'max-age=86400',
+}
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-# STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'stylieu-assets'
-# STATIC_URL = '//s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
-# ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 MEDIA_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
