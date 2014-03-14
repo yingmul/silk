@@ -105,18 +105,18 @@ class LoginView(FormMixin, TemplateView):
 def logout_view(request):
     # on log out, remove any outfit and piece photos that were not tied to the outfits/pieces
     pics = Picture.objects.filter(
-            seller=request.user,
-            piece__isnull=True,
-            type='p'
-        ) | Picture.objects.filter(
-            seller=request.user,
-            outfit__isnull=True,
-            type='o'
-        )
+        seller=request.user,
+        piece__isnull=True,
+        type='p'
+    ) | Picture.objects.filter(
+        seller=request.user,
+        outfit__isnull=True,
+        type='o'
+    )
 
     for pic in pics:
         pic.delete()
 
     logout(request)
-    return HttpResponseRedirect(reverse('login'))
+    return HttpResponseRedirect(reverse('home'))
 

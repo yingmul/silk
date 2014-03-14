@@ -1,0 +1,41 @@
+{% load i18n %}
+{% block header_block %}
+    <div class="row header-top-text">
+        <span class="col-md-2 col-md-offset-1">
+            About Us
+        </span>
+        <span>
+            How it works
+        </span>
+    </div>
+    <div class="header row">
+        <span class="col-md-3 col-md-offset-1 header-text">
+            {% trans "Stylieu"%}
+        </span>
+
+        {% if user.is_authenticated %}
+            <span class="col-md-3 col-md-offset-5">
+                <span>
+                    {% trans "Sell" %}
+                </span>
+                <span>
+                    {% trans "Welcome, " %}
+                    {{ user.username }}
+                </span>
+                <span>
+                    <a id="logout" href="{% url 'logout' %}">{% trans 'Log Out' %}</a>
+                </span>
+            </span>
+
+        {% else %}
+            <span>
+                <a id="login" href="{%  url 'login' %}">{% trans 'Log in' %}</a>
+            </span>
+            <span>
+                <a id="register" href="{% url 'register' %}">{% trans 'Register' %}</a>
+            </span>
+        {% endif %}
+
+    </div>
+
+{% endblock header_block %}

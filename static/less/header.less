@@ -1,12 +1,24 @@
 @charset "UTF-8";
 
 .header {
-  height: 60px;
   border-bottom: 2px solid @border-gray;
   margin-bottom: 20px;
+//  padding: 10px 0 20px 0;
+  background-color: #555555;
+  color: #bbb;
+
+  background: -webkit-linear-gradient(black, grey); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(black, grey); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(black, grey); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(black, @gray-light); /* Standard syntax */
 }
 
-.header-text {
-  width: 200px;
-  .center;
+.header-top-text {
+  font-weight: bold;
 }
+.header-text {
+  font-family: Didot, "Didot LT STD", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 50px;
+  text-transform: uppercase;
+}
+

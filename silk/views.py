@@ -14,7 +14,7 @@ class LoginRequired(object):
         return super(LoginRequired, self).dispatch(*args, **kwargs)
 
 
-class HomeView(LoginRequired, ListView):
+class HomeView(ListView):
     model = Picture
     template_name = 'silk/home.html'
 

@@ -26,14 +26,7 @@
 
 <body>
     <div class="content">
-        {% block header_block %}
-            <div class="header">
-                <div class="header-text">
-                    <h2>SILK FASHION</h2>
-                </div>
-            </div>
-
-        {% endblock header_block %}
+        {% include "includes/header.html" %}
 
         {% block content_block %}
             You screwed up! Fill in content_block in your template!

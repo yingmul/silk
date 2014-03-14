@@ -2,13 +2,6 @@
 {% load i18n %}
 
 {% block content_block %}
-    {% if user.is_authenticated %}
-        <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
-         <a id="logout" href="{% url 'logout' %}">{% trans 'Log Out' %}</a>
-    {% else %}
-        <p>Welcome, new user. Please <a id="login" href="{%  url 'login' %}">{% trans 'log in' %}</a>.</p>
-    {% endif %}
-
     <div class="home-photos">
         {% for picture in object_list %}
             <div class="home-photo-display">

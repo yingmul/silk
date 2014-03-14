@@ -80,7 +80,9 @@ class Picture(models.Model):
 
     # field for sorl's thumbnail url
     thumbnail_url = models.URLField(blank=True)
+    # if not null, picture is for this outfit
     outfit = models.ForeignKey(Outfit, blank=True, null=True)
+    # if not null, picture is for this piece
     piece = models.ForeignKey(Piece, blank=True, null=True)
 
     is_primary = models.BooleanField(default=False)
