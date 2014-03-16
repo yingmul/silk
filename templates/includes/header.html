@@ -2,15 +2,15 @@
 {% block header_block %}
     <div class="row header-top-text">
         <span class="col-md-2 col-md-offset-1">
-            About Us
+            {% trans 'About us' %}
         </span>
         <span>
-            How it works
+            {% trans 'How it works' %}
         </span>
     </div>
     <div class="header row">
         <span class="col-md-3 col-md-offset-1 header-text">
-            {% trans "Stylieu"%}
+            <a href="{% url 'home' %}">{% trans "Stylieu"%}</a>
         </span>
 
         {% if user.is_authenticated %}

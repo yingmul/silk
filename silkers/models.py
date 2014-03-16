@@ -16,7 +16,7 @@ for i in range(4, 13):
 
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(User, unique=True)
+    user = models.OneToOneField(User)
     shoe_size = models.FloatField(choices=US_SHOE_SIZES, blank=True, null=True)
     dress_size = models.IntegerField(choices=US_DRESS_SIZE, blank=True, null=True)
     city = models.CharField(max_length=30, blank=True)
@@ -25,5 +25,9 @@ class UserProfile(models.Model):
     # picture = models.ImageField(upload_to="profile/%s" % (uuid.uuid4()),
     #                             blank=True,
     #                             null=True)
+
+    # override unicode to return something meaningful
+    def __unicode__(self):
+        return self.user.username
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])

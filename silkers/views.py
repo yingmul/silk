@@ -1,6 +1,8 @@
 import os
 import uuid
-from django.contrib.auth import authenticate
+import urlparse
+
+from django.contrib.auth import REDIRECT_FIELD_NAME, authenticate
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.formtools.wizard.views import SessionWizardView
 from django.conf import settings
@@ -64,9 +66,9 @@ class LoginView(FormMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(LoginView, self).get_context_data(**kwargs)
-
         context.update({
             'login_form': self.login_form,
+            REDIRECT_FIELD_NAME: self.request.REQUEST.get(REDIRECT_FIELD_NAME, reverse('home')),
         })
         return context
 
@@ -75,10 +77,21 @@ class LoginView(FormMixin, TemplateView):
 
         self.login_form = LoginForm()
         self.request = request
+
         return super(LoginView, self).get(request, *args, **kwargs)
 
     def get_success_url(self):
-        return settings.LOGIN_REDIRECT_URL
+        redirect_to = self.request.REQUEST.get(REDIRECT_FIELD_NAME, '')
+
+        netloc = urlparse.urlparse(redirect_to)[1]
+
+         # Use default setting if redirect_to is empty
+        if not redirect_to:
+            redirect_to = settings.LOGIN_REDIRECT_URL
+        # Don't allow redirection to a different host.
+        elif netloc and netloc != self.request.get_host():
+            redirect_to = settings.LOGIN_REDIRECT_URL
+        return redirect_to
 
     def form_valid(self, form):
         login(self.request, self.login_form.get_user())

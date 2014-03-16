@@ -4,6 +4,7 @@
 {%  block content_block %}
    <form id="login_form" action="." method="post">
         {% csrf_token %}
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
         {{ login_form.as_p }}
         <input type="submit" value="{% trans "Login" %}"/>
    </form>
