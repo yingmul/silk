@@ -2,14 +2,12 @@ import simplejson as json
 from django.views.generic import DetailView
 from django.views.generic.edit import BaseFormView
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
 
-from sell.models import Outfit, Piece, Picture
-from silk.views import LoginRequired
+from sell.models import Outfit, Picture
+from silk.views import AjaxLoginRequired
 from piece.forms import CommentForm
 from piece.models import Comment
 
-@login_required
 def like_outfit(request, pk, like):
     outfit = Outfit.objects.get(pk=pk)
     if like == 'true':
@@ -19,7 +17,6 @@ def like_outfit(request, pk, like):
     outfit.save()
     return HttpResponse(outfit.num_likes)
 
-@login_required
 def get_outfit_pictures(request, pk):
     """
     Given a pk for an outfit, return all the outfit pictures except for the primary photo
@@ -37,7 +34,7 @@ def get_outfit_pictures(request, pk):
     return HttpResponse(json.dumps(outfit_urls), mimetype=u'application/json')
 
 
-class OutfitDetailView(LoginRequired, DetailView):
+class OutfitDetailView(DetailView):
     model = Outfit
     template_name = 'outfit/outfit_detail.html'
 
@@ -63,8 +60,10 @@ class OutfitDetailView(LoginRequired, DetailView):
 
         return context
 
-class OutfitCommentView(LoginRequired, BaseFormView):
+
+class OutfitCommentView(AjaxLoginRequired, BaseFormView):
     form_class = CommentForm
+
     def form_valid(self, form):
         comment = form.cleaned_data['comment']
         author = self.request.user

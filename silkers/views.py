@@ -1,7 +1,10 @@
 import os
 import uuid
 import urlparse
+import json
 
+from django.shortcuts import render
+from django.http import HttpResponseBadRequest
 from django.contrib.auth import REDIRECT_FIELD_NAME, authenticate
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.formtools.wizard.views import SessionWizardView
@@ -60,15 +63,51 @@ class RegistrationWizard(SessionWizardView):
                 login(self.request, auth_user)
         return HttpResponseRedirect('/')
 
+@sensitive_post_parameters()
+@csrf_protect
+def ajax_login(request):
+    if request.POST:
+        form = LoginForm(data=request.POST)
+        if form.is_valid():     # this does the user authentication
+            # actually log the user in
+            login(request, form.get_user())
+            if request.is_ajax():
+                return HttpResponse('OK')
+            else:
+                pass
+        else:
+            if request.is_ajax():
+                # Prepare JSON for parsing
+                errors_dict = {}
+                if form.errors:
+                    for error in form.errors:
+                        e = form.errors[error]
+                        errors_dict[error] = unicode(e)
 
+                return HttpResponseBadRequest(json.dumps(errors_dict))
+            else:
+                # render() form with errors (No AJAX)
+                pass
+    else:
+        form = LoginForm()
+
+    return render(
+        request,
+        'modals/login.html',
+        {
+          'login_form': form,
+          REDIRECT_FIELD_NAME: request.REQUEST.get(REDIRECT_FIELD_NAME)
+        })
+
+#TODO: remove this LoginView
 class LoginView(FormMixin, TemplateView):
-    template_name = 'silkers/login.html'
+    template_name = 'modals/login.html'
 
     def get_context_data(self, **kwargs):
         context = super(LoginView, self).get_context_data(**kwargs)
         context.update({
             'login_form': self.login_form,
-            REDIRECT_FIELD_NAME: self.request.REQUEST.get(REDIRECT_FIELD_NAME, reverse('home')),
+            REDIRECT_FIELD_NAME: self.request.REQUEST.get(REDIRECT_FIELD_NAME),
         })
         return context
 

@@ -1,0 +1,29 @@
+{% load floppyforms %}
+{% load i18n %}
+<div class="modal-header">
+    <h1>{% trans 'Log in to Stylieu' %}</h1>
+</div>
+
+<form id="login_form" method="post" action='{% url 'login' %}'>
+    <div class="modal-body">
+        <div class="social-buttons">
+            <a class="btn btn-block btn-lg btn-social btn-facebook">
+                <i class="fa fa-facebook"></i> {% trans 'Log in with Facebook' %}
+            </a>
+        </div>
+        <div class="or">
+            <span>or</span>
+        </div>
+
+        {% csrf_token %}
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+        {{login_form.as_p}}
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">{% trans 'Login' %}</button>
+        <button type="button" class="btn">{% trans 'Cancel' %}</button>
+
+        <div>Forgot Password?</div>
+        <div>Not a member? Register</div>
+    </div>
+</form>

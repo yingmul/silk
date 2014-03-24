@@ -12,7 +12,7 @@ for i in range(settings.MAX_PIECE_SELL_FORMS):
 sell_forms.append(SellPreviewForm)
 
 urlpatterns = patterns('',
-    url(r'^$', SellWizard.as_view(sell_forms)),
+    url(r'^$', SellWizard.as_view(sell_forms), name='sell'),
     # urls for creating pictures for outfit
     url(r'^new/$', PictureCreateView.as_view(), name='sell-new'),
     url(r'^view/$', PictureListView.as_view(), name='sell-view'),

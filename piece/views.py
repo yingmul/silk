@@ -9,7 +9,7 @@ from piece.forms import CommentForm
 from piece.models import Comment
 
 
-class PieceDetailView(LoginRequired, DetailView):
+class PieceDetailView(DetailView):
     model = Piece
     template_name = 'piece/piece_detail.html'
 

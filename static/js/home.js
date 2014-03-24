@@ -13,38 +13,7 @@ $(function () {
         );
     });
 
-    $('.btn-counter').click(function() {
-        var $this = $(this),
-            count = $this.attr('data-count'),
-            pk = $(this).attr('id'),
-            likeness = !($this.hasClass('active'));
-
-        $.get(
-            '/outfit/like/'+pk+'/'+likeness,
-            function(responseText){
-                $this.toggleClass('active');
-                $this.attr('data-count', responseText);
-
-                if (likeness) {
-                    $('.like-empty-heart').css('display', 'none');
-                    $('.like-heart').css('display', 'inline');
-                } else {
-                    $('.like-heart').css('display', 'none');
-                    $('.like-empty-heart').css('display', 'inline');
-                }
-            },
-            "html"
-        );
-    })
-
-
     // Function to display rest of outfit angles when hovered over on home page
-    // these variables are not ideal, they are set in success which is used in the unhovered part of the function
-    //TODO: figure out a better way to do this, setting global variables like swapImageFunc
-    // makes the pictures on home page get swapped sometimes, and clear interval doesn't work all the time
-    var primaryImage;
-    var swapImageFunc;
-
     var outfitHoverInFunc = function() {
         $.ajax({
             context: this,
@@ -61,20 +30,29 @@ $(function () {
                 var img = $(this).find('.preview-img');
                 var i = 0;
 
-                primaryImage = img.attr('src');
+                var primaryImage = img.attr('src');
                 data.push(primaryImage);
 
-                swapImageFunc = setInterval(function() {
+                var swapImageFunc = setInterval(function() {
                     img.attr('src', data[i]);
                     i = (i+1) % data.length;
                 }, 1000);
+
+                // use $(this).data, so no need to declare primaryImage or swapImageFunc as
+                // a global variable, otherwise race condition occur
+                $(this).data('primaryImage', primaryImage);
+                $(this).data('timeout', swapImageFunc);
             }
         });
     };
 
     var outfitHoverOutFunc = function() {
-        clearInterval(swapImageFunc);
-        $(this).find('.preview-img').attr('src', primaryImage);
+        clearInterval($(this).data('timeout'));
+        $(this).find('.preview-img')
+            .attr(
+                'src',
+                $(this).data('primaryImage')
+            );
     };
 
     $(".photo-image").hoverIntent({
