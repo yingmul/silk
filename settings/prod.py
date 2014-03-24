@@ -1,6 +1,6 @@
 from settings.common import *
 
-DEBUG=True
+DEBUG=False
 TEMPLATE_DEBUG = DEBUG
 
 INSTALLED_APPS += (
