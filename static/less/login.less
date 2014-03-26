@@ -1,12 +1,16 @@
 @charset "UTF-8";
 
 #login_modal {
-  height: 470px;
+  height: 485px;
   width: 400px;
   background-color: white;
 
   .modal-body {
     padding: 0 40px;
+  }
+
+  .modal-footer {
+    padding-right: 40px;
   }
 
   .social-buttons {
@@ -32,4 +36,13 @@
   position: absolute;
   text-transform: uppercase;
   top: -7px;
+}
+
+#forgot_password {
+  margin-top: 12px;
+}
+
+//hide the form and field errors for now
+#error_div, .ajax-error {
+  display: none;
 }

@@ -4,6 +4,7 @@
     <h1>{% trans 'Log in to Stylieu' %}</h1>
 </div>
 
+{% form login_form using %}
 <form id="login_form" method="post" action='{% url 'login' %}'>
     <div class="modal-body">
         <div class="social-buttons">
@@ -17,13 +18,20 @@
 
         {% csrf_token %}
         {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-        {{login_form.as_p}}
+        <div id="error_div" class="input-error">
+        </div>
+        {% formrow form.username using "forms/rows/ajax_p.html" %}
+        {% formrow form.password using "forms/rows/ajax_p.html" %}
     </div>
     <div class="modal-footer">
         <button type="submit" class="btn btn-primary">{% trans 'Login' %}</button>
-        <button type="button" class="btn">{% trans 'Cancel' %}</button>
-
-        <div>Forgot Password?</div>
-        <div>Not a member? Register</div>
+        <button type="button" class="btn" data-dismiss="modal">{% trans 'Cancel' %}</button>
+        <div id="forgot_password">
+            <a href=#>{% trans 'Forgot password?' %}</a>
+        </div>
+        <div>
+            {% trans 'Not a member? ' %}<a href=#>{% trans 'Register' %}</a>
+        </div>
     </div>
 </form>
+{% endform %}

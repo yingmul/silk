@@ -1,4 +1,22 @@
 $(function () {
+    // helper utility to apply a form field error
+    function apply_form_field_error(fieldname, error) {
+        var container = $("#div_id_" + fieldname);
+        container.html(error);
+        container.show();
+    }
+
+    function clear_errors() {
+        $('.ajax-error').hide();
+        $('#error_div').hide();
+    }
+
+    function reset_login_form() {
+        // not ideal - reset height back to original height in case errors happened
+        $('#login_modal').get(0).style.height = '485px';
+        $('#login_form').get(0).reset();
+    }
+
     // dynamically load in the log in modal when 'login' is clicked on the header
     $(".login").click(function(e) {
         e.preventDefault(); // prevent navigation
@@ -6,6 +24,7 @@ $(function () {
 
         $("#login_modal").load(url, function() { // load the url into the modal
             $(this).modal('show'); // display the modal on url load
+            reset_login_form();
         });
         return false; // prevent the click propagation
     });
@@ -20,7 +39,22 @@ $(function () {
                 // close the modal and reload the current page
                 $('#login_modal').modal('hide');
                 window.location.reload(true);
+            },
+            error: function(data, textStatus, jqXHR) {
+                clear_errors();
+                // set the height to 550px so no scroll bar appear when there is an error
+                $('#login_modal')[0].style.height = '550px';
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function(index, value) {
+                    if (index === "__all__") {
+                        $('#error_div').html(value);
+                        $('#error_div').show();
+                    } else {
+                        apply_form_field_error(index, value);
+                    }
+                });
             }
+
         });
         return false;
     });

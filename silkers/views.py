@@ -66,6 +66,11 @@ class RegistrationWizard(SessionWizardView):
 @sensitive_post_parameters()
 @csrf_protect
 def ajax_login(request):
+    """
+    A class used for most login cases: where actions are required to have an account:
+    e.g. sell, login in header, comment, etc. It's an ajax login since this login screen
+    appears in a modal
+    """
     if request.POST:
         form = LoginForm(data=request.POST)
         if form.is_valid():     # this does the user authentication
@@ -83,7 +88,6 @@ def ajax_login(request):
                     for error in form.errors:
                         e = form.errors[error]
                         errors_dict[error] = unicode(e)
-
                 return HttpResponseBadRequest(json.dumps(errors_dict))
             else:
                 # render() form with errors (No AJAX)
@@ -99,7 +103,8 @@ def ajax_login(request):
           REDIRECT_FIELD_NAME: request.REQUEST.get(REDIRECT_FIELD_NAME)
         })
 
-#TODO: remove this LoginView
+#TODO: this is not being used right now, but may want to use this for some case
+#not an ajax login, redirect to the login redirect url
 class LoginView(FormMixin, TemplateView):
     template_name = 'modals/login.html'
 
