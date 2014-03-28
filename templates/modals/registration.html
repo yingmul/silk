@@ -1,0 +1,33 @@
+{% load floppyforms %}
+{% load i18n %}
+<div class="modal-header">
+    <h1>{% trans 'Register' %}</h1>
+</div>
+<form id="registration_form" method="POST" action="{% url 'register' %}">
+    <div class="modal-body">
+        <div class="social-buttons">
+            <a class="btn btn-block btn-lg btn-social btn-facebook">
+                <i class="fa fa-facebook"></i> {% trans 'Sign Up with Facebook' %}
+            </a>
+        </div>
+
+        <div class="or">
+            <span>or</span>
+        </div>
+
+        {% csrf_token %}
+        <div id="error_div" class="input-error">
+        </div>
+        {% formrow form.email using "forms/rows/ajax_p.html" %}
+        {% formrow form.username using "forms/rows/ajax_p.html" %}
+        {% formrow form.password form.confirm_password using "forms/rows/multiple_fields_in_div.html" with css_classes="col-md-6" show_required=False %}
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">{% trans 'Sign Up!' %}</button>
+        <button type="button" class="btn" data-dismiss="modal">{% trans 'Cancel' %}</button>
+
+        <div id="already_member">
+            {% trans 'Already a member? ' %}<a href=# id="login_on_register" data-login="{% url 'login' %}">{% trans 'Log In' %}</a>
+        </div>
+    </div>
+</form>

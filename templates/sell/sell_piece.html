@@ -20,10 +20,10 @@
         {% formconfig row using "forms/rows/multiple_fields_in_div.html" %}
         <div class="align-left col-md-9 col-md-offset-1">
             {%  include "includes/form_errors.html" with form=wizard.form%}
-            {% formrow form.price form.size form.brand with css_classes="col-md-3" %}
-            {% formrow form.category form.condition with css_classes="col-md-4"%}
-            {% formrow form.description with css_classes="col-md-9" %}
-            {% formrow form.more_pieces with css_classes="col-md-9" %}
+            {% formrow form.price form.size form.brand with css_classes="col-md-3" show_required=True %}
+            {% formrow form.category form.condition with css_classes="col-md-4" show_required=True %}
+            {% formrow form.description with css_classes="col-md-9" show_required=True %}
+            {% formrow form.more_pieces with css_classes="col-md-9" show_required=True %}
         </div>
         <div class="col-md-2 col-md-offset-1 sell-form-button">
             <button name="wizard_goto_step" type="submit" class="btn btn-primary btn-prev" value="{{ wizard.steps.prev }}">

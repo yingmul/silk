@@ -21,8 +21,8 @@
             {{ wizard.management_form }}
 
             {% include "includes/form_errors.html" with form=wizard.form %}
-            {% formrow form.name form.price using "forms/rows/multiple_fields_in_div.html" with css_classes="col-md-5" %}
-            {% formrow form.description using "forms/rows/multiple_fields_in_div.html" with css_classes="col-md-10" %}
+            {% formrow form.name form.price using "forms/rows/multiple_fields_in_div.html" with css_classes="col-md-5" show_required=True %}
+            {% formrow form.description using "forms/rows/multiple_fields_in_div.html" with css_classes="col-md-10" show_required=True%}
         </div>
         <div class="col-md-1 col-md-offset-1 sell-form-button">
             <button type="submit" class="btn btn-primary">

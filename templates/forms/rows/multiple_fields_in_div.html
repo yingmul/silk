@@ -10,13 +10,15 @@ And it displays the fields passed in on a single row, sharing the same css_class
 {% block row %}
 <div class="row">
 {% for field in fields %}
-{% with classes=css_classes label=field.label|default:field.label help_text=help_text|default:field.help_text required=field.field.required %}
+{% with classes=css_classes label=field.label|default:field.label help_text=help_text|default:field.help_text required=field.field.required%}
 {% block field %}
 <div class="{{field.html_name}} {% if classes or row_classes %} {{ classes }} {{ row_classes }}{% endif %}">
 
 {% block label %}
 {% if field|id %}<label for="{{ field|id }}">{% endif %}
-    {% if required or force_required %}<span class="asterisk">*</span>{% endif %}
+    {% if show_required %}
+        {% if required or force_required %}<span class="asterisk">*</span>{% endif %}
+    {% endif %}
     {{ label }}
 {% if field|id %}</label>{% endif %}
 {% endblock %}
@@ -29,6 +31,13 @@ And it displays the fields passed in on a single row, sharing the same css_class
     <span class="message">{% for error in field.errors %}{{ error }} {% endfor %}</span>
 </div>
 {% endif %}
+</div>
+{% comment %}
+This is to show field errors when this form is an ajax form, since we control the display (show/hide)
+of the following error div via js, can't depend on field.errors like above
+{% endcomment %}
+<div id="div_{{ field|id }}" class="input-error ajax-error">
+    <span class="glyphicon glyphicon-hand-up"></span>
 </div>
 {% endblock %}
 {% endwith %}

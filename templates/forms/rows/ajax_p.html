@@ -10,7 +10,6 @@ so with ajax forms (esp in modals), we control the appearance of field errors vi
 <p{% if classes %} class="{{ classes }}"{% endif %}>
     {% block label %}
         {% if field|id %}<label for="{{ field|id }}">{% endif %}
-        {% if required or force_required %}<span class="asterisk">*</span>{% endif %}
         {{ label }}
         {% if label|last not in ".:!?" %}{% endif %}
         {% if field|id %}</label>{% endif %}
@@ -20,6 +19,7 @@ so with ajax forms (esp in modals), we control the appearance of field errors vi
     {% block hidden_fields %}{% for field in hidden_fields %}{{ field.as_hidden }}{% endfor %}{% endblock %}
     {% block field_errors %}
         <div id="div_{{ field|id }}" class="input-error ajax-error">
+            <span class="glyphicon glyphicon-hand-up"></span>
         </div>
     {% endblock %}
 </p>{% endblock %}

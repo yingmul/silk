@@ -9,7 +9,7 @@
     <div class="modal-body">
         <div class="social-buttons">
             <a class="btn btn-block btn-lg btn-social btn-facebook">
-                <i class="fa fa-facebook"></i> {% trans 'Log in with Facebook' %}
+                <i class="fa fa-facebook"></i> {% trans 'Log In with Facebook' %}
             </a>
         </div>
         <div class="or">
@@ -30,7 +30,7 @@
             <a href=#>{% trans 'Forgot password?' %}</a>
         </div>
         <div>
-            {% trans 'Not a member? ' %}<a href=#>{% trans 'Register' %}</a>
+            {% trans 'Not a member? ' %}<a href=# id="register_on_login" data-register="{% url 'register' %}">{% trans 'Register' %}</a>
         </div>
     </div>
 </form>

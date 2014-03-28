@@ -1,6 +1,4 @@
 from django.conf.urls import patterns, include, url
-from silkers.views import RegistrationWizard, LoginView
-from silkers.forms import RegistrationBasicForm, RegistrationExtraForm
 from silk.views import HomeView
 from django.contrib import admin
 from django.conf import settings
@@ -17,7 +15,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', HomeView.as_view(), name='home'),
-    url(r'^register/$', RegistrationWizard.as_view([RegistrationBasicForm, RegistrationExtraForm]), name='register'),
+    url(r'^register/$', 'silkers.views.ajax_registration', name='register'),
     # url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^login/$', 'silkers.views.ajax_login', name='login'),
     url(r'^logout/$', 'silkers.views.logout_view', name='logout'),

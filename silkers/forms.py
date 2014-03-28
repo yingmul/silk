@@ -7,6 +7,41 @@ from django.utils.translation import ugettext_lazy as _
 from models import UserProfile
 
 
+class RegistrationForm(forms.Form):
+    username = forms.CharField(max_length=50)
+    email = forms.EmailField(max_length=100)
+    password = forms.CharField(max_length=30, widget=forms.PasswordInput())
+    confirm_password = forms.CharField(max_length=30, widget=forms.PasswordInput())
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if email:
+            if User.objects.filter(Q(email=email)):
+                raise forms.ValidationError(u'This email address is already registered.')
+
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if username:
+            if User.objects.filter(Q(username=username)):
+                raise forms.ValidationError(u'This username is already taken.')
+
+        return username
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+
+        if password and password != confirm_password:
+            msg = u'Passwords do not match. Please try again.'
+            self._errors['confirm_password'] = self.error_class([msg])
+
+        return cleaned_data
+
+#TODO: change basic and extra form, so only asked if user wants to sell something,
+#and ask only the info that RegistrationForm didn't.
 class RegistrationBasicForm(forms.Form):
     """
     First step of the Registration form, requiring User's basic info

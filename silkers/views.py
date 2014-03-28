@@ -18,7 +18,7 @@ from django.contrib.auth import login, logout
 from django.core.files.storage import FileSystemStorage
 from django.core.urlresolvers import reverse
 
-from silkers.forms import RegistrationBasicForm, RegistrationExtraForm, LoginForm
+from silkers.forms import RegistrationBasicForm, RegistrationExtraForm, LoginForm, RegistrationForm
 from models import UserProfile
 from sell.models import Picture
 
@@ -28,7 +28,7 @@ FORMS = [("0", RegistrationBasicForm),
 TEMPLATES = {"0": "silkers/registration_basic_form.html",
              "1": "silkers/registration_extra_form.html"}
 
-
+#TODO: not being used, no longer need a wizard, create the userprofile only when user sells
 class RegistrationWizard(SessionWizardView):
     #TODO DEPLOY
     # file_storage = FileSystemStorage(
@@ -63,6 +63,58 @@ class RegistrationWizard(SessionWizardView):
                 login(self.request, auth_user)
         return HttpResponseRedirect('/')
 
+
+def ajax_registration(request):
+    '''
+    View used for registration cases when user is registering via a modal.
+    '''
+    if request.POST:
+        form = RegistrationForm(data=request.POST)
+        if form.is_valid():
+            # create the user, and log the user in
+            user = User.objects.create_user(
+                username=request.POST['username'],
+                email=request.POST['email'],
+                password=request.POST['password'],
+            )
+
+            # Now log the user in after registration
+            auth_user = authenticate(username=request.POST['username'], password=request.POST['password'])
+            if auth_user is not None:
+                if auth_user.is_active:
+                    login(request, auth_user)
+
+            if request.is_ajax():
+                return HttpResponse('OK')
+            else:
+                pass
+        else:
+            if request.is_ajax():
+                # Prepare JSON for parsing
+                errors_dict = {}
+                if form.errors:
+                    for field in form.errors:
+                        field_error = form.errors[field]
+                        # take the error string out of the field errors
+                        field_error_str = ''
+                        for e in field_error:
+                            field_error_str += e + ' '
+                        errors_dict[field] = unicode(field_error_str)
+                return HttpResponseBadRequest(json.dumps(errors_dict))
+            else:
+                # render() form with errors (No AJAX)
+                pass
+    else:
+        form = RegistrationForm()
+
+    return render(
+        request,
+        'modals/registration.html',
+        {
+            'form': form,
+        })
+
+
 @sensitive_post_parameters()
 @csrf_protect
 def ajax_login(request):
@@ -85,9 +137,13 @@ def ajax_login(request):
                 # Prepare JSON for parsing
                 errors_dict = {}
                 if form.errors:
-                    for error in form.errors:
-                        e = form.errors[error]
-                        errors_dict[error] = unicode(e)
+                    for field in form.errors:
+                        field_error = form.errors[field]
+                        # take the error string out of the field errors
+                        field_error_str = ''
+                        for e in field_error:
+                            field_error_str += e + ' '
+                        errors_dict[field] = unicode(field_error_str)
                 return HttpResponseBadRequest(json.dumps(errors_dict))
             else:
                 # render() form with errors (No AJAX)
@@ -103,7 +159,7 @@ def ajax_login(request):
           REDIRECT_FIELD_NAME: request.REQUEST.get(REDIRECT_FIELD_NAME)
         })
 
-#TODO: this is not being used right now, but may want to use this for some case
+#TODO: this is not being used right now, but may want to use this for some case, may combine this with ajax_login
 #not an ajax login, redirect to the login redirect url
 class LoginView(FormMixin, TemplateView):
     template_name = 'modals/login.html'

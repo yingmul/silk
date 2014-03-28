@@ -32,14 +32,19 @@
             <span>
                 <a href="#" class="login" data-form="{% url 'login' %}">{% trans 'Log in' %}</a>
             </span>
-             <div class="modal" id="login_modal">
+             <div class="modal fade" id="login_modal">
                 {% comment %}
                 Dynamically loading in the log in modal
                 {% endcomment %}
              </div>
             <span>
-                <a id="register" href="{% url 'register' %}">{% trans 'Register' %}</a>
+                <a href="#" class="register" data-form="{% url 'register' %}">{% trans 'Register' %}</a>
             </span>
+            <div class="modal fade" id="register_modal">
+                {% comment %}
+                Dynamically loading in the register modal
+                {% endcomment %}
+             </div>
         {% endif %}
     </div>
 {% endblock header_block %}
