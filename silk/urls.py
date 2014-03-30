@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from silk.views import HomeView
+from silkers.views import ProfileView
 from django.contrib import admin
 from django.conf import settings
 
@@ -19,6 +20,7 @@ urlpatterns = patterns('',
     # url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^login/$', 'silkers.views.ajax_login', name='login'),
     url(r'^logout/$', 'silkers.views.logout_view', name='logout'),
+    url(r'^profile/$', ProfileView.as_view(), name='profile'),
 
     url(r'^sell/', include('sell.urls')),
     url(r'^outfit/', include('outfit.urls')),

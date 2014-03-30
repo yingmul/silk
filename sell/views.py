@@ -2,6 +2,7 @@ from django.views.generic import CreateView, ListView, DeleteView
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import SessionWizardView
+from django.core.urlresolvers import reverse
 from upload.serialize import serialize
 from django.utils import six
 from django.utils.datastructures import SortedDict
@@ -9,8 +10,10 @@ from django.views.generic.detail import BaseDetailView, SingleObjectTemplateResp
 from sorl.thumbnail import get_thumbnail
 from upload.response import JSONResponse, response_mimetype
 from sell.models import Picture, Outfit, Piece, condition_display
-from silk.views import LoginRequired
+from silk.views import LoginRequired, AjaxLoginRequired
 from sell.forms import SellPieceForm
+from silkers.models import UserProfile
+
 
 TEMPLATES = {"0": "sell/sell_outfit.html"}
 for i in range(1, settings.MAX_PIECE_SELL_FORMS + 1):
@@ -71,8 +74,13 @@ class SellWizard(LoginRequired, SessionWizardView):
         return form_list
 
     def get(self, request, *args, **kwargs):
-        self.request.session['check_for_sell_piece_pics'] = True
-        return super(SellWizard, self).get(request, *args, **kwargs)
+        # check if this user has UserProfile created, if not, redirect to page with this form
+        profile = UserProfile.objects.filter(user=self.request.user)
+        if not profile:
+            return HttpResponseRedirect(reverse('profile'))
+        else:
+            self.request.session['check_for_sell_piece_pics'] = True
+            return super(SellWizard, self).get(request, *args, **kwargs)
 
     def render_done(self, form, **kwargs):
         #aliu: set session check to False to not have to check for piece pics

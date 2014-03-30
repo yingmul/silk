@@ -1,32 +1,34 @@
+// in the global scope so other files can call this function
+function resetLoginForm() {
+    // not ideal - reset height back to original height in case errors happened
+    $('#login_modal').get(0).style.height = '485px';
+    $('#login_form').get(0).reset();
+}
+
 $(function () {
     // helper utility to apply a form field error
-    function apply_form_field_error(fieldname, error) {
+    function applyFormFieldError(fieldname, error) {
         var container = $("#div_id_" + fieldname);
         container.append(error);
         container.show();
     }
 
-    function clear_errors() {
+    function clearErrors() {
         $('.ajax-error').hide();
         $('#error_div').hide();
-    }
-
-    function reset_login_form() {
-        // not ideal - reset height back to original height in case errors happened
-        $('#login_modal').get(0).style.height = '485px';
-        $('#login_form').get(0).reset();
     }
 
     // dynamically load in the log in modal when 'login' is clicked on the header
     $(".login").click(function(e) {
         e.preventDefault(); // prevent navigation
-        var url = $(this).data("form"); // get the login form url
 
+        var url = $(this).data("form"); // get the login form url
         $("#login_modal").load(url, function() { // load the url into the modal
             $(this).modal('show'); // display the modal on url load
-            reset_login_form();
+            resetLoginForm();
         });
         return false; // prevent the click propagation
+
     });
 
     $('#login_modal').on('submit', '#login_form', function() {
@@ -38,10 +40,15 @@ $(function () {
             success: function(data, status) {
                 // close the modal and reload the current page
                 $('#login_modal').modal('hide');
-                window.location.reload(true);
+                // if there is a 'next' url set, redirect the url to this url, o.w. refresh this window
+                if ($('#login_modal').data('next')) {
+                    window.location.href=$('#login_modal').data('next');
+                } else {
+                    window.location.reload(true);
+                }
             },
             error: function(data, textStatus, jqXHR) {
-                clear_errors();
+                clearErrors();
                 // set the height to 550px so no scroll bar appear when there is an error
                 $('#login_modal')[0].style.height = '550px';
                 var errors = $.parseJSON(data.responseText);
@@ -50,7 +57,7 @@ $(function () {
                         $('#error_div').html(value);
                         $('#error_div').show();
                     } else {
-                        apply_form_field_error(index, value);
+                        applyFormFieldError(index, value);
                     }
                 });
             }
@@ -96,7 +103,7 @@ $(function () {
                 window.location.reload(true);
             },
             error: function(data, textStatus, jqXHR) {
-                clear_errors();
+                clearErrors();
                 // set the height to 600px so no scroll bar appear when there is an error
                 $('#register_modal')[0].style.height = '600px';
                 var errors = $.parseJSON(data.responseText);
@@ -105,7 +112,7 @@ $(function () {
                         $('#error_div').html(value);
                         $('#error_div').show();
                     } else {
-                        apply_form_field_error(index, value);
+                        applyFormFieldError(index, value);
                     }
                 });
             }

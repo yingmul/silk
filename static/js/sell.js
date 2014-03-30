@@ -6,4 +6,16 @@ $(function () {
         var clickedImg = $(this).attr('src');
         $(this).parent().parent().find('.selected-img').attr('src', clickedImg);
     });
+
+    $('#sell_not_loggedin').click(function (e) {
+        e.preventDefault();
+        var nextUrl = $(this).data("url");
+        $('#login_modal').load('/login/', function() {
+            $(this).data('next', nextUrl);
+            $(this).modal('show');
+            resetLoginForm();
+        });
+        return false;
+    });
+
 });

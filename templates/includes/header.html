@@ -12,10 +12,15 @@
         <span class="col-md-3 col-md-offset-1 header-text">
             <a href="{% url 'home' %}">{% trans "Stylieu"%}</a>
         </span>
-
-        <span>
-            <a id="sell" href="{% url 'sell' %}">{% trans "Sell" %}</a>
-        </span>
+        {% if user.is_authenticated %}
+            <span>
+                <a id="sell" href="{% url 'sell' %}">{% trans "Sell" %}</a>
+            </span>
+        {% else %}
+            <span>
+                <a id="sell_not_loggedin" href="#" data-url="{% url 'sell' %}">{% trans "Sell" %}</a>
+            </span>
+        {% endif %}
 
         {% if user.is_authenticated %}
             <span class="col-md-3 col-md-offset-5">

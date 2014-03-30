@@ -14,7 +14,6 @@ def ajax_login_required(function=None,redirect_field_name=None):
     """
     def _decorator(view_func):
         def _wrapped_view(request, *args, **kwargs):
-            print 'ajax login decorator request', request
             if request.user.is_authenticated():
                 return view_func(request, *args, **kwargs)
             else:

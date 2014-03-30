@@ -18,7 +18,7 @@ from django.contrib.auth import login, logout
 from django.core.files.storage import FileSystemStorage
 from django.core.urlresolvers import reverse
 
-from silkers.forms import RegistrationBasicForm, RegistrationExtraForm, LoginForm, RegistrationForm
+from silkers.forms import RegistrationBasicForm, RegistrationExtraForm, LoginForm, RegistrationForm, ProfileForm
 from models import UserProfile
 from sell.models import Picture
 
@@ -62,6 +62,37 @@ class RegistrationWizard(SessionWizardView):
             if auth_user.is_active:
                 login(self.request, auth_user)
         return HttpResponseRedirect('/')
+
+
+class ProfileView(FormMixin, TemplateView):
+    template_name = 'silkers/user_profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        context.update({
+            'profile_form': self.profile_form,
+        })
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.profile_form = ProfileForm()
+        self.request = request
+
+        return super(ProfileView, self).get(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('sell')
+
+    def form_valid(self, form):
+        return super(ProfileView, self).form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        self.request = request
+        self.profile_form = ProfileForm(data=request.POST)
+        if self.profile_form.is_valid():
+            return self.form_valid(self.profile_form)
+        else:
+            return self.form_invalid(self.profile_form)
 
 
 def ajax_registration(request):

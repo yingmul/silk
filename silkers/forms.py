@@ -40,6 +40,20 @@ class RegistrationForm(forms.Form):
 
         return cleaned_data
 
+
+class ProfileForm(forms.ModelForm):
+    """
+    The form that contains full user information, prompted during sell or in My Account page
+    """
+    first_name = forms.CharField(max_length=30, required=False)
+    last_name = forms.CharField(max_length=30, required=False)
+
+    class Meta:
+        model = UserProfile
+        #TODO: add measurement, picture, and maybe pants size?
+        fields = ['shoe_size', 'dress_size', 'city', 'state']
+
+
 #TODO: change basic and extra form, so only asked if user wants to sell something,
 #and ask only the info that RegistrationForm didn't.
 class RegistrationBasicForm(forms.Form):
