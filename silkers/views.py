@@ -104,13 +104,13 @@ def ajax_registration(request):
         if form.is_valid():
             # create the user, and log the user in
             user = User.objects.create_user(
-                username=request.POST['username'],
+                username=request.POST['username_register'],
                 email=request.POST['email'],
                 password=request.POST['password'],
             )
 
             # Now log the user in after registration
-            auth_user = authenticate(username=request.POST['username'], password=request.POST['password'])
+            auth_user = authenticate(username=request.POST['username_register'], password=request.POST['password'])
             if auth_user is not None:
                 if auth_user.is_active:
                     login(request, auth_user)

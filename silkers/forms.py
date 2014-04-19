@@ -8,7 +8,10 @@ from models import UserProfile
 
 
 class RegistrationForm(forms.Form):
-    username = forms.CharField(max_length=50)
+    #this has to be under a different name due to the fact that register form popup may
+    #appear after user login modal, and if that happens, 'div_id_fieldname' would only pick up the
+    #username field from login pop so login.js applyFormFieldError wouldn't work for username
+    username_register = forms.CharField(max_length=50, label=u'Username')
     email = forms.EmailField(max_length=100)
     password = forms.CharField(max_length=30, widget=forms.PasswordInput())
     confirm_password = forms.CharField(max_length=30, widget=forms.PasswordInput())
@@ -21,8 +24,8 @@ class RegistrationForm(forms.Form):
 
         return email
 
-    def clean_username(self):
-        username = self.cleaned_data['username']
+    def clean_username_register(self):
+        username = self.cleaned_data['username_register']
         if username:
             if User.objects.filter(Q(username=username)):
                 raise forms.ValidationError(u'This username is already taken.')
@@ -30,15 +33,14 @@ class RegistrationForm(forms.Form):
         return username
 
     def clean(self):
-        cleaned_data = self.cleaned_data
-        password = cleaned_data.get('password')
-        confirm_password = cleaned_data.get('confirm_password')
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
 
         if password and password != confirm_password:
             msg = u'Passwords do not match. Please try again.'
             self._errors['confirm_password'] = self.error_class([msg])
 
-        return cleaned_data
+        return self.cleaned_data
 
 
 class ProfileForm(forms.ModelForm):

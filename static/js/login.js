@@ -76,7 +76,7 @@ $(function () {
                 $(this).modal('show');
             });
         });
-});
+    });
 
     // REGISTRATION SCRIPTS
 
