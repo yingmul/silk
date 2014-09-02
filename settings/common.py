@@ -150,4 +150,4 @@ MAX_PIECE_SELL_FORMS = 5
 
 # setting for the thumbnail size for sorl,
 # making it in a bigger size so we keep one version, since original photo uploaded orientation is not kept (bug)
-SORL_THUMBNAIL_SIZE = '380x450'
+SORL_THUMBNAIL_SIZE = '380x420'

@@ -4,6 +4,9 @@
 {% block content_block %}
 <div class="home-photos">
     {% for picture in object_list %}
+        <div class="home-photo-display-block">
+
+
         <div class="home-photo-display">
             <div class="photo-image" id="{{ picture.outfit.pk }}">
                 <a href="/outfit/detail/{{ picture.outfit.pk }}" class="outfit-picture">
@@ -21,8 +24,9 @@
                 <span class="num-outfit-likes">{{ picture.outfit.num_likes }}</span>
             </div>
         </div>
+        </div>
     {% empty %}
-        {% trans "No pictures yet."%}
+        {% trans "Sorry, there are no styles yet."%}
     {% endfor %}
 </div>
 {% endblock content_block %}
