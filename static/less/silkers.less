@@ -1,14 +1,24 @@
 @charset "UTF-8";
 
+.profile-background {
+  background: url('/static/img/profile_bg.jpg') no-repeat;
+  height: 700px;
+  padding-top: 40px;
+}
+
 .profile-page-header {
   border-bottom: 1px solid @border-gray;
   padding-bottom: 15px;
 }
 .profile-page {
-  padding: 10px 40px 20px 40px;
-  margin-top: 20px;
+  .center;
+  width: 600px;
+  padding: 20px 40px 30px 40px;
   overflow: hidden;
-  background-color: white;
+  display: block;
+  background-color: rgba(255, 255, 255, 0.9); // white with transparency
+  border: 2px ridge;
+  border-radius: 1px;
 }
 
 #profile_form {

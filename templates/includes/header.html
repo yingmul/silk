@@ -1,55 +1,56 @@
 {% load i18n %}
 {% block header_block %}
-    <div class="row header-top-text">
-        <span class="col-md-2 col-md-offset-1">
-            {% trans 'About us' %}
-        </span>
-        <span>
-            {% trans 'How it works' %}
-        </span>
-    </div>
-    <div class="header row">
-        <span class="col-md-3 col-md-offset-1 header-text">
-            <a href="{% url 'home' %}">{% trans "Stylieu"%}</a>
-        </span>
-        {% if user.is_authenticated %}
-            <span>
-                <a id="sell" href="{% url 'sell' %}">{% trans "Sell" %}</a>
-            </span>
-        {% else %}
-            <span>
-                <a id="sell_not_loggedin" href="#" data-url="{% url 'sell' %}">{% trans "Sell" %}</a>
-            </span>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-            <span class="col-md-3 col-md-offset-5">
-                <span>
-                    {% trans "Welcome, " %}
-                    {{ user.username }}
-                </span>
-                <span>
-                    <a id="logout" href="{% url 'logout' %}">{% trans 'Log Out' %}</a>
-                </span>
+    <div class="header">
+        <div class="row">
+            <span class="col-md-1 col-md-offset-2">
+                <button type="button" class="header-button">
+                {% if user.is_authenticated %}
+                    <a class="button-link" id="sell" href="{% url 'sell' %}">
+                {% else %}si
+                    <a class="button-link" id="sell_not_loggedin" href="#" data-url="{% url 'sell' %}">
+                {% endif %}
+                    {% trans "SELL" %}
+                </a>
+                </button>
             </span>
 
-        {% else %}
-            <span>
-                <a href="#" class="login" data-form="{% url 'login' %}">{% trans 'Log in' %}</a>
+            <span class="col-md-2 col-md-offset-2 header-name">
+                <a href="{% url 'home' %}">{% trans "Stylieu"%}</a>
             </span>
-             <div class="modal fade" id="login_modal">
-                {% comment %}
-                Dynamically loading in the log in modal
-                {% endcomment %}
-             </div>
-            <span>
-                <a href="#" class="register" data-form="{% url 'register' %}">{% trans 'Register' %}</a>
+
+
+            <span class="col-md-2 col-md-offset-3 header-text">
+                {% if user.is_authenticated %}
+                    <span class="header-welcome">
+                        {% trans "Welcome, " %}
+                        {{ user.username }}
+                    </span>
+                     <span class="header-vertical-bar"> | </span>
+                    <span>
+                        <a id="logout" href="{% url 'logout' %}">{% trans 'Log Out' %}</a>
+                    </span>
+                {% else %}
+                    <span>
+                        <a href="#" class="login" data-form="{% url 'login' %}">{% trans 'Log in' %}</a>
+                    </span>
+                    <span class="header-vertical-bar"> | </span>
+                    <span>
+                        <a href="#" class="register" data-form="{% url 'register' %}">{% trans 'Register' %}</a>
+                    </span>
+
+                {% endif %}
             </span>
-            <div class="modal fade" id="register_modal">
-                {% comment %}
-                Dynamically loading in the register modal
-                {% endcomment %}
-             </div>
-        {% endif %}
-    </div>
+        </div>
+        <div class="modal fade" id="login_modal">
+            {% comment %}
+            Dynamically loading in the log in modal
+            {% endcomment %}
+        </div>
+        <div class="modal fade" id="register_modal">
+            {% comment %}
+            Dynamically loading in the register modal
+            {% endcomment %}
+         </div>
+     </div>
+
 {% endblock header_block %}

@@ -2,27 +2,27 @@
 {% load i18n %}
 
 {% block content_block %}
-    <div class="home-photos">
-        {% for picture in object_list %}
-            <div class="home-photo-display">
-                <div class="photo-image" id="{{ picture.outfit.pk }}">
-                    <a href="/outfit/detail/{{ picture.outfit.pk }}" class="outfit-picture">
-                        <img class="preview-img" src="{{ picture.thumbnail_url }}">
-                        <img class="loading-img" src="{{ STATIC_URL }}img/spinning_loading.gif">
-                    </a>
-                </div>
-                <div class="outfit-name">
-                    {{ picture.outfit.name }}
-                </div>
-                <div class="outfit-buttons">
-                    <button id="{{ picture.outfit.pk }}" class="button outfit-like-btn" type="button">{% trans "Like" %}</button>
-                    <button class="button" type="button">{% trans "Share" %}</button>
-                    {% trans "By: " %} {{ picture.outfit.user.username }}
-                    <span class="num-outfit-likes">{{ picture.outfit.num_likes }}</span>
-                </div>
+<div class="home-photos">
+    {% for picture in object_list %}
+        <div class="home-photo-display">
+            <div class="photo-image" id="{{ picture.outfit.pk }}">
+                <a href="/outfit/detail/{{ picture.outfit.pk }}" class="outfit-picture">
+                    <img class="preview-img" src="{{ picture.thumbnail_url }}">
+                    <img class="loading-img" src="{{ STATIC_URL }}img/spinning_loading.gif">
+                </a>
             </div>
-        {% empty %}
-            {% trans "No pictures yet."%}
-        {% endfor %}
-    </div>
+            <div class="outfit-name">
+                {{ picture.outfit.name }}
+            </div>
+            <div class="outfit-buttons">
+                <button id="{{ picture.outfit.pk }}" class="button outfit-like-btn" type="button">{% trans "Like" %}</button>
+                <button class="button" type="button">{% trans "Share" %}</button>
+                {% trans "By: " %} {{ picture.outfit.user.username }}
+                <span class="num-outfit-likes">{{ picture.outfit.num_likes }}</span>
+            </div>
+        </div>
+    {% empty %}
+        {% trans "No pictures yet."%}
+    {% endfor %}
+</div>
 {% endblock content_block %}
