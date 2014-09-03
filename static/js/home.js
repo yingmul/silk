@@ -1,13 +1,18 @@
 $(function () {
     // Update number of likes when user clicks on 'like' button on an outfit
-    $(".outfit-like-btn").click(function(){
-        var pk = $(this).attr('id');
-        var like = $(this).closest(".outfit-buttons").find(".num-outfit-likes");
-        //TODO: make this to add 'true' or 'false' at the end of the url
+    $(".home-btn-like").click(function(){
+        var $this = $(this),
+            pk = $(this).attr('id'),
+            like = $(this).closest(".home-outfit-buttons").find(".num-outfit-likes"),
+            likeness = !($this.hasClass('active'));
+
         $.get(
-            '/outfit/like/'+pk,
+            '/outfit/like/'+pk+'/'+likeness,
             function(responseText){
-                like.html(responseText);
+                $this.toggleClass('active');
+                if (likeness) {
+                    like.html(responseText);
+                }
             },
             "html"
         );

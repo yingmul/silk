@@ -1,9 +1,33 @@
 @charset "UTF-8";
 
 /* Style for home.html */
-.home-photos {
-  width: 1050px;
+.home-banner {
+  width: 1020px;
+  height: 100px;
   margin: auto;
+
+  margin-bottom: 15px;
+  font-family: Didot, "Didot LT STD", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 26px;
+  font-style: italic;
+  color: #6E6E6E;
+  text-shadow: 1px 1px 4px #A4A4A4;
+  background: url('/static/img/banner.jpg') no-repeat;
+
+  .banner-line-1 {
+    padding-left: 280px;
+    padding-top: 10px;
+  }
+
+  .banner-line-2 {
+    padding-left: 500px;
+  }
+}
+
+.home-photos {
+  width: 1020px;
+  margin: auto;
+  padding-bottom: 20px;
 }
 
 .home-photo-display-block {
@@ -19,6 +43,11 @@
   border-radius: 2px;
   background-color: white;
   width: 228px;
+}
+
+.home-photo-labels {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .preview-img {
@@ -37,13 +66,20 @@
 }
 
 .outfit-buttons {
-    padding-top: 8px;
+  padding-top: 8px;
 }
 
-.outfit-name {
-    border-bottom: 1px solid #c9c9c9;
-    font-size: 14px;
-    padding-top: 5px;
+.home-photo-section {
+  border-bottom: 1px solid #d9d5d2;
+  padding: 5px 0;
+  margin-bottom: 8px;
 }
 
+.home-heart {
+ color: #f64136;
+}
+
+.home-btn-like {
+  float: right;
+}
 /* end style for home.html */
