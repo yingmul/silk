@@ -10,7 +10,9 @@
             {% endfor %}
         </span>
         <span class="product-pictures">
-            <img class="selected-img" src="{{ object.picture_set.all|primary_picture }}"/>
+            <div class="piece-img-wrapper">
+                <img class="selected-img" src="{{ object.picture_set.all|primary_picture }}"/>
+            </div>
             <div class="piece-comments">
                 <div class="comment-line sub-title">
                     {% trans 'COMMENTS' %} (<span id="num_comments">{{ comments.count }}</span>)
@@ -27,7 +29,7 @@
                 <form id="piece_comment" method="post" data-submit="ajax" action="{% url "piece-comment" pk=object.pk %}">
                     {% csrf_token %}
                     {{ comment_form.as_p }}
-                    <input type="submit" value="{% trans "Post" %}"/>
+                    <button type="submit" class="btn function-btn">{% trans "POST" %}</button>
                 </form>
             </div>
         </span>

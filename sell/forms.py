@@ -22,7 +22,7 @@ class SellOutfitForm(forms.Form):
     )
 
     price = forms.DecimalField(
-        required=False,
+        required=True,
         widget = forms.TextInput(
             attrs={
                 'placeholder': _(u"Price for all the pieces for sale in this outfit.")
@@ -38,7 +38,7 @@ class SellOutfitForm(forms.Form):
             }
         ),
         max_length=500,
-        required=False,
+        required=True,
     )
 
     def __init__(self, *args, **kwargs):

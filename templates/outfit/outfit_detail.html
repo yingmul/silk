@@ -18,9 +18,22 @@
             <div class="title">{{ object.name }}</div>
             <div class="outfit-data">
                 <div class="outfit-data-top">
+                    <div>
+                        <div class="label">{% trans "PRICE: " %}</div>
+                        {% if object.price %}
+                            {{ object.price }}
+                        {% else %}
+                            {% trans 'N/A' %}
+                        {% endif %}
+                    </div>
+                    <div class="label">{% trans "DESCRIPTION: " %}</div>
+                    <div class="outfit-desc-detail">
                     {% if object.description %}
                         <p> {{ object.description }} </p>
+                    {% else %}
+                        <p> {% trans 'None' %}</p>
                     {% endif %}
+                    </div>
                     <button type="button" class="btn btn-primary">
                         <a class="button-link"
                            href="mailto:{{ object.user.email }}?subject={{ object.name }}&body={{ request.build_absolute_uri|urlencode }}">
@@ -37,9 +50,14 @@
                 <div class="seller-info display-box">
                     <div class="sub-title">{% trans "Seller Info" %}</div>
                     <div class="seller-info-detail">
-                        <span class="seller-pic"></span>
-                        <span class="main-text">{{ object.user.username }}</span>
-                        <button type="button" class="btn btn-primary">{% trans 'Follow' %}</button>
+                        <span class="seller-pic">
+                            <img src="{{ STATIC_URL }}img/avatar.png"/>
+                        </span>
+
+                        <span class="seller-data">
+                            <div class="main-text">{{ object.user.username }}</div>
+                            <span class="label-text">100% approval rating</span>
+                        </span>
                     </div>
 
                 </div>
@@ -60,7 +78,7 @@
                     <form id="outfit_comment" method="post" data-submit="ajax" action="{% url "outfit-comment" pk=object.pk %}">
                         {% csrf_token %}
                         {{ comment_form.as_p }}
-                        <input type="submit" value="{% trans "Post" %}"/>
+                        <button type="submit" class="btn function-btn">{% trans "POST" %}</button>
                     </form>
                 </div>
 

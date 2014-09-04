@@ -4,6 +4,7 @@
   padding: 30px 20px 20px 20px;
   margin: 20px 100px 10px 80px;
   width: 1200px;
+  margin: auto;
   overflow: hidden;
   background-color: white;
 }
@@ -12,6 +13,11 @@
   float: left;
   width: 385px;
   border-right: 1px solid @border-gray;
+}
+
+.outfit-desc-detail {
+  padding-left: 15px;
+  margin-bottom: 25px;
 }
 
 .outfit-data {
@@ -34,17 +40,23 @@
   height: 120px;
   padding: 10px 10px 10px 20px;
   margin-top: 30px;
+  background-color: #FAFAFA;
 }
 
 .seller-info-detail {
   margin-top: 10px;
 }
+
 .seller-pic {
   width: 60px;
   height: 60px;
   margin-right: 20px;
   background-color: white;
   float: left;
+  img {
+    width: 60px;
+    height: 60px;
+  }
 }
 
 .outfit-piece-desc {
@@ -87,12 +99,12 @@
 
 .outfit-comments {
   .display-box;
-  width: 360px;
+  width: 348px;
   margin-top: 30px;
   padding: 5px 0px 10px 5px;
-
+  display: inline-block;
   #id_comment {
-    width: 350px;
+    width: 320px;
   }
 }
 
