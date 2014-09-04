@@ -9,7 +9,7 @@ def upload_js():
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <div class="template-upload fade photo-upload">
-        <span class="preview"></span>
+        <span class="preview preview-upload"></span>
         <div class="preview-detail">
             {% if (file.error) { %}
                 <div>
