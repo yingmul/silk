@@ -65,4 +65,5 @@ $(function () {
         out: outfitHoverOutFunc,
         timeout: 400
     });
+
 });

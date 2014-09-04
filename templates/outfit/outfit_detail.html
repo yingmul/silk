@@ -21,7 +21,10 @@
                     <div>
                         <div class="label">{% trans "PRICE: " %}</div>
                         {% if object.price %}
-                            {{ object.price }}
+                            ${{ object.price }}
+                            <span class="small-text">
+                                {% trans "(amount is for all the items in this outfit)" %}
+                            </span>
                         {% else %}
                             {% trans 'N/A' %}
                         {% endif %}
