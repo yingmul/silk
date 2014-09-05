@@ -44,11 +44,13 @@
                         </a>
                     </button>
 
+                    {% if object.user.username == user.username %}
                         <button type="button" class="btn btn-danger">
                             <a class="button-link delete-outfit" href=".">
                                 {% trans 'Delete' %}
                             </a>
                         </button>
+                    {% endif %}
 
                     <span class="like">
                         <a href="#" title="Love it" class="love-btn btn-counter" id={{ object.pk }} data-count={{ object.num_likes }}>

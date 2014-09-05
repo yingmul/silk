@@ -73,6 +73,8 @@ class OutfitDeleteView(DeleteView):
     def get_object(self, queryset=None):
         """ Hook to ensure object is owned by request.user. """
         obj = super(OutfitDeleteView, self).get_object()
+        if not obj.user == self.request.user:
+            raise Http404
         return obj
 
     # only allow delete when logged in
