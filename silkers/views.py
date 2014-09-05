@@ -271,7 +271,7 @@ def create_feedback_email(request):
     email = request.POST.get('email', '')
     feedback = request.POST.get('feedback', '')
 
-    msg = 'Name: '+name + "\n" + 'Email: ' + email + "\n"
+    msg = 'Name: '+name + "\n\n" + 'Email: ' + email + "\n\n"
     msg += "Feedback:\n"+feedback
 
     return msg
