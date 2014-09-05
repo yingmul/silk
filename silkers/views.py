@@ -17,6 +17,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from django.core.files.storage import FileSystemStorage
 from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 
 from silkers.forms import RegistrationBasicForm, RegistrationExtraForm, LoginForm, RegistrationForm, ProfileForm
 from models import UserProfile
@@ -264,3 +266,24 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
 
+def create_feedback_email(request):
+    name = request.POST.get('name', '')
+    email = request.POST.get('email', '')
+    feedback = request.POST.get('feedback', '')
+
+    msg = 'Name: '+name + "\n" + 'Email: ' + email + "\n"
+    msg += "Feedback:\n"+feedback
+
+    return msg
+
+def feedback(request):
+    if request.method == 'POST':
+        if request.is_ajax():
+            email_content = create_feedback_email(request)
+            msg = EmailMessage(
+                'Feedback from Stylieu',
+                email_content,
+                to=['stylieu@gmail.com'],
+            )
+            msg.send()
+            return HttpResponse('OK')

@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'silkers.views.logout_view', name='logout'),
     url(r'^profile/$', ProfileView.as_view(), name='profile'),
 
+    url(r'^feedback/$', 'silkers.views.feedback', name='feedback'),
     url(r'^sell/', include('sell.urls')),
     url(r'^outfit/', include('outfit.urls')),
     url(r'^piece/', include('piece.urls')),

@@ -1,8 +1,13 @@
 # Django settings for silk project.
 
 import os.path
+from os import environ
+
+# Helper lambda for gracefully degrading environmental variables:
+env = lambda e, d: environ[e] if environ.has_key(e) else d
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -10,6 +15,14 @@ ADMINS = (
 
 DATABASES = {
 }
+
+DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER', '')
+SERVER_EMAIL = env('EMAIL_HOST_USER', '')
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', '')
 
 AUTH_PROFILE_MODULE = "silkers.UserProfile"
 

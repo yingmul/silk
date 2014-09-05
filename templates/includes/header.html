@@ -1,5 +1,9 @@
 {% load i18n %}
 {% block header_block %}
+    <button class="btn feedback-btn" data-toggle="modal" data-target="#feedbackModal">
+        {% trans "Feedback?" %}
+    </button>
+
     <div class="header">
         <div class="row">
             <span class="col-md-1 col-md-offset-2">
@@ -54,6 +58,39 @@
             {% comment %}
             Dynamically loading in the register modal
             {% endcomment %}
+        </div>
+
+        <div id='feedbackModal' class="modal fade fade-left">
+          <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h2>Feedback</h2>
+          </div>
+
+          <form id="feedback_form" method="POST" action="{% url 'feedback' %}">
+              <div class="feedback-form">
+                  <div class="modal-body">
+                    Thank you for your valuable feedback! <br/><br/>
+                    {% csrf_token %}
+                    <p>Feedback *:
+                        <textarea rows="4" cols="20" name="feedback" autofocus required>
+                        </textarea>
+                    </p>
+
+                    <p>Name (optional): <input type="text" name="name"></p>
+                    <p>Email (optional): <input type="email" name="email"></p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">{% trans 'Submit' %}</button>
+                    <button type="button" class="btn" data-dismiss="modal">{% trans 'Cancel' %}</button>
+                  </div>
+              </div>
+              <div class="feedback-received">
+                  <img class="feedback-loading-img" src="{{ STATIC_URL }}img/spinning_loading.gif">
+                  <div class="feedback-received-text">Thanks for your feedback!</div>
+              </div>
+          </form>
+          </div>
+
         </div>
 
         <div class="modal fade" id="alphaModal" tabindex="-1" role="dialog" aria-labelledby="Alpha" aria-hidden="true">

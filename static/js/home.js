@@ -66,4 +66,28 @@ $(function () {
         timeout: 400
     });
 
+    $('#feedbackModal').on('show', function() {
+        $(this).find('.feedback-form').css( 'display', 'block');
+        $(this).find('.feedback-received').css( 'display', 'none' );
+        $(this).find("textarea").val("");
+    });
+
+    $('#feedbackModal').on('submit', '#feedback_form', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: $(this).attr('method'),
+            url: this.action,
+            data: $(this).serialize(),
+            context: this,
+            beforeSend:function(){
+                $(this).find('.feedback-form').css( 'display', 'none');
+                $(this).find('.feedback-received').css( 'display', 'block' );
+            },
+            success: function(data, status) {
+                // close the modal and reload the current page
+                $('#feedbackModal').modal('hide');
+            }
+        });
+    });
+
 });
