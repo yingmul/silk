@@ -1,7 +1,11 @@
 import simplejson as json
-from django.views.generic import DetailView
+from django.views.generic import DetailView, DeleteView
 from django.views.generic.edit import BaseFormView
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+from django.core.urlresolvers import reverse_lazy
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from sell.models import Outfit, Picture
 from silk.views import AjaxLoginRequired
@@ -59,6 +63,25 @@ class OutfitDetailView(DetailView):
         })
 
         return context
+
+#TODO: perhaps move this to MyAccount page's posted outfit page, then have it redirect
+#to the MyAccount page instead of home page
+class OutfitDeleteView(DeleteView):
+    model = Outfit
+    success_url = settings.LOGIN_REDIRECT_URL
+
+    def get_object(self, queryset=None):
+        """ Hook to ensure object is owned by request.user. """
+        obj = super(OutfitDeleteView, self).get_object()
+        if not obj.user == self.request.user:
+            raise Http404
+        return obj
+
+    # only allow delete when logged in
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        resp = super(OutfitDeleteView, self).dispatch(*args, **kwargs)
+        return resp
 
 
 class OutfitCommentView(AjaxLoginRequired, BaseFormView):

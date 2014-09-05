@@ -94,4 +94,20 @@ $(function () {
             });
         }
     }
+
+    $('.delete-outfit').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('href'),
+            context: this,
+            beforeSend:function() {
+                $('#outfitDeleteModal').modal('show');
+            },
+            success: function(data, status) {
+            }
+        })
+    });
+
+
 });

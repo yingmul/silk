@@ -44,6 +44,14 @@
                         </a>
                     </button>
 
+                    {% if object.user.username == user.username %}
+                        <button type="button" class="btn btn-danger">
+                            <a class="button-link delete-outfit" href=".">
+                                {% trans 'Delete' %}
+                            </a>
+                        </button>
+                    {% endif %}
+
                     <span class="like">
                         <a href="#" title="Love it" class="love-btn btn-counter" id={{ object.pk }} data-count={{ object.num_likes }}>
                             <span class="like-empty-heart">&#x2661;</span> <span class="like-heart">&#x2665;</span>{% trans 'Love it' %}
@@ -108,5 +116,16 @@
                 {% endfor %}
             </div>
         </span>
+    </div>
+
+    <div class="modal fade" id="outfitDeleteModal">
+        <form action="/outfit/delete/{{ object.pk }}" method="post">
+            {% csrf_token %}
+            <p>Are you sure you want to delete "{{ object.name }}"?</p>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">{% trans 'Confirm' %}</button>
+                <button type="button" class="btn" data-dismiss="modal">{% trans 'Cancel' %}</button>
+            </div>
+        </form>
     </div>
 {% endblock content_block %}
