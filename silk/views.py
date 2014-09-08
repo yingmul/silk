@@ -47,6 +47,8 @@ class AjaxLoginRequired(object):
 class HomeView(ListView):
     model = Picture
     template_name = 'silk/home.html'
+    context_object_name = "outfit_list"
+    paginate_by = 16
 
     def get_queryset(self):
         return Picture.objects.filter(

@@ -11,33 +11,59 @@
     </div>
 </div>
 <div class="home-photos">
-    {% for picture in object_list %}
-        <div class="home-photo-display-block">
-            <div class="home-photo-display">
-                <div class="photo-image" id="{{ picture.outfit.pk }}">
-                    <a href="/outfit/detail/{{ picture.outfit.pk }}" class="outfit-picture">
-                        <img class="preview-img" src="{{ picture.thumbnail_url }}">
-                        <img class="loading-img" src="{{ STATIC_URL }}img/spinning_loading.gif">
-                    </a>
-                </div>
-                <div class="home-photo-labels">
-                    <div class="home-photo-section label-text">
-                        {{ picture.outfit.name }}
+    {% if outfit_list %}
+        {% for picture in outfit_list %}
+            <div class="home-photo-display-block">
+                <div class="home-photo-display">
+                    <div class="photo-image" id="{{ picture.outfit.pk }}">
+                        <a href="/outfit/detail/{{ picture.outfit.pk }}" class="outfit-picture">
+                            <img class="preview-img" src="{{ picture.thumbnail_url }}">
+                            <img class="loading-img" src="{{ STATIC_URL }}img/spinning_loading.gif">
+                        </a>
                     </div>
-                    <div class="home-outfit-buttons">
-                        <span class="home-heart">&#x2665;</span>
-                        <span class="num-outfit-likes">{{ picture.outfit.num_likes }}</span>
-                        <span>{% trans 'likes ' %}</span>
-                        <button id="{{ picture.outfit.pk }}" class="button home-btn-like" type="button">
-                            {% trans "Like" %}
-                        </button>
+                    <div class="home-photo-labels">
+                        <div class="home-photo-section label-text">
+                            {{ picture.outfit.name }}
+                        </div>
+                        <div class="home-outfit-buttons">
+                            <span class="home-heart">&#x2665;</span>
+                            <span class="num-outfit-likes">{{ picture.outfit.num_likes }}</span>
+                            <span>{% trans 'likes ' %}</span>
+                            <button id="{{ picture.outfit.pk }}" class="button home-btn-like" type="button">
+                                {% trans "Like" %}
+                            </button>
+                        </div>
                     </div>
-                </div>
 
+                </div>
+            </div>
+        {% endfor %}
+        <div class="home-pagination-outer">
+            <div class="home-pagination">
+                {% if page_obj.paginator.num_pages > 1 %}
+                    {% if page_obj.has_previous %}
+                        <a href="/?page={{ page_obj.previous_page_number }}">&lt;</a>
+                    {% endif %}
+
+                    {% for page in page_obj.paginator.page_range %}
+                        {% if page_obj.number == page %}
+                            {{ page }}
+                        {% else %}
+                            <button type="button" class="btn btn-default">
+                                <a class="button-link" href="?page={{ page }}">{{ page }}</a>
+                            </button>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a href="/?page={{ page_obj.next_page_number }}">&gt;</a>
+                    {% endif %}
+                {% endif %}
             </div>
         </div>
-    {% empty %}
+
+    {% else %}
         {% trans "Sorry, there are no styles yet."%}
-    {% endfor %}
+    {% endif %}
 </div>
 {% endblock content_block %}
