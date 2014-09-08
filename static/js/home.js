@@ -90,4 +90,14 @@ $(function () {
         });
     });
 
+    $('.instruction').hide();
+
+    $('.home-banner').mouseenter(function () {
+        $('.instruction').show();
+        $('.banner-text').hide();
+    });
+    $('.home-banner').mouseleave(function () {
+        $('.instruction').hide();
+        $('.banner-text').show();
+    });
 });

@@ -3,11 +3,21 @@
 
 {% block content_block %}
 <div class="home-banner">
-    <div class="banner-line-1">
-        {% trans "Be inspired, buy their styles."%}
+    <div class="banner-text">
+        <div class="banner-line-1">
+            {% trans "Be inspired, buy their styles."%}
+        </div>
+        <div class="banner-line-2">
+            {% trans "Be an influencer, sell yours." %}
+        </div>
     </div>
-    <div class="banner-line-2">
-        {% trans "Be an influencer, sell yours." %}
+    <div class="instruction">
+        <div class="instruction-part-1">
+        Stylieu is a platform that lets you show off your unique sense of style, by putting together outfits with
+        clothes that you'd like to sell.
+        It's also a place to be inspired by others just like you.
+        </div>
+        Come here and share with us your sense of fashion.
     </div>
 </div>
 <div class="home-photos">
@@ -66,4 +76,5 @@
         {% trans "Sorry, there are no styles yet."%}
     {% endif %}
 </div>
+
 {% endblock content_block %}
