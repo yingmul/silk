@@ -92,6 +92,7 @@ class ProfileView(FormMixin, TemplateView):
         self.request = request
         self.profile_form = ProfileForm(data=request.POST)
         if self.profile_form.is_valid():
+            self.profile_form.save(user=request.user)
             return self.form_valid(self.profile_form)
         else:
             return self.form_invalid(self.profile_form)

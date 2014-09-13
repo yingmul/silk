@@ -50,6 +50,13 @@ class ProfileForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
 
+    def save(self, *args, **kw):
+        user = kw.get('user')
+
+        profile = super(ProfileForm, self).save(commit=False)
+        profile.user = user
+        profile.save()
+
     class Meta:
         model = UserProfile
         #TODO: add measurement, picture, and maybe pants size?
